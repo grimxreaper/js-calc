@@ -4,7 +4,7 @@
 
 body {
   margin: 0;
-  background-color:white;
+  background-color:rgb(179, 170, 170);
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -12,13 +12,15 @@ body {
 }
 
 .calculator {
-  width: 240px;
-  height: 400px;
+  width: 250px;
+  height: 380px;
+  padding: 5px;
   background-color: black;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-
+  background-color: #111;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
 
 }
 
@@ -45,8 +47,11 @@ button.orange {
 
 }
 button.dark-grey {
-  background-color: ;
+  background-color: #323232;
+  color: white;
 }
 button.light-grey {
+  background-color: A5A5A5;
+  color: white;
 
 }
