@@ -21,7 +21,6 @@ body {
   flex-wrap: wrap;
   background-color: #111;
   box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-
 }
 
 .display {
@@ -43,8 +42,7 @@ button {
 
 button.orange {
   background-color: #EE9406;
-
-
+  color: white;
 }
 button.dark-grey {
   background-color: #323232;
@@ -52,6 +50,16 @@ button.dark-grey {
 }
 button.light-grey {
   background-color: A5A5A5;
-  color: white;
 
+}
+button.big-v {
+  border-radius: 50px;
+  height: 110px;
+  
+
+}
+button.big-h {
+  border-radius: 50px;
+  width: 110px;
+  
 }
