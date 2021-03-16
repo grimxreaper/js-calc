@@ -7,12 +7,12 @@ const operations = ["/", "×", "-", "+", "="];
 class App extends React.Component {
   state = {
     currentNumber: "0",
-    prevNumber: undefined,
+    calc: undefined,
     operation: undefined
   };
 
   handleClick = (e) => {
-    const { currentNumber, prevNumber, operation } = this.state;
+    const { currentNumber, calc, operation } = this.state;
     const { innerText } = e.target; // we get the target which is the button, and the innerText gets what's inside the button!
 
     if (!Number.isNaN(Number(innerText))) {
@@ -31,7 +31,7 @@ class App extends React.Component {
       case 'AC' : {
         this.setState({
           currentNumber : '0',
-          prevNumber: undefined,
+          calc: undefined,
           operation: undefined
         });
         break;
@@ -47,17 +47,19 @@ class App extends React.Component {
         if (!operation) {
           this.setState({
             operation: innerText,
-            prevNumber: currentNumber,
+            calc: currentNumber,
             currentNumber: '0'
           });
         } else {
-          const evaluated = eval(`${prevNumber} ${operation} ${currentNumber}`)
-          this.setState({
-            operation: innerText,
-            prevNumber: evaluated,
-            currentNumber: innerText === '=' ? evaluated : '0'
-          });
-        }
+            if (innerText === '=') {
+              const evaluated = eval(`${calc} ${operation} ${currentNumber}`)
+              this.setState({
+                operation: innerText,
+                calc: evaluated,
+                currentNumber: innerText === '=' ? evaluated : '0'
+              });
+            }
+          }
       }
     }
   }
