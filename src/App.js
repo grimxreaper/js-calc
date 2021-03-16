@@ -1,4 +1,3 @@
-// import ReactDOM from 'react-dom';
 import React from 'react';
 import './index.css';
 
@@ -37,4 +36,3 @@ return(
 
 
 export default App;
-// ReactDOM.render(<App />, document.getElementById('app'));
