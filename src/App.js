@@ -15,9 +15,19 @@ class App extends React.Component {
     const { lastPressed, currentNumber, prevNumber } = this.state;
     const { innerText } = e.target; // we get the target which is the button, and the innerText gets what's inside the button!
     
-    if (!Number.isNan(Number(innerText)) //is not not a number
+    if (!Number.isNan(Number(innerText)) {
+      if (currentNumber === '0') {
+        this.setState({
+          currentNumber: innerText
+        })
+      } else {
+      this.setState({
+        currentNumber: currentNumber + innerText
+      })
+    }
 
-    
+    }
+
 
     this.setState({
       lastPressed: innerText //so we're always setting what was last pressed
@@ -26,10 +36,11 @@ class App extends React.Component {
     alert(innerText);
   }
   render() {
+    const { currentNumber } = this.state;
     return (
       <div className="calculator">
         <div id="display" className="display">
-          125
+          {currentNumber}
         </div>
         <div className="nums-container">
           <button className="big-h light-grey ac" onClick={this.handleClick}>AC</button>
