@@ -2,7 +2,7 @@ import React from "react";
 import "./index.css";
 
 const nums = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
-const operations = ["/", "×", "-", "+", "="];
+const operations = ["/", "*", "-", "+", "="];
 
 class App extends React.Component {
   state = {
@@ -50,27 +50,34 @@ class App extends React.Component {
             calc: currentNumber,
             currentNumber: '0'
           });
-        } else {
-            if (innerText === '=') {
-              const evaluated = eval(`${calc} ${operation} ${currentNumber}`)
-              this.setState({
-                operation: innerText,
-                calc: evaluated,
-                currentNumber: innerText === '=' ? evaluated : '0'
-              });
-            }
-          }
+        }
+        else if  (innerText === '=') {
+          const evaluated = eval(`${calc} ${operation} ${currentNumber}`)
+          this.setState({
+            operation: innerText,
+            calc: evaluated,
+            currentNumber: evaluated
+          });
+        }
+        else {
+          this.setState({
+            operation: innerText
+          }) 
+        }
       }
     }
   }
 
 
+
   render() {
-    const { currentNumber } = this.state;
+    const { currentNumber, calc } = this.state;
+
     return (
       <div className="calculator">
        <p style={{position: 'absolute', top: 0}}> {JSON.stringify(this.state)}</p>
         <div id="display" className="display">
+          <small>{calc}</small>
           {currentNumber}
         </div>
         <div className="nums-container">
@@ -106,7 +113,7 @@ class App extends React.Component {
           })}
         </div>
       </div>
-    );
+    )
   }
 }
 
