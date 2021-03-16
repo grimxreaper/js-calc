@@ -7,7 +7,7 @@ const operations = ["/", "×", "-", "+", "="];
 class App extends React.Component {
   state = {
     lastPressed: undefined,
-    currentNumber: undefined,
+    currentNumber: '0',
     prevNumber: undefined
   }
 
@@ -15,7 +15,7 @@ class App extends React.Component {
     const { lastPressed, currentNumber, prevNumber } = this.state;
     const { innerText } = e.target; // we get the target which is the button, and the innerText gets what's inside the button!
     
-    if (!Number.isNan(Number(innerText)) {
+    if (!Number.isNaN(Number(innerText))) {
       if (currentNumber === '0') {
         this.setState({
           currentNumber: innerText
@@ -33,7 +33,7 @@ class App extends React.Component {
       lastPressed: innerText //so we're always setting what was last pressed
     })
 
-    alert(innerText);
+   
   }
   render() {
     const { currentNumber } = this.state;
