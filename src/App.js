@@ -6,21 +6,31 @@ const operations = ["/", "*", "-", "+", "="];
 
 class App extends React.Component {
   state = {
+    lastPressed: undefined,
     currentNumber: "0",
     calc: undefined,
     operation: undefined
   };
 
   handleClick = (e) => {
-    const { currentNumber, calc, operation } = this.state;
+    const { currentNumber, calc, operation, lastPressed } = this.state;
     const { innerText } = e.target; // we get the target which is the button, and the innerText gets what's inside the button!
+
+    this.setState({
+      lastPressed: innerText
+    })
 
     if (!Number.isNaN(Number(innerText))) {
       if (currentNumber === "0") {
         this.setState({
           currentNumber: innerText,
         });
-      } else {
+      } else if (operations.includes(lastPressed)) {
+          this.setState({
+            currentNumber: innerText,
+          });
+      }
+      else {
         this.setState({
           currentNumber: currentNumber + innerText,
         });
@@ -37,10 +47,20 @@ class App extends React.Component {
         break;
       }
       case '.' : {
-        if (!currentNumber.includes('.'))
+        // if (!currentNumber.includes('.'))
+        //   this.setState({
+        //     currentNumber: currentNumber + innerText
+        //   });
+        const splitted = calc.split(/[\+\-\*\/]/);
+        const last = splitted.slice(-1)[0];
+        
+        if(!last.includes('.')) {
           this.setState({
-            currentNumber: currentNumber + innerText
-          });
+            calc: calc+'.'
+          })
+        }
+
+
           break;
       }
       default: {
@@ -51,7 +71,7 @@ class App extends React.Component {
             currentNumber: '0'
           });
         }
-        else if  (innerText === '=') {
+        else if (innerText === '=') {
           const evaluated = eval(`${calc} ${operation} ${currentNumber}`)
           this.setState({
             operation: innerText,
@@ -71,13 +91,13 @@ class App extends React.Component {
 
 
   render() {
-    const { currentNumber, calc } = this.state;
+    const { currentNumber, calc, operation } = this.state;
 
     return (
       <div className="calculator">
        <p style={{position: 'absolute', top: 0}}> {JSON.stringify(this.state)}</p>
         <div id="display" className="display">
-          <small>{calc}</small>
+          <small>{calc} {operation}</small>
           {currentNumber}
         </div>
         <div className="nums-container">
