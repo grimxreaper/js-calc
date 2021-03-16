@@ -3,6 +3,22 @@ import "./index.css";
 
 const nums = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
 const operations = ["/", "*", "-", "+", "="];
+const ids = {
+  7: 'seven', 
+  8: 'eight', 
+  9: 'nine', 
+  4: 'four', 
+  5: 'five', 
+  6: 'six', 
+  1: 'one', 
+  2: 'two', 
+  3: 'three', 
+  0: 'zero',
+  '/': 'divide', 
+  '*': 'multiply', 
+  '-': 'subtract', 
+  '+': 'add'
+}
 
 class App extends React.Component {
   state = {
@@ -101,7 +117,7 @@ class App extends React.Component {
           {currentNumber}
         </div>
         <div className="nums-container">
-          <button className="big-h light-grey ac" onClick={this.handleClick}>
+          <button className="big-h light-grey ac" onClick={this.handleClick} id="clear">
             AC
           </button>
           {nums.map((num) => {
@@ -110,12 +126,13 @@ class App extends React.Component {
                 className={`dark-grey ${num === 0 && "big-h"}`}
                 onClick={this.handleClick}
                 key={num}
+                id={ids[num]}
               >
                 {num}
               </button>
             );
           })}
-          <button className="light-grey" onClick={this.handleClick}>
+          <button className="light-grey" onClick={this.handleClick} id="decimal">
             .
           </button>
         </div>
@@ -126,6 +143,7 @@ class App extends React.Component {
                 className="orange"
                 key={operation}
                 onClick={this.handleClick}
+                id={ids[operation]}
               >
                 {operation}
               </button>
