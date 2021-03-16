@@ -1,1 +1,1 @@
-JS Calculator created with React.
+JS Calculator built with React.
