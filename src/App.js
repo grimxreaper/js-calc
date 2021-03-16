@@ -5,13 +5,24 @@ const nums = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
 const operations = ["/", "×", "-", "+", "="];
 
 class App extends React.Component {
+  state = {
+    lastPressed: undefined,
+    currentNumber: undefined,
+    prevNumber: undefined
+  }
 
   handleClick = (e) => {
+    const { lastPressed, currentNumber, prevNumber } = this.state;
     const { innerText } = e.target; // we get the target which is the button, and the innerText gets what's inside the button!
     
-    switch(innerText) {
-      case 
-    }
+    if (!Number.isNan(Number(innerText)) //is not not a number
+
+    
+
+    this.setState({
+      lastPressed: innerText //so we're always setting what was last pressed
+    })
+
     alert(innerText);
   }
   render() {
