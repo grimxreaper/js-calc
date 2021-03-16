@@ -42,6 +42,15 @@ button {
   font-family: 'Noto Sans JP', sans-serif;
 }
 
+button:active {
+  transform: scale(0.9);
+}
+
+button:hover {
+  opacity: 0.9;
+
+}
+
 .nums-container {
   width: 75%;
 
@@ -50,6 +59,11 @@ button {
 .operations-container {
   width: 25%;
 
+}
+
+
+button.ac {
+  margin-right: 50%;
 }
 
 button.orange {
