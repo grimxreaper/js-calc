@@ -2,6 +2,10 @@
 import React from 'react';
 import './index.css';
 
+const num = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+const operations = ['=', '+', '-', '/', '*','ac'];
+
+
 const App = () => {
 return(
   <div className="calculator">
