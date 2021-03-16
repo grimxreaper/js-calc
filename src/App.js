@@ -4,6 +4,10 @@ import './index.css';
 const num = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 const operations = ['=', '+', '-', '/', '*','ac'];
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> a40472d4cacfd8302847ec70c6b6f109a6e30d91
 const App = () => {
 return(
   <div className="calculator">
