@@ -12,7 +12,7 @@ class App extends React.Component {
   };
 
   handleClick = (e) => {
-    const { lastPressed, currentNumber, prevNumber } = this.state;
+    const { lastPressed, currentNumber, prevNumber, operation } = this.state;
     const { innerText } = e.target; // we get the target which is the button, and the innerText gets what's inside the button!
 
     if (!Number.isNaN(Number(innerText))) {
@@ -25,30 +25,48 @@ class App extends React.Component {
           currentNumber: currentNumber + innerText,
         });
       }
+      return;
     }
     switch(innerText) {
       case 'AC' : {
         this.setState({
           currentNumber : '0',
           prevNumber: undefined
-        })
+        });
         break;
       }
       case '.' : {
         if (!currentNumber.includes('.'))
           this.setState({
             currentNumber: currentNumber + innerText
-          })
+          });
           break;
       }
+      default: {
+        if (!operation) {
+          this.setState({
+            operation: innerText,
+            prevNumber: currentNumber,
+            currentNumber: '0'
+          });
+        } else {
+          const evaluated = eval(`${prevNumber} ${operation} ${currentNumber}`)
+          this.setState({
+            operation: innerText,
+            prevNumber: evaluated,
+            currentNumber: '0'
+          });
+          if (innerText === '='){
+            this.setState({
+              currentNumber: evaluated
+            })
+          }
+        }
+      }
      
-
-
       }
 
-      this.setState({
-        lastPressed: innerText, //so we're always setting what was last pressed
-      });
+
   }
 
 
