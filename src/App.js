@@ -43,12 +43,10 @@ class App extends React.Component {
         result: (eval(checkResult) || "" ) + "" //why do we need the "+ "" " here?
         // || If expr1 can be converted to true, returns expr1; else, returns expr2.
       })
-      
   } catch (e) {
       this.setState({
         result: "error"
       })
-
     }
   }
 
