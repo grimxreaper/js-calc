@@ -18,6 +18,9 @@ class App extends React.Component {
     else if (button === "AC"){
       this.reset()
     }
+    else if(button === "CE"){
+      this.backspace()
+  }
     else {
       this.setState({
         result: this.state.result + button
