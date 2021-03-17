@@ -22,13 +22,19 @@ class App extends React.Component {
     else if (button === 'CE'){
       this.backspace()
     }
+    else {
+      this.setState({
+        result: this.state.result + button 
+      })
+    }
   }
 
 
   calculate = () => {
-    let currentResult = this.state.result;
-    if (this.state.result === '--'){
-      this.state.result.replace('--', '+')
+    let currentResult = ""
+
+    if (this.state.result === '--'){ //includes
+      currentResult = this.state.result.replace('--', '+')
     }
     else {
       currentResult = this.state.result
@@ -63,7 +69,6 @@ class App extends React.Component {
         <h1>JS CALC</h1>
         <KeyPadComponent result={this.state.result}/>
         <ResultComponent onClick={this.onClick}/>
-
       </div>
     )
   }
