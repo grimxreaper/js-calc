@@ -40,8 +40,9 @@ class App extends React.Component {
     try {
       // console.log(checkResult)
       this.setState({
-        result: (eval(checkResult) || "" ) + "" //why do we need the "+ "" " here?
+        result: (eval(checkResult) || "" ) + ""  //why do we need the "+ "" " here?
         // || If expr1 can be converted to true, returns expr1; else, returns expr2.
+        //?? we don't need a special case for the decimal right? eval takes care of that?
       })
   } catch (e) {
       this.setState({
