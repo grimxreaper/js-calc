@@ -14,7 +14,7 @@ body {
 }
 
 .result {
-  height: 60px;
+  height: 80px;
   width: 100%;
   border-radius: 5px;
   background: rgb(246,224,255);
@@ -28,6 +28,7 @@ body {
   text-align: right;
   font-family: 'Balsamiq Sans', cursive;
   color: rgba(118, 65, 241, 0.747);
+  word-break: break-all;
 }
 
 .keypad {
