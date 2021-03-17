@@ -20,7 +20,7 @@ class App extends React.Component {
     }
     else if(button === "CE"){
       this.backspace()
-  }
+    }
     else {
       this.setState({
         result: this.state.result + button
