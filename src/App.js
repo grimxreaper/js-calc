@@ -19,11 +19,11 @@ class App extends React.Component {
       this.reset()
     }
     else if(button === "CE"){
-      this.backspace()
+      this.backspace() //not sure why this is returning "not a function"
     }
     else {
       this.setState({
-        result: this.state.result + button
+        result: this.state.result + button //this sets the button to the character it is
       })
     }
   }
@@ -38,11 +38,12 @@ class App extends React.Component {
       checkResult = this.state.result
     }
     try {
-      console.log(checkResult)
+      // console.log(checkResult)
       this.setState({
-        result: (eval(checkResult) || "" ) + "" 
+        result: (eval(checkResult) || "" ) + "" //why do we need the "+ "" " here?
         // || If expr1 can be converted to true, returns expr1; else, returns expr2.
       })
+      
   } catch (e) {
       this.setState({
         result: "error"
@@ -62,7 +63,7 @@ class App extends React.Component {
     return (
         <div>
             <div className="calculator-body">
-                <h1>Simple Calculator</h1>
+                <h1>Js Calculator</h1>
                 <ResultComponent result={this.state.result}/>
                 <KeyPadComponent onClick={this.onClick}/>
             </div>
