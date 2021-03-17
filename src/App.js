@@ -65,7 +65,7 @@ class App extends React.Component {
 
   render(){
     const { currentNumber, calc, operation } = this.state;
-
+dsfsd
     return (
       <div className="calculator">
        <p style={{position: 'absolute', top: 0}}> {JSON.stringify(this.state)}</p>
