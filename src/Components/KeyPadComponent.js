@@ -1,5 +1,6 @@
 import React from "react";
 
+const keypads = ["AC", "CE", "(", ")", 7, 8, 9, 4, 5, 6, 1, 2, 3, 0, "/", "*", "-", "+", "=", "."]
 
 
 class KeyPadComponent extends React.Component {
@@ -8,8 +9,21 @@ class KeyPadComponent extends React.Component {
     render() {
         return (
             <div className="button">
-                <button className="keypad" name="(" onClick={e => this.props.onClick(e.target.name)}>(</button>
-                <button name="CE" onClick={e => this.props.onClick(e.target.name)}>CE</button>
+                {keypads.map((keypad) => {
+                    return (
+                        <button
+                        className="keypad"
+                        name={keypad}
+                        onClick={e => this.props.onClick(e.target.name)}
+                        >
+                            {keypad}
+                        </button>
+                    )
+
+                })}
+
+                {/* <button className="keypad" name="(" onClick={e => this.props.onClick(e.target.name)}>(</button>
+                <button className="keypad" name="CE" onClick={e => this.props.onClick(e.target.name)}>CE</button>
                 <button name=")" onClick={e => this.props.onClick(e.target.name)}>)</button>
                 <button  name="AC" onClick={e => this.props.onClick(e.target.name)}>AC</button><br/>
 
@@ -34,7 +48,7 @@ class KeyPadComponent extends React.Component {
                 <button name="." onClick={e => this.props.onClick(e.target.name)}>.</button>
                 <button name="0" onClick={e => this.props.onClick(e.target.name)}>0</button>
                 <button name="=" onClick={e => this.props.onClick(e.target.name)}>=</button>
-                <button name="/" onClick={e => this.props.onClick(e.target.name)}>÷</button><br/>
+                <button name="/" onClick={e => this.props.onClick(e.target.name)}>÷</button><br/> */}
             </div>
         );
     }

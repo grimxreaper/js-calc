@@ -30,8 +30,10 @@ body {
 }
 
 .keypad {
-  color:rgb(248, 62, 186);
+  color:rgb(95, 36, 233);
+  font-family: 'Balsamiq Sans', cursive;
 }
+
 .calculator-body {
   width: 250px;
   height: 400px;
