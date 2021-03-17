@@ -67,7 +67,7 @@ class App extends React.Component {
   render() {
     return (
         <div>
-          <h1>Js Calculator</h1>
+          <h1>JS "Pocket" Calculator</h1>
             <div className="calculator-body">
           
                 <ResultComponent result={this.state.result}/>
