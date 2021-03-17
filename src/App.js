@@ -46,16 +46,21 @@ class App extends React.Component {
           currentNumber: evaluated,
           calc: evaluated
         })
+        break;
       }
       default: {
-      this.setState({
-        calc: currentNumber + innerText,
-        lastPressed: innerText,
-        currentNumber: currentNumber + innerText,
-      })
+        const e = currentNumber === '0' ? innerText : currentNumber + innerText
+        
+        if(operations.includes(lastPressed) && operations.includes(innerText)) {
+          this.setState({
+          calc: calc.slice(0, -1) + innerText,
+          lastPressed: innerText,
+          currentNumber: currentNumber + innerText,
+        })
+        }
+      }
     }
-  
-}
+  }
   //   const { currentNumber, calc, operation, lastPressed } = this.state;
   //   const { innerText } = e.target; // we get the target which is the button, and the innerText gets what's inside the button!
 
@@ -131,7 +136,7 @@ class App extends React.Component {
 
   
 
-  render() {
+  render(){
     const { currentNumber, calc, operation } = this.state;
 
     return (
