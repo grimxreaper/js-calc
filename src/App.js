@@ -5,57 +5,57 @@ import KeyPadComponent from "./Components/KeyPadComponent";
 
 class App extends React.Component {
   constructor(props){
-    super(props)
-
+    super(props);
     this.state = {
-      result : ""
+      result: ""
     }
   }
 
-  onClick = (button) => {
-    if (button === '=') {
+  onClick = button => {
+    if (button === '='){
       this.calculate()
     }
-    else if (button === 'AC'){
+    else if (button === "AC"){
       this.reset()
     }
-    else if (button === 'CE'){
-      this.backspace()
+    else if(button === "CE"){
+      this.backspace() //not sure why this is returning "not a function"
     }
     else {
       this.setState({
-        result: this.state.result + button 
+        result: this.state.result + button //this sets the button to the character it is
       })
     }
   }
 
 
   calculate = () => {
-    let currentResult = ""
-
-    if (this.state.result === '--'){ //includes
-      currentResult = this.state.result.replace('--', '+')
+    let checkResult = ""
+    if (this.state.result.includes('--')) {
+      checkResult = this.state.result.replace('--', '+')
     }
     else {
-      currentResult = this.state.result
+      checkResult = this.state.result
     }
     try {
+      // console.log(checkResult)
       this.setState({
-        result : (eval(currentResult) || "") + ""
+        result: (eval(checkResult) || "" ) + ""  //why do we need the "+ "" " here?
+        // || If expr1 can be converted to true, returns expr1; else, returns expr2.
+        //?? we don't need a special case for the decimal right? eval takes care of that?
       })
-    }
-    catch (e) {
+  } catch (e) {
       this.setState({
-        result: 'error'
+        result: "error"
       })
     }
   }
 
   reset = () => {
     this.setState({
-      result: ""
+      result : ""
     })
-  }
+  };
 
   backspace = () => {
     this.setState({
@@ -63,14 +63,20 @@ class App extends React.Component {
     })
   }
 
+
   render() {
     return (
-      <div className="calculator-body">
-        <h1>JS CALC</h1>
-        <KeyPadComponent result={this.state.result}/>
-        <ResultComponent onClick={this.onClick}/>
-      </div>
-    )
-  }
+        <div>
+          <h1>Js Calculator</h1>
+            <div className="calculator-body">
+          
+                <ResultComponent result={this.state.result}/>
+                <KeyPadComponent onClick={this.onClick}/>
+            </div>
+        </div>
+    );
 }
+}
+
+
 export default App;

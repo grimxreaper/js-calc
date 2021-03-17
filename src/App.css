@@ -1,27 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(0, 0, 0);
+
+}
+
 .result {
   height: 60px;
-  background-color: rgb(245, 208, 208);
+  background-color: rgb(232, 179, 245);
   width: 100%;
+  border-radius: 5px;
 }
 
 .result p {
   font-size: 40px;
   margin: 5px;
   text-align: right;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Balsamiq Sans', cursive;
+  color: rgb(208, 248, 62)
 
 }
 
+.keypad {
+  color:rgb(248, 62, 186);
+}
 .calculator-body {
-  max-width: 400px;
+  width: 250px;
+  height: 400px;
   margin: auto;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Balsamiq Sans', cursive;
+
 }
 
 .button {
   display: block;
-  background-color: #bbb;
-  font-family: 'Courier New', Courier, monospace;
+  background-color: rgb(248, 62, 186);
+  font-family: 'Balsamiq Sans', cursive;
+
 }
 
 
@@ -31,4 +54,20 @@ button {
   font-size: 30px;
   font-family: 'Courier New', Courier, monospace;
   background-color: rgb(223, 200, 250);
+  border-radius: 5px;
+}
+
+button:active {
+  transform: scale(0.9);
+}
+
+button:hover {
+  opacity: 0.75;
+
+}
+h1 {
+  color: rgb(208, 248, 62);
+  font-family: 'Balsamiq Sans', cursive;
+  text-align: center;
+  font-size: 40px;
 }
