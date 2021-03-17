@@ -38,8 +38,10 @@ class App extends React.Component {
       checkResult = this.state.result
     }
     try {
+      console.log(checkResult)
       this.setState({
-        result: (eval(checkResult) || "" ) + ""
+        result: (eval(checkResult) || "" ) + "" 
+        // || If expr1 can be converted to true, returns expr1; else, returns expr2.
       })
   } catch (e) {
       this.setState({
