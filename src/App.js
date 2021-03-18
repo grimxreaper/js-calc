@@ -21,6 +21,20 @@ class App extends React.Component {
     if (this.state.result === '--') {
       this.state.result.replace('--', '+')
     }
+    else {
+      currentResult = this.state.result
+    }
+    try {
+      this.setState({
+        result: (eval(currentResult) || "") + ""
+      })
+    }
+    catch {
+      this.setState({
+        result: "error"
+      })
+    }
+
 
   }
 
