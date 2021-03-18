@@ -12,6 +12,20 @@ class App extends React.Component {
     }
   }
   onClick = (button) => {
+    if (button === '='){
+      this.calculate()
+    }
+    else if (button === 'AC'){
+      this.reset()
+    }
+    else if (button === 'CE'){
+      this.backspace()
+    }
+    else {
+      this.setState({
+        result: this.state.result + button
+      })
+    }
 
   }
 
@@ -34,7 +48,6 @@ class App extends React.Component {
         result: "error"
       })
     }
-
 
   }
 
