@@ -32,7 +32,7 @@ class App extends React.Component {
     let currentResult = ""
 
     if (this.state.result === '--') {
-      this.state.result.replace('--', '+')
+      currentResult = this.state.result.replace('--', '+')
     }
     else {
       currentResult = this.state.result
@@ -42,7 +42,7 @@ class App extends React.Component {
         result: (eval(currentResult) || "") + ""
       })
     }
-    catch {
+    catch (e){
       this.setState({
         result: "error"
       })
@@ -63,10 +63,11 @@ class App extends React.Component {
 
   render(){
     return (
-      <div>
+      <div >
+        <h1>Pocket Js Calculator</h1>
         <div className="calculator-body">
+          <ResultComponent result = {this.state.result}/>
           <KeyPadComponent onClick = {this.onClick}/>
-          <ResultComponent result = {this.result}/>
         </div>
       </div>
     )
