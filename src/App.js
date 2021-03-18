@@ -26,7 +26,6 @@ class App extends React.Component {
         result: this.state.result + button
       })
     }
-
   }
 
   calculate = () => {
@@ -48,7 +47,6 @@ class App extends React.Component {
         result: "error"
       })
     }
-
   }
 
   reset = () => {
@@ -63,19 +61,16 @@ class App extends React.Component {
     })
   }
 
-
-
-
-
   render(){
     return (
       <div>
         <div className="calculator-body">
-          <KeyPadComponent {onClick = this.onClick}/>
-          <ResultComponent {result = this.result}/>
+          <KeyPadComponent onClick = {this.onClick}/>
+          <ResultComponent result = {this.result}/>
         </div>
       </div>
     )
   }
 
 }
+export default App;
