@@ -1,5 +1,6 @@
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, screen, cleanup, fireEvent } from '@testing-library/react';
 import App from './App';
+import KeyPadComponent from './Components/KeyPadComponent';
 import ResultComponent from './Components/ResultComponent';
 
 
@@ -16,3 +17,12 @@ it('should equal an empty string', () => {
   expect(getByTestId('result')).toHaveTextContent('')
 });
 
+//Testing events
+it('displays open parens when clicked', () => {
+  const { getByTestId } = render(<App />);
+  
+  fireEvent.click(getByTestId("("))
+
+  expect(getByTestId("result")).toHaveTextContent("(")
+
+})

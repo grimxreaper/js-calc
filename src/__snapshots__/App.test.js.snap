@@ -20,120 +20,140 @@ exports[`matches snapshot 1`] = `
       >
         <button
           class="keypad"
+          data-testid="("
           name="("
         >
           (
         </button>
         <button
           class="keypad"
+          data-testid="CE"
           name="CE"
         >
           CE
         </button>
         <button
           class="keypad"
+          data-testid=")"
           name=")"
         >
           )
         </button>
         <button
           class="keypad"
+          data-testid="AC"
           name="AC"
         >
           AC
         </button>
         <button
           class="keypad"
+          data-testid="/"
           name="/"
         >
           /
         </button>
         <button
           class="keypad"
+          data-testid="*"
           name="*"
         >
           *
         </button>
         <button
           class="keypad"
+          data-testid="-"
           name="-"
         >
           -
         </button>
         <button
           class="keypad"
+          data-testid="+"
           name="+"
         >
           +
         </button>
         <button
           class="keypad"
+          data-testid="9"
           name="9"
         >
           9
         </button>
         <button
           class="keypad"
+          data-testid="8"
           name="8"
         >
           8
         </button>
         <button
           class="keypad"
+          data-testid="7"
           name="7"
         >
           7
         </button>
         <button
           class="keypad"
+          data-testid="6"
           name="6"
         >
           6
         </button>
         <button
           class="keypad"
+          data-testid="5"
           name="5"
         >
           5
         </button>
         <button
           class="keypad"
+          data-testid="4"
           name="4"
         >
           4
         </button>
         <button
           class="keypad"
+          data-testid="3"
           name="3"
         >
           3
         </button>
         <button
           class="keypad"
+          data-testid="2"
           name="2"
         >
           2
         </button>
         <button
           class="keypad"
+          data-testid="1"
           name="1"
         >
           1
         </button>
         <button
           class="keypad"
+          data-testid="0"
           name="0"
         >
           0
         </button>
         <button
           class="keypad"
+          data-testid="="
           name="="
         >
           =
         </button>
         <button
           class="keypad"
+          data-testid="."
           name="."
         >
           .

@@ -15,6 +15,7 @@ class KeyPadComponent extends React.Component {
                         className="keypad"
                         key={keypad}
                         name={keypad}
+                        data-testid={keypad}
                         onClick={e => this.props.onClick(e.target.name)}
                         >
                             {keypad}
