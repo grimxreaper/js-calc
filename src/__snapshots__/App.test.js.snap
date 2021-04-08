@@ -11,6 +11,7 @@ exports[`matches snapshot 1`] = `
     >
       <div
         class="result"
+        data-testid="result"
       >
         <p />
       </div>

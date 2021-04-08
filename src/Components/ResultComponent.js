@@ -5,7 +5,7 @@ class ResultComponent extends Component {
     render() {
         let {result} = this.props;
         return (
-            <div className="result">
+            <div className="result" data-testid="result">
                 <p>{result}</p>
             </div>
     )
