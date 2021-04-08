@@ -13,6 +13,7 @@ class KeyPadComponent extends React.Component {
                     return (
                         <button
                         className="keypad"
+                        key={keypad}
                         name={keypad}
                         onClick={e => this.props.onClick(e.target.name)}
                         >
