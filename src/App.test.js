@@ -26,3 +26,20 @@ it('displays open parens when clicked', () => {
   expect(getByTestId("result")).toHaveTextContent("(")
 
 })
+//Testing events: multiplication calculation 
+
+//1. press 8 and * and 7
+//2. press =
+//3. expect '56'
+
+const expectedMultResult = 56;
+
+it('displays correct result of multiplying 8 by 7', () => {
+  const { getByTestId } = render(<App />);
+
+  fireEvent.click(getByTestId("8"), getByTestId("*"), getByTestId("7"), getByTestId("="))
+
+  expect(getByTestId("result")).toHaveTextContent("56")
+})
+
+//Testing events: division calculation 
