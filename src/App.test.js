@@ -98,6 +98,19 @@ describe('check the operation of 2 numbers', () => {
     fireEvent.click(getByTestId("="))
     expect(getByTestId('result')).toHaveTextContent('32')
   })
+
+  test('addition of 1 by 89 must result in 90', () => {
+    const { getByTestId } = render(<App />);
+
+    fireEvent.click(getByTestId(1))
+    fireEvent.click(getByTestId("+"))
+    fireEvent.click(getByTestId(8))
+    fireEvent.click(getByTestId(9))
+    fireEvent.click(getByTestId("="))
+    expect(getByTestId('result')).toHaveTextContent('90')
+  })
+
+
 })
 
 
