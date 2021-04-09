@@ -120,6 +120,18 @@ describe('check the operation of 2 numbers', () => {
     expect(getByTestId('result')).toHaveTextContent('-7')
   })
 
+  test('clearing the display when hitting AC', () => {
+    const { getByTestId } = render(<App />);
+
+    fireEvent.click(getByTestId(2))
+    fireEvent.click(getByTestId("-"))
+    fireEvent.click(getByTestId(3))
+    fireEvent.click(getByTestId("AC"))
+
+    expect(getByTestId('result')).toHaveTextContent('')
+
+  })
+
 
 })
 
