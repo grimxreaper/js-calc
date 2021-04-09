@@ -119,6 +119,9 @@ describe('check the operation of 2 numbers', () => {
     fireEvent.click(getByTestId("="))
     expect(getByTestId('result')).toHaveTextContent('-7')
   })
+})
+
+describe('check operations of AC and CE', () => {
 
   test('clearing the display when hitting AC', () => {
     const { getByTestId } = render(<App />);
@@ -129,10 +132,16 @@ describe('check the operation of 2 numbers', () => {
     fireEvent.click(getByTestId("AC"))
 
     expect(getByTestId('result')).toHaveTextContent('')
-
   })
 
+  test('clearing the last entered number when hitting CE', () => {
+    const { getByTestId } = render(<App />);
 
+    fireEvent.click(getByTestId(2))
+    fireEvent.click(getByTestId("CE"))
+
+    expect(getByTestId('result')).toHaveTextContent('')
+  })
 })
 
 
