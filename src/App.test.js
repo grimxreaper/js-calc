@@ -143,6 +143,20 @@ describe("check the operation of 3 numbers", () => {
     expect(getByTestId("result")).toHaveTextContent("105")
   });
 
+  test("dividing 99 by 3 and multiplying by 5 must result in 165", () => {
+    const { getByTestId } = render(<App />);
+
+    fireEvent.click(getByTestId(9));
+    fireEvent.click(getByTestId(9));
+    fireEvent.click(getByTestId("/"));
+    fireEvent.click(getByTestId(3));
+    fireEvent.click(getByTestId("*"));
+    fireEvent.click(getByTestId(5));
+    fireEvent.click(getByTestId("="));
+
+    expect(getByTestId("result")).toHaveTextContent("165")
+  });
+
 });
 
 describe('error message displaying at correct times', () => {
