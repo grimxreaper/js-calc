@@ -157,7 +157,23 @@ describe("check the operation of 3 numbers", () => {
     expect(getByTestId("result")).toHaveTextContent("165")
   });
 
+  test("multiplication and addition with parens", () => {
+    const { getByTestId } = render(<App />);
+
+    fireEvent.click(getByTestId("("));
+    fireEvent.click(getByTestId(7));
+    fireEvent.click(getByTestId("+"));
+    fireEvent.click(getByTestId(2));
+    fireEvent.click(getByTestId(")"));
+    fireEvent.click(getByTestId("*"));
+    fireEvent.click(getByTestId(2));
+    fireEvent.click(getByTestId("="));
+
+    expect(getByTestId("result")).toHaveTextContent("18")
+  });
+
 });
+
 
 describe('error message displaying at correct times', () => {
   test("multiplying 3 by 7 then adding 8 and hitting CE must equal error", () => {
