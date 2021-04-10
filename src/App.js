@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
 import ResultComponent from './Components/ResultComponent';
 import KeyPadComponent from "./Components/KeyPadComponent";
@@ -63,7 +63,7 @@ class App extends React.Component {
 
   render(){
     return (
-      <div >
+      <div className="container" >
         <h1>Pocket Js Calculator</h1>
         <div className="calculator-body">
           <ResultComponent result = {this.state.result}/>
