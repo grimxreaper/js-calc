@@ -130,31 +130,43 @@ describe("check operations of AC and CE", () => {
 });
 
 describe("check the operation of 3 numbers", () => {
-  test("multiplying 3 by 7 by 5 must result in 105", () => {});
-});
+  test("multiplying 3 by 7 by 5 must result in 105", () => {
+    const { getByTestId } = render(<App />);
 
+    fireEvent.click(getByTestId(3));
+    fireEvent.click(getByTestId("*"));
+    fireEvent.click(getByTestId(7));
+    fireEvent.click(getByTestId("*"));
+    fireEvent.click(getByTestId(5));
+    fireEvent.click(getByTestId("="));
 
-
-test('submits username and password', () => {
-  const x = 3;
-  const y = 4;
-  const onSubmit = jest.fn();
-  render(<App onSubmit={"="} />);
-  const { getByTestId } = render(<App />);
-
-  userEvent.click(screen.getAllByTestId("3"), x);
-
-  userEvent.click(screen.getAllByTestId("4"), y);
-
-  userEvent.click(screen.getByRole('button', { name: /=/i }));
-  fireEvent.click(screen.getByTestId("="));
-
-  expect(getByTestId("=")).toHaveBeenCalledTimes(1);
-  expect(onSubmit).toHaveBeenCalledWith({
-    x,
-    y
+    expect(getByTestId("result")).toHaveTextContent("105")
+  
   });
 });
+
+
+
+// test('equal button is called one time', () => {
+//   const x = 3;
+//   const y = 4;
+//   const onSubmit = jest.fn();
+//   render(<App onSubmit={"="} />);
+//   const { getByTestId } = render(<App />);
+
+//   userEvent.click(screen.getAllByRole('button', { name: /3/i }))
+
+//   userEvent.click(screen.getAllByRole('button', { name: /4/i }))
+
+//   userEvent.click(screen.getByRole('button', { name: /=/i }));
+//   fireEvent.click(screen.getByTestId("="));
+
+//   expect(getByTestId("=")).toHaveBeenCalledTimes(1);
+//   expect(onSubmit).toHaveBeenCalledWith({
+//     x,
+//     y
+//   });
+// });
 
 //const calculate = require('./App')
 // test('displays correct result of multiplying 8 by 7', () => {
