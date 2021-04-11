@@ -35,6 +35,7 @@ class App extends React.Component {
 
   calculate = () => {
     let currentResult = ""
+    let product = ""
 
     if (this.state.result === '--') {
       currentResult = this.state.result.replace('--', '+')
@@ -43,9 +44,22 @@ class App extends React.Component {
       currentResult = this.state.result
     }
     try {
+    
+      if (this.state.counter > 1) {
+        product = (eval(currentResult) || "") + ""
       this.setState({
-        result: (eval(currentResult) || "") + ""
+        result: product
       })
+      }
+
+      else {
+        const newEquation = currentResult
+
+        this.setState({
+          result: (eval)
+        })
+      }
+
     }
     catch (e){
       this.setState({
