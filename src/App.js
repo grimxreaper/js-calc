@@ -9,15 +9,16 @@ class App extends React.Component {
 
     this.state = {
       result : "",
-      counter : 0
+      counter : 0,
+      operation: "",
     }
   }
+  
   onClick = (button) => {
     if (button === '='){
       this.setState ({
         counter: this.state.counter + 1
       })
-      console.log(this.state.counter)
       this.calculate()
     }
     else if (button === 'AC'){
@@ -34,8 +35,9 @@ class App extends React.Component {
   }
 
   calculate = () => {
-    let currentResult = ""
-    let product = ""
+    let currentResult = "";
+    let product = "";
+    let originalLastEqNum = "";
 
     if (this.state.result === '--') {
       currentResult = this.state.result.replace('--', '+')
@@ -43,24 +45,23 @@ class App extends React.Component {
     else {
       currentResult = this.state.result
     }
+
     try {
-    
       if (this.state.counter === 0) {
         product = (eval(currentResult) || "") + ""
-      this.setState({
-        result: product
-      })
+        this.setState({
+          result: product
+        })
       }
 
-      // else {
-      //   const newEquation = currentResult
-
-      //   this.setState({
-      //     result: (eval)
-      //   })
-      // }
-
+      else {
+        product = this.state.result + this.state.operation + originalLastEqNum
+        this.setState({
+          result: product
+        })
+      }
     }
+
     catch (e){
       this.setState({
         result: "error"
