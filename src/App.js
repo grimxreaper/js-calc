@@ -8,11 +8,16 @@ class App extends React.Component {
     super(props)
 
     this.state = {
-      result : ""
+      result : "",
+      counter : 0
     }
   }
   onClick = (button) => {
     if (button === '='){
+      this.setState ({
+        counter: this.state.counter + 1
+      })
+      console.log(this.state.counter)
       this.calculate()
     }
     else if (button === 'AC'){
