@@ -45,20 +45,20 @@ class App extends React.Component {
     }
     try {
     
-      if (this.state.counter > 1) {
+      if (this.state.counter === 0) {
         product = (eval(currentResult) || "") + ""
       this.setState({
         result: product
       })
       }
 
-      else {
-        const newEquation = currentResult
+      // else {
+      //   const newEquation = currentResult
 
-        this.setState({
-          result: (eval)
-        })
-      }
+      //   this.setState({
+      //     result: (eval)
+      //   })
+      // }
 
     }
     catch (e){
