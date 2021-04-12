@@ -22,8 +22,6 @@ const keypads = [
   { type: "operation", key: "=" },
   { type: "operation", key: "." },
 ];
-const operationKeys = ["/", "*", "-", "+"];
-const nums = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
 
 class KeyPadComponent extends React.Component {
   render() {
