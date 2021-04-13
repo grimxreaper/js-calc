@@ -21,10 +21,16 @@ class App extends React.Component {
           result: button.key,
         });
       } else {
-        this.setState({
-          originalLastNum: button.key,
-          result: this.state.result + button.key,
-        });
+        if (button.key === "(" || button.key === ")") {
+          this.setState({
+            result: this.state.result + button.key,
+          });
+        } else {
+          this.setState({
+            originalLastNum: button.key,
+            result: this.state.result + button.key,
+          });
+        }
       }
     } else {
       if (
@@ -36,8 +42,8 @@ class App extends React.Component {
       ) {
         this.setState({
           operate: button.key,
-          // result: this.state.result + button.key,
-          result: this.changeKeys(this.state.result, button.key)
+          //result: this.state.result + button.key,
+          result: this.changeKeys(this.state.result, button.key),
         });
       }
     }
@@ -50,20 +56,21 @@ class App extends React.Component {
     }
   };
 
-
-  
   changeKeys = (result, button) => {
-    
     // "" + sign = operator
     if (result === "") {
       if ("+-".includes(button)) {
-        return button
+        return button;
       }
-      return ""
+      return "";
     }
 
-    if (!isNaN(result[result.length - 1]) || result[result.length -1] === ")") { //right after a number you can add an operator
-      return result + button
+    if (
+      !isNaN(result[result.length - 1]) ||
+      result[result.length - 1] === ")"
+    ) {
+      //right after a number you can add an operator
+      return result + button;
     }
 
     // number + operator + (+ | -)  = number + operator + (+ | -)
@@ -74,53 +81,94 @@ class App extends React.Component {
     // 7 "+-/*" (+ 2) -> number "operation" + (signed number) -> ok
 
     if (result.length >= 2) {
-      // 
+      //
       if (!isNaN(result[result.length - 2])) {
         if ("+-/*(".includes(result[result.length - 1])) {
-          if ("+-".includes(button)) { // + or - are the sign of the number, not the operation
-            return result + button
+          if ("+-".includes(button)) {
+            // + or - are the sign of the number, not the operation
+            return result + button;
           }
-          return result.slice(0, -1) + button
+          return result.slice(0, -1) + button;
         }
-      } 
+      }
     } else {
-         // number + operator = number + operator
-      if (!isNaN(result[result.length - 1])) { //right after a number you can add an operator
-        return result + button
+      // number + operator = number + operator
+      if (!isNaN(result[result.length - 1])) {
+        //right after a number you can add an operator
+        return result + button;
       } else {
         if ("+-".includes(button)) {
           // If open ( just result result + button
           if ("(".includes(button)) {
-            return result + button
+            return result + button;
           }
-          return result.slice(0, -1) + button
+          return result.slice(0, -1) + button;
         } else {
-          return ""
+          return "";
         }
       }
     }
-    //nicolas.savoini@mac.com
-    
+
     // operator + operator -> replace the first operator
     // "" - - -> is not possible
-
-
     return "not yet coded";
-  }
-
-
+  };
 
   calculate = () => {
     const { result, operate, originalLastNum } = this.state;
     let lastKey = result.split(operate);
-    if (lastKey[1]) { //check if string is not alone
-      this.setState({ originalLastNum: lastKey[lastKey.length - 1] });
+    if (lastKey[1]) {
+      //check if string is not alone
+      if ("123456789".includes(lastKey[lastKey.length - 1])) {
+      this.setState({ originalLastNum: lastKey[lastKey.length - 1] })
+      }
     }
+    console.log(lastKey, this.originalLastNum)
+
+    // Handle paraenthesis
+    //= 0 -> run the calculation
+    if (!result.includes("(")) {
+      this.setState({
+        done: true,
+        //result: (eval(lastKey[0] + operate + originalLastNum) || "") + "",
+        result: (eval(result) || "") + "",
+      });
+    }
+
+    // 1 -> run calculation insde (), replace () with result -> run calculation
+    //We need to count the number of (
+    let countParenthesis = (result.match(/\(/g)||[]).length
+    
+    if (countParenthesis === 1) {
+      //We need to run the calculation inside first
+      let start = result.indexOf("(");
+      console.log("start="+start)
+      let end = result.indexOf(")");
+      console.log("end="+end)
+      let firstCalculation = result.substr(start+1, end-start-1);
+      console.log(firstCalculation);
+      let firstResult = eval(firstCalculation);
+      console.log(firstResult);
+      let tempResult = result.substr(0,start) + firstResult + result.substr(end+1);
+      console.log(tempResult);
+      this.setState({
+        done: true,
+        //result: (eval(lastKey[0] + operate + originalLastNum) || "") + "",
+        result: (eval(tempResult) || "") + "",
+      });
+
+    }
+
+    // +1 -> 
+ 
     this.setState({
       done: true,
-      result: (eval(lastKey[0] + operate + originalLastNum) || "") + "",
+      //result: (eval(lastKey[0] + operate + originalLastNum) || "") + "",
+      result: (eval(result) || "") + "",
     });
   };
+
+
 
   reset = () => {
     this.setState({

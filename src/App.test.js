@@ -1,8 +1,6 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import App from "./App";
-import KeyPadComponent from "./Components/KeyPadComponent";
 import ResultComponent from "./Components/ResultComponent";
-import userEvent from "@testing-library/user-event";
 
 //snapshot
 it("matches snapshot", () => {
