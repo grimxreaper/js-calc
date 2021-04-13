@@ -14,7 +14,6 @@ class App extends React.Component {
 
   onClick = (button) => {
     if (button.type === "key") {
-
       if (this.state.done) {
         this.setState({
           done: false,
@@ -37,7 +36,8 @@ class App extends React.Component {
       ) {
         this.setState({
           operate: button.key,
-          result: this.state.result + button.key,
+          // result: this.state.result + button.key,
+          result: this.changeKeys(this.state.result, button.key)
         });
       }
     }
@@ -50,11 +50,48 @@ class App extends React.Component {
     }
   };
 
+
+  
+  // number + operator + (+ | -)  = number + operator + (+ | -)
+  // number + operator + (/ | *)  = number +  (* | /)
+  // operator + operator -> replace the first operator
+  changeKeys = (result, button) => {
+    
+    // "" + operator = operator
+    if (result === "") {
+      return button
+    }
+
+    // number + operator = number + operator
+    if (!isNaN(result[result.length - 1])) { //right after a number you can add an operator
+      return result + button
+    }
+
+    // number + operator + (+ | -)  = number + operator + (+ | -)
+    //Right after a number and an operator, we can have + or -
+    if (result.length >= 2) {
+      // 
+      if (!isNaN(result[result.length - 2])) {
+        if ("+-/*".includes(result[result.length - 1])) {
+          if ("+-".includes(button)) {
+            return result + button
+          }
+          return result.slice(0, -1)
+        }
+
+      }
+    }
+    
+
+    return "not yet coded";
+  }
+
+
+
   calculate = () => {
     const { result, operate, originalLastNum } = this.state;
     let lastKey = result.split(operate);
-    if (lastKey[1]) {
-      //check if string is not alone
+    if (lastKey[1]) { //check if string is not alone
       this.setState({ originalLastNum: lastKey[lastKey.length - 1] });
     }
     this.setState({
