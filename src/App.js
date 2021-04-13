@@ -89,7 +89,10 @@ class App extends React.Component {
         return result + button
       } else {
         if ("+-".includes(button)) {
-          //If open ( just result result + button
+          // If open ( just result result + button
+          if ("(".includes(button)) {
+            return result + button
+          }
           return result.slice(0, -1) + button
         } else {
           return ""
