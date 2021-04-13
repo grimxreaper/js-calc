@@ -13,7 +13,7 @@ class App extends React.Component {
   };
 
   onClick = (button) => {
-    if (button.type === "key") {
+    if (button.type === "key" || button.key === "(" || button.key === ")") {
       if (this.state.done) {
         this.setState({
           done: false,
@@ -52,36 +52,55 @@ class App extends React.Component {
 
 
   
-  // number + operator + (+ | -)  = number + operator + (+ | -)
-  // number + operator + (/ | *)  = number +  (* | /)
-  // operator + operator -> replace the first operator
   changeKeys = (result, button) => {
     
-    // "" + operator = operator
+    // "" + sign = operator
     if (result === "") {
-      return button
+      if ("+-".includes(button)) {
+        return button
+      }
+      return ""
     }
 
-    // number + operator = number + operator
-    if (!isNaN(result[result.length - 1])) { //right after a number you can add an operator
+    if (!isNaN(result[result.length - 1]) || result[result.length -1] === ")") { //right after a number you can add an operator
       return result + button
     }
 
     // number + operator + (+ | -)  = number + operator + (+ | -)
+    // number + operator + (/ | *)  = number +  (* | /)
     //Right after a number and an operator, we can have + or -
+    //Right after a number and an operator, if the operator is / * we replace
+    // 7 + 2 -> number + number =OK
+    // 7 "+-/*" (+ 2) -> number "operation" + (signed number) -> ok
+
     if (result.length >= 2) {
       // 
       if (!isNaN(result[result.length - 2])) {
-        if ("+-/*".includes(result[result.length - 1])) {
-          if ("+-".includes(button)) {
+        if ("+-/*(".includes(result[result.length - 1])) {
+          if ("+-".includes(button)) { // + or - are the sign of the number, not the operation
             return result + button
           }
-          return result.slice(0, -1)
+          return result.slice(0, -1) + button
         }
-
+      } 
+    } else {
+         // number + operator = number + operator
+      if (!isNaN(result[result.length - 1])) { //right after a number you can add an operator
+        return result + button
+      } else {
+        if ("+-".includes(button)) {
+          //If open ( just result result + button
+          return result.slice(0, -1) + button
+        } else {
+          return ""
+        }
       }
     }
+    //nicolas.savoini@mac.com
     
+    // operator + operator -> replace the first operator
+    // "" - - -> is not possible
+
 
     return "not yet coded";
   }
