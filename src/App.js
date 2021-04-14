@@ -156,11 +156,39 @@ class App extends React.Component {
         //result: (eval(lastKey[0] + operate + originalLastNum) || "") + "",
         result: (eval(tempResult) || "") + "",
       });
-
     }
 
     // +1 -> 
+    // 2 differents issues
+    // no level -> no ( inside ()) -> (2+5)*(5+6) -> order
+    // level(nested) -> ( inside () -> 2(*(2+5))*5 -> 3*((2*5)/5)
+    //  Rule: First you calculate the () withtout ( or ) inside
+  var tempResultString = result;
+  if ( countParenthesis > 1 ) {
+    
+    //We need to detect the non nested parenthesis
+    //Open ( and no other ( before the next close
+    // '(' 0123456789-+*/.(not (, not ) ) ')'
+    // ( + any number of the 15 chars + ) : (7+2) (-3.25478/+6.587)
+    const reg = /\(([0123456789/*-+.]*)\)/g;
+    var parenthesisToCalculate = (result.match(reg)||[]);
+    while (parenthesisToCalculate.length > 0) {
+      for(var i=0; i< parenthesisToCalculate.length; i++) {
+        //we extract the first expression ex:  (2+5)
+        let expression = parenthesisToCalculate[i];
+        //We calculate the value ex: 7
+        let tempResult = eval(expression);
+        //We need to put it back
+        let indexOfExpression = tempResultString.indexOf(expression);
+
+      }
+    }
+    
+    
+  }
+
  
+
     this.setState({
       done: true,
       //result: (eval(lastKey[0] + operate + originalLastNum) || "") + "",

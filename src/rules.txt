@@ -1,0 +1,49 @@
+// Calculator
+
+// Expression: list of symbol to evaluate (result)
+// Digit: number 0 to 9
+// (): parenthesis
+// "+ - / *": operator
+// "+ - ": sign for positive / negative number
+// .: is a dot (decimal)
+
+// Calculation: [sign][digits] operator [sign][digit]
+
+// Expression = list of Calculation
+
+// Rule:
+// An empty expression can only start with
+// - Digit
+// - (
+// - sign
+// - ., but we need to add a zero before
+
+// After a digit, you can only have
+// - digit
+// - operator
+// - ), only if there are more ( than ) 
+// . 
+
+// After a (, you can only have *same as empty expression
+// - Digit
+// - (
+// - sign
+// - ., but we need to add a zero before
+
+// After a ), you can only have
+// - operator
+// - ), only if there are more ( than )
+
+// After an operator, you can only have
+// - Digit
+// - sign
+// - (
+// - ., but we need to add a zero before
+
+// After a sign, you can only have
+// - digit
+// - (
+// - ., but we need to add a zero before
+
+//After a dot, you can only have
+// - digit
