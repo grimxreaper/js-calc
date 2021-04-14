@@ -86,6 +86,15 @@ if (result.length - 1 === ')'){
 // - (
 // - ., but we need to add a zero before
 
+if ((result.length - 1).includes('/*+-')) {
+    if ("+-(0123456789".includes(button)) {
+        return result + button;
+      }
+      if (".".includes(button)) {
+        return result + "0.";
+      }
+}
+
 // After a sign, you can only have
 // - digit
 // - (
