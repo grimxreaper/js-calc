@@ -2,9 +2,7 @@ import React from "react";
 import "./App.css";
 import ResultComponent from "./Components/ResultComponent";
 import KeyPadComponent from "./Components/KeyPadComponent";
-import {
-  atan2, chain, derivative, e, evaluate, log, pi, pow, round, sqrt
-} from 'mathjs';
+import { evaluate } from "mathjs";
 
 class App extends React.Component {
   state = {
@@ -29,7 +27,10 @@ class App extends React.Component {
             result: this.state.result + button.key,
           });
         } else {
-          if (button.key === "." || (this.state.originalLastNum+"").includes('.')) {
+          if (
+            button.key === "." ||
+            (this.state.originalLastNum + "").includes(".")
+          ) {
             this.setState({
               originalLastNum: this.state.originalLastNum + button.key,
               result: this.state.result + button.key,
@@ -74,7 +75,6 @@ class App extends React.Component {
       }
       return "";
     }
-
     if (
       !isNaN(result[result.length - 1]) ||
       result[result.length - 1] === ")"
