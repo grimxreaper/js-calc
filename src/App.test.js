@@ -32,18 +32,6 @@ test("result displays correct number and operation when used together", () => {
   expect(getByTestId("result")).toHaveTextContent("9/");
 });
 
-//'CE button deletes previous number or command'
-// test('CE button displays when clicked', () => {
-//   const { getByTestId } = render(<App />);
-//   const children = 'CE'
-
-//   fireEvent.click(getByTestId("CE"))
-
-//   expect(getByTestId('result')).toHaveTextContent('/')
-
-//   userEvent.click(screen.getByRole('button', {name: /CE/i }))
-//   expect(screen.queryByText(children)).toBeInTheDocument();
-// })
 
 //Testing events
 it("state is updated when a button is clicked", () => {
@@ -199,7 +187,7 @@ describe("check the operation of 3 or more numbers", () => {
     expect(getByTestId("result")).toHaveTextContent("2.3")
   });
 
-  test("1.1 + 1.2 must equal 1.3", () => {
+  test("Multiple operations including parens", () => {
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId(8));
@@ -221,8 +209,26 @@ describe("check the operation of 3 or more numbers", () => {
   });
 });
 
+// describe('clicking equals runs the operation again every time', () => {
+//   const { getByTestId } = render(<App />);
 
-describe('error message displaying at correct times', () => {
+//   fireEvent.click(getByTestId(1));
+//   fireEvent.click(getByTestId("."));
+//   fireEvent.click(getByTestId(1));
+//   fireEvent.click(getByTestId("+"));
+//   fireEvent.click(getByTestId(1));
+//   fireEvent.click(getByTestId("."));
+//   fireEvent.click(getByTestId(2));
+//   fireEvent.click(getByTestId("="));
+//   fireEvent.click(getByTestId("="));
+
+//   expect(getByTestId("result").toHaveTextContent(""))
+
+
+// })
+
+
+describe('removes characters appropriately', () => {
   test("multiplying 3 by 7 then adding 8 and hitting CE must remove 8", () => {
     const { getByTestId } = render(<App />);
 
@@ -235,8 +241,39 @@ describe('error message displaying at correct times', () => {
 
     expect(getByTestId("result")).toHaveTextContent("3*7+")
   });
+
+  test("double negative at the beginning of an expression defaults to one negative sign", () => {
+    const { getByTestId } = render(<App />);
+
+    fireEvent.click(getByTestId("-"));
+    fireEvent.click(getByTestId("-"));
+
+    expect(getByTestId("result")).toHaveTextContent("-")
+  })
+
+  test("using an addition followed by a multiplication operator defaults to a multiplication operator", () => {
+    const { getByTestId } = render(<App />);
+
+    fireEvent.click(getByTestId(7));
+    fireEvent.click(getByTestId("+"));
+    fireEvent.click(getByTestId("*"));
+
+    expect(getByTestId("result")).toHaveTextContent("7*")
+  })
 })
 
+// test("starting a new calculation after '=' has been pressed", () => {
+//   const { getByTestId } = render(<App />);
+
+//   fireEvent.click(getByTestId(3));
+//   fireEvent.click(getByTestId("*"));
+//   fireEvent.click(getByTestId(7));
+//   fireEvent.click(getByTestId("="));
+//   fireEvent.click(getByTestId(8));
+//   fireEvent.click(getByTestId(3));
+
+//   expect(getByTestId("result")).toHaveTextContent("83")
+// }) 
 
 
 // test('equal button is called one time', () => {
