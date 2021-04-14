@@ -9,7 +9,7 @@ class App extends React.Component {
     counter: 0,
     done: false,
     operate: undefined,
-    originalLastNum: undefined,
+    originalLastNum: "",
   };
 
   onClick = (button) => {
@@ -26,10 +26,17 @@ class App extends React.Component {
             result: this.state.result + button.key,
           });
         } else {
-          this.setState({
-            originalLastNum: button.key,
-            result: this.state.result + button.key,
-          });
+          if (button.key === "." || (this.state.originalLastNum+"").includes('.')) {
+            this.setState({
+              originalLastNum: this.state.originalLastNum + button.key,
+              result: this.state.result + button.key,
+            });
+          } else {
+            this.setState({
+              originalLastNum: button.key,
+              result: this.state.result + button.key,
+            });
+          }
         }
       }
     } else {
@@ -116,6 +123,19 @@ class App extends React.Component {
 
   calculate = () => {
     const { result, operate, originalLastNum } = this.state;
+    let finalResult = 0;
+
+    // Handling double equal
+    // If I only have sign + digit(s) + dot + digit(s)
+    const regex = /-{0,1}[0123456789]*(\.[0123456789]*){0,1}/g;
+    const matches = result.match(regex) || [];
+    if (matches.length > 1 && matches[0] === result) {
+      //I need to handle the double equal
+      if ("+-/*".includes(operate) && !isNaN(originalLastNum)) {
+        finalResult = (eval(result + operate + originalLastNum) | "") + "";
+      }
+    } else {
+      /*
     let lastKey = result.split(operate);
     if (lastKey[1]) {
       //check if string is not alone
@@ -124,79 +144,47 @@ class App extends React.Component {
       }
     }
     console.log(lastKey, this.originalLastNum)
+*/
+      // Handle paraenthesis
+      //= 0 -> run the calculation
 
-    // Handle paraenthesis
-    //= 0 -> run the calculation
-    if (!result.includes("(")) {
-      this.setState({
-        done: true,
-        //result: (eval(lastKey[0] + operate + originalLastNum) || "") + "",
-        result: (eval(result) || "") + "",
-      });
-    }
+      // 1 -> run calculation insde (), replace () with result -> run calculation
+      //We need to count the number of (
+      // +1 ->
+      // 2 differents issues
+      // no level -> no ( inside ()) -> (2+5)*(5+6) -> order
+      // level(nested) -> ( inside () -> 2(*(2+5))*5 -> 3*((2*5)/5)
+      //  Rule: First you calculate the () withtout ( or ) inside
 
-    // 1 -> run calculation insde (), replace () with result -> run calculation
-    //We need to count the number of (
-    let countParenthesis = (result.match(/\(/g)||[]).length
-    
-    if (countParenthesis === 1) {
-      //We need to run the calculation inside first
-      let start = result.indexOf("(");
-      console.log("start="+start)
-      let end = result.indexOf(")");
-      console.log("end="+end)
-      let firstCalculation = result.substr(start+1, end-start-1);
-      console.log(firstCalculation);
-      let firstResult = eval(firstCalculation);
-      console.log(firstResult);
-      let tempResult = result.substr(0,start) + firstResult + result.substr(end+1);
-      console.log(tempResult);
-      this.setState({
-        done: true,
-        //result: (eval(lastKey[0] + operate + originalLastNum) || "") + "",
-        result: (eval(tempResult) || "") + "",
-      });
-    }
-
-    // +1 -> 
-    // 2 differents issues
-    // no level -> no ( inside ()) -> (2+5)*(5+6) -> order
-    // level(nested) -> ( inside () -> 2(*(2+5))*5 -> 3*((2*5)/5)
-    //  Rule: First you calculate the () withtout ( or ) inside
-  var tempResultString = result;
-  if ( countParenthesis > 1 ) {
-    
-    //We need to detect the non nested parenthesis
-    //Open ( and no other ( before the next close
-    // '(' 0123456789-+*/.(not (, not ) ) ')'
-    // ( + any number of the 15 chars + ) : (7+2) (-3.25478/+6.587)
-    const reg = /\(([0123456789/*-+.]*)\)/g;
-    var parenthesisToCalculate = (result.match(reg)||[]);
-    while (parenthesisToCalculate.length > 0) {
-      for(var i=0; i< parenthesisToCalculate.length; i++) {
-        //we extract the first expression ex:  (2+5)
-        let expression = parenthesisToCalculate[i];
-        //We calculate the value ex: 7
-        let tempResult = eval(expression);
-        //We need to put it back
-        let indexOfExpression = tempResultString.indexOf(expression);
-
+      var tempResultString = result;
+      //We need to detect the non nested parenthesis
+      //Open ( and no other ( before the next close
+      // '(' 0123456789-+*/.(not (, not ) ) ')'
+      // ( + any number of the 15 chars + ) : (7+2) (-3.25478/+6.587)
+      const reg = /\(([0123456789/*-+.]*)\)/g;
+      var parenthesisToCalculate = tempResultString.match(reg) || [];
+      while (parenthesisToCalculate.length > 0) {
+        for (var i = 0; i < parenthesisToCalculate.length; i++) {
+          //we extract the first expression ex:  (2+5)
+          let expression = parenthesisToCalculate[i];
+          //We calculate the value ex: 7
+          let tempResult = eval(expression);
+          //We need to replace the expression by the calculation
+          tempResultString = tempResultString.replace(expression, tempResult);
+        }
+        parenthesisToCalculate = tempResultString.match(reg) || [];
       }
-    }
-    
-    
-  }
+      //In tempResultString we have the last expression withtout any ()
 
- 
+      finalResult = eval(tempResultString);
+    }
 
     this.setState({
       done: true,
       //result: (eval(lastKey[0] + operate + originalLastNum) || "") + "",
-      result: (eval(result) || "") + "",
+      result: (finalResult || "") + "",
     });
   };
-
-
 
   reset = () => {
     this.setState({

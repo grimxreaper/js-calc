@@ -20,7 +20,7 @@ const keypads = [
   { type: "key", key: 1 },
   { type: "key", key: 0 },
   { type: "operation", key: "=" },
-  { type: "operation", key: "." },
+  { type: "key", key: "." },
 ];
 
 class KeyPadComponent extends React.Component {
