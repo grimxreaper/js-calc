@@ -135,7 +135,7 @@ class App extends React.Component {
     if (matches.length > 1 && matches[0] === result) {
       //I need to handle the double equal
       if ("+-/*".includes(operate) && !isNaN(originalLastNum)) {
-        finalResult = (eval(result + operate + originalLastNum) | "") + "";
+        finalResult = (evaluate(result + operate + originalLastNum) | "") + "";
       }
     } else {
       /*
@@ -171,7 +171,7 @@ class App extends React.Component {
           //we extract the first expression ex:  (2+5)
           let expression = parenthesisToCalculate[i];
           //We calculate the value ex: 7
-          let tempResult = eval(expression);
+          let tempResult = evaluate(expression);
           //We need to replace the expression by the calculation
           tempResultString = tempResultString.replace(expression, tempResult);
         }
@@ -179,7 +179,7 @@ class App extends React.Component {
       }
       //In tempResultString we have the last expression withtout any ()
 
-      finalResult = eval(tempResultString);
+      finalResult = evaluate(tempResultString);
     }
 
     this.setState({

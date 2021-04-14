@@ -1,6 +1,7 @@
 import { render, fireEvent } from "@testing-library/react";
 import App from "./App";
 import ResultComponent from "./Components/ResultComponent";
+import { evaluate } from "mathjs";
 
 //snapshot
 it("matches snapshot", () => {
@@ -59,7 +60,7 @@ const y = 7;
 const operation = "*";
 
 test("displays correct result of multiplying 8 by 7", () => {
-  expect(eval(`${x} ${operation} ${y}`)).toBe(56);
+  expect(evaluate(`${x} ${operation} ${y}`)).toBe(56);
 });
 
 describe("check the operation of 2 numbers", () => {
