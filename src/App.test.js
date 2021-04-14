@@ -128,7 +128,7 @@ describe("check operations of AC and CE", () => {
   });
 });
 
-describe("check the operation of 3 numbers", () => {
+describe("check the operation of 3 or more numbers", () => {
   test("multiplying 3 by 7 by 5 must result in 105", () => {
     const { getByTestId } = render(<App />);
 
@@ -197,6 +197,27 @@ describe("check the operation of 3 numbers", () => {
     fireEvent.click(getByTestId("="));
 
     expect(getByTestId("result")).toHaveTextContent("2.3")
+  });
+
+  test("1.1 + 1.2 must equal 1.3", () => {
+    const { getByTestId } = render(<App />);
+
+    fireEvent.click(getByTestId(8));
+    fireEvent.click(getByTestId("."));
+    fireEvent.click(getByTestId(7));
+    fireEvent.click(getByTestId("*"));
+    fireEvent.click(getByTestId(2));
+    fireEvent.click(getByTestId("+"));
+    fireEvent.click(getByTestId(6));
+    fireEvent.click(getByTestId("-"));
+    fireEvent.click(getByTestId("("));
+    fireEvent.click(getByTestId(7));
+    fireEvent.click(getByTestId("-"));
+    fireEvent.click(getByTestId(2));
+    fireEvent.click(getByTestId(")"));
+    fireEvent.click(getByTestId("="));
+
+    expect(getByTestId("result")).toHaveTextContent("18.4")
   });
 });
 
