@@ -135,8 +135,8 @@ class App extends React.Component {
     // - (
     // - sign
     // - ., but we need to add a zero before
-
-    if (result[result.length - 1] === "(") { //89( .
+    //ex: 59 - ( 
+    if (result[result.length - 1] === "(") {
       if ("+-(0123456789".includes(button)) {
         return result + button;
       }
@@ -144,7 +144,13 @@ class App extends React.Component {
         return result + "0.";
       }
     }
-     //🪲BUG -> (7 +  isn't working
+
+     //🪲BUG -> (7 +  isn't working, attempting fix with this if conditional
+     if (result[result.length - 1] === "("
+     && '/*+-'.includes(button)
+     && (result[result.length - 2]).includes('0123456789(')) {
+       return result + button 
+     }
 
     // After a ), you can only have
     // - operator
@@ -214,7 +220,7 @@ class App extends React.Component {
     }
 
     //ATTN -> added rule below myself outside of our tutoring
-
+    //🪲 72.2 + doesn't work FIXED
     if (result.includes('.')) {
       if ("+-*/0123456789".includes(button)) {
         return result + button;
