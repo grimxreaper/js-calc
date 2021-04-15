@@ -19,7 +19,7 @@ class App extends React.Component {
         this.setState({
           done: false,
           originalLastNum: "",
-          result: button.key,
+          result: button.key + "",
         });
       } else {
         if (button.key === "(" || button.key === ")") {
@@ -32,12 +32,18 @@ class App extends React.Component {
             (this.state.originalLastNum + "").includes(".")
           ) {
             this.setState({
-              originalLastNum: this.state.originalLastNum + button.key,
+              //originalLastNum: this.state.originalLastNum + button.key,
+              originalLastNum: this.recordLastNum(
+                this.state.result + button.key
+              ),
               result: this.state.result + button.key,
             });
           } else {
             this.setState({
-              originalLastNum: button.key,
+              //originalLastNum: button.key,
+              originalLastNum: this.recordLastNum(
+                this.state.result + button.key
+              ),
               result: this.state.result + button.key,
             });
           }
@@ -67,59 +73,153 @@ class App extends React.Component {
     }
   };
 
-  changeKeys = (result, button) => {
-    // "" + sign = operator
-    if (result === "") {
-      if ("+-".includes(button)) {
-        return button;
-      }
+  recordLastNum = (result) => {
+    const regex = /[-+/*]{0,}[0-9]{1,}[.]{0,1}[0-9]*/g;
+    let results = result.match(regex) || [];
+    if (results.length === 0) {
       return "";
     }
-    if (
-      !isNaN(result[result.length - 1]) ||
-      result[result.length - 1] === ")"
-    ) {
-      //right after a number you can add an operator
-      return result + button;
+
+    //We need to take the last one
+    let lastNum = results[results.length - 1];
+    console.log();
+
+    // If there is no operator -> we return the value
+    if (!"-+/*".includes(lastNum[0])) {
+      return lastNum;
+    }
+    this.setState({
+      operate: lastNum[0],
+    });
+    return lastNum.substr(1);
+
+    /*
+    // If there is one sign, we remove itr
+    const operatorsCount = (result.match(/[-+/*]/g) || []).length;
+    if (operatorsCount === 1) {
+      return lastNum.substr(1)
+    }
+    // If there are two operator (operator+sign) -> we remove the first and keep the sign
+    if (operatorsCount === 2) {
+      return lastNum.substr(1)
+    }
+*/
+  };
+
+  changeKeys = (result, button) => {
+    if (result === "") {
+      if ("+-(0123456789".includes(button)) {
+        return button;
+      }
+      if (".".includes(button)) {
+        return "0.";
+      }
     }
 
-    // number + operator + (+ | -)  = number + operator + (+ | -)
-    // number + operator + (/ | *)  = number +  (* | /)
-    //Right after a number and an operator, we can have + or -
-    //Right after a number and an operator, if the operator is / * we replace
-    // 7 + 2 -> number + number =OK
-    // 7 "+-/*" (+ 2) -> number "operation" + (signed number) -> ok
-
-    if (result.length >= 2) {
-      //
-      if (!isNaN(result[result.length - 2])) {
-        if ("+-/*(".includes(result[result.length - 1])) {
-          if ("+-".includes(button)) {
-            // + or - are the sign of the number, not the operation
-            return result + button;
-          }
-          return result.slice(0, -1) + button;
-        }
-      }
-    } else {
-      // number + operator = number + operator
-      if (!isNaN(result[result.length - 1])) {
-        //right after a number you can add an operator
+    if ("0123456789".includes(result[result.length - 1])) {
+      const numberOfOpenP = (result.match(/\(/g) || []).length;
+      const numberOfCloseP = (result.match(/\)/g) || []).length;
+      if (
+        "*/-+0123456789.".includes(result) ||
+        (button.key === ")" && numberOfOpenP > numberOfCloseP)
+      ) {
         return result + button;
-      } else {
-        if ("+-".includes(button)) {
-          // If open ( just result result + button
-          if ("(".includes(button)) {
-            return result + button;
-          }
-          return result.slice(0, -1) + button;
-        } else {
-          return "";
+      }
+    }
+    // After a (, you can only have *same as empty expression
+    // - Digit
+    // - (
+    // - sign
+    // - ., but we need to add a zero before
+
+    if (result.length - 1 === "(") {
+      if ("+-(0123456789".includes(button)) {
+        return result + button;
+      }
+      if (".".includes(button)) {
+        return result + "0.";
+      }
+    }
+
+    // After a ), you can only have
+    // - operator
+    // - ), only if there are more ( than )
+
+    if (result.length - 1 === ")") {
+      const numberOfOpenP = (result.match(/\(/g) || []).length;
+      const numberOfCloseP = (result.match(/\)/g) || []).length;
+      if ("/*-+".includes(button)) {
+        return result + button;
+      }
+      if (")".includes(button) && numberOfOpenP > numberOfCloseP) {
+        return result + button;
+      }
+    }
+
+    //QS: will we run into a problem in differentiating an operator from a sign? */
+    //For  + / , how do you know it's an operator, or a sign (7--)
+    // You need to watch what is before
+    // digit, ) -> operator
+    // operator, ( -> sign
+    // . -> cannot
+
+    // After an operator, you can only have
+    // - Digit
+    // - sign
+    // - (
+    // - ., but we need to add a zero before
+
+    if (result[result.length - 2].includes("0123456789)")) {
+      //checking "digit, ) -> operator"
+      if (result[result.length - 1].includes("/*+-")) {
+        if ("+-(0123456789".includes(button)) {
+          return result + button;
+        }
+        if (".".includes(button)) {
+          return result + "0.";
         }
       }
     }
+
+    // After a sign, you can only have
+    // - digit
+    // - (
+    // - ., but we need to add a zero before
+
+    if (result[result.length - 2].includes("/*+-(")) {
+      if (result[result.length - 1].includes("-+")) {
+        if ("0123456789(".includes(button)) {
+          return result + button;
+        }
+        if (".".includes(button)) {
+          return result + "0.";
+        }
+      }
+    }
+
+    //After a dot, you can only have
+    // - digit
+
+    if (result[result.length - 1].includes(".")) {
+      console.log(result[result.length - 1])
+      if ("0123456789".includes(button)) {
+        return result + button;
+      }
+    }
+
+    //ATTN -> added rule below myself outside of our tutoring
+    if (result.includes('.')) {
+      if ("0123456789".includes(button)) {
+        return result + button;
+      }
+
+    }
+    //72.2 + doesn't work
+
 
     // operator + operator -> replace the first operator
+
+    
     // "" - - -> is not possible
     return "not yet coded";
   };
@@ -135,7 +235,7 @@ class App extends React.Component {
     if (matches.length > 1 && matches[0] === result) {
       //I need to handle the double equal
       if ("+-/*".includes(operate) && !isNaN(originalLastNum)) {
-        finalResult = (evaluate(result + operate + originalLastNum) | "") + "";
+        finalResult = evaluate(result + operate + originalLastNum) + "";
       }
     } else {
       /*
@@ -184,7 +284,6 @@ class App extends React.Component {
 
     this.setState({
       done: true,
-      //result: (eval(lastKey[0] + operate + originalLastNum) || "") + "",
       result: (finalResult || "") + "",
     });
   };
