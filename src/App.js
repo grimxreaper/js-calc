@@ -115,7 +115,11 @@ class App extends React.Component {
         return "0.";
       }
     }
-
+// After a digit, you can only have
+// - digit
+// - operator
+// - ), only if there are more ( than )
+// .
     if ("0123456789".includes(result[result.length - 1])) {
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
@@ -132,7 +136,7 @@ class App extends React.Component {
     // - sign
     // - ., but we need to add a zero before
 
-    if (result.length - 1 === "(") {
+    if (result[result.length - 1] === "(") {
       if ("+-(0123456789".includes(button)) {
         return result + button;
       }
@@ -145,7 +149,7 @@ class App extends React.Component {
     // - operator
     // - ), only if there are more ( than )
 
-    if (result.length - 1 === ")") {
+    if (result[result.length - 1] === ")") {
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
       if ("/*-+".includes(button)) {
