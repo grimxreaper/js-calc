@@ -136,7 +136,7 @@ class App extends React.Component {
     // - sign
     // - ., but we need to add a zero before
 
-    if (result[result.length - 1] === "(") {
+    if (result[result.length - 1] === "(") { //89( .
       if ("+-(0123456789".includes(button)) {
         return result + button;
       }
@@ -144,6 +144,7 @@ class App extends React.Component {
         return result + "0.";
       }
     }
+     //🪲BUG -> (7 +  isn't working
 
     // After a ), you can only have
     // - operator
@@ -159,7 +160,7 @@ class App extends React.Component {
         return result + button;
       }
     }
-    //BUG 🪲-> (7 + 2 isn't working
+  
 
     //QS: will we run into a problem in differentiating an operator from a sign? */
     //For  + / , how do you know it's an operator, or a sign (7--)
@@ -213,14 +214,14 @@ class App extends React.Component {
     }
 
     //ATTN -> added rule below myself outside of our tutoring
-       //🪲 72.2 + doesn't work FIXED
+
     if (result.includes('.')) {
       if ("+-*/0123456789".includes(button)) {
         return result + button;
       }
     }
  
-    // 72(7+2 returns "not yet coded"
+    // 🪲 72(7+2 returns "not yet coded"
 
     // operator + operator -> replace the first operator
 
