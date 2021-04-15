@@ -111,6 +111,7 @@ class App extends React.Component {
     console.log("click params", result, button);
     if ("(".includes(button)) {
       if (result.length > 1) {
+        //these few lines below, did not work to fix another bug
        console.log('here')
         if ("0123456789".includes(result[result.length - 1])) {
           //remove the previous number and return the last number
