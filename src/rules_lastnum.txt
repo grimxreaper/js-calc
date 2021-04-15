@@ -20,7 +20,9 @@ last num: number : + - [digits]
 22
 -986
 //
-const regex = /[-+]{0,1}[0-9]{1,}[.]{0,1}[0-9]*/g;
+
+const regex = /[-+/*]{0,}[0-9]{1,}[.]{0,1}[0-9]*/g;
+
 {1,} -> this is to say: At lEast one digit
 //
 ......

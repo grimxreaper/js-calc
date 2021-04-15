@@ -132,7 +132,7 @@ class App extends React.Component {
     // - sign
     // - ., but we need to add a zero before
 
-    if (result.length - 1 === "(") {
+    if (result[result.length - 1] === "(") {
       if ("+-(0123456789".includes(button)) {
         return result + button;
       }
@@ -145,7 +145,7 @@ class App extends React.Component {
     // - operator
     // - ), only if there are more ( than )
 
-    if (result.length - 1 === ")") {
+    if (result[result.length - 1] === ")") {
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
       if ("/*-+".includes(button)) {
@@ -197,29 +197,51 @@ class App extends React.Component {
       }
     }
 
+    // After a sign, you can only have
+    // - digit
+    // - (
+    // - ., but we need to add a zero before
+
+    if (result[result.length - 2].includes("/*+-(")) {
+      if (result[result.length - 1].includes("-+")) {
+        if ("0123456789(".includes(button)) {
+          return result + button;
+        }
+        if (".".includes(button)) {
+          return result + "0.";
+        }
+      }
+    }
+
     //After a dot, you can only have
     // - digit
 
     if (result[result.length - 1].includes(".")) {
-      console.log(result[result.length - 1])
+      console.log(result[result.length - 1]);
       if ("0123456789".includes(button)) {
         return result + button;
       }
     }
 
-    //ATTN -> added rule below myself outside of our tutoring
-    if (result.includes('.')) {
+    //ATTN -> added rule below myself outside of tutoring
+
+    if (result.includes(".")) {
       if ("0123456789".includes(button)) {
         return result + button;
       }
-
     }
-    //72.2 + doesn't work
 
+    //🪲 72.2 + doesn't work FIXED
+    if (result.includes(".")) {
+      if ("+-*/0123456789".includes(button)) {
+        return result + button;
+      }
+    }
+
+    // 72(7+2 returns "not yet coded"
 
     // operator + operator -> replace the first operator
 
-    
     // "" - - -> is not possible
     return "not yet coded";
   };
