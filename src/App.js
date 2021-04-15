@@ -159,6 +159,7 @@ class App extends React.Component {
         return result + button;
       }
     }
+    //BUG 🪲-> (7 + 2 isn't working
 
     //QS: will we run into a problem in differentiating an operator from a sign? */
     //For  + / , how do you know it's an operator, or a sign (7--)
@@ -212,14 +213,14 @@ class App extends React.Component {
     }
 
     //ATTN -> added rule below myself outside of our tutoring
+       //🪲 72.2 + doesn't work FIXED
     if (result.includes('.')) {
-      if ("0123456789".includes(button)) {
+      if ("+-*/0123456789".includes(button)) {
         return result + button;
       }
-
     }
-    //72.2 + doesn't work
-
+ 
+    // 72(7+2 returns "not yet coded"
 
     // operator + operator -> replace the first operator
 

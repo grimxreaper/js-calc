@@ -1,0 +1,31 @@
+Rules for the last number
+
+- digits
+- (
+- )
+- .
+- sign - +
+- operator - + / * 
+
+lastNum: empty
+- digits : add it
+- sign: add it
+- . add it
+
+- (,),operator: replace next
+
+(2*(22*-986))
+last num: number : + - [digits]
+2
+22
+-986
+//
+const regex = /[-+/*]{0,}[0-9]{1,}[.]{0,1}[0-9]*/g;
+{1,} -> this is to say: At lEast one digit
+//
+......
+save one or more char
+everytime there is new one-> save it or record it
+the new char may depends on the last char input
+986 record 986 + + in operate
+98-6 record 6 + - in operate
