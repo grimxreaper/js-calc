@@ -192,6 +192,18 @@ describe('error message displaying at correct times', () => {
 
     expect(getByTestId("result")).toHaveTextContent("21")
   });
+
+  test("returns 0 instead of an empty string", () => {
+    const { getByTestId } = render(<App />);
+
+    fireEvent.click(getByTestId(7));
+    fireEvent.click(getByTestId("+"));
+    fireEvent.click(getByTestId("-"));
+    fireEvent.click(getByTestId(7));
+    fireEvent.click(getByTestId("="));
+
+    expect(getByTestId("result")).toHaveTextContent("0")
+  });
 })
 
 // function fireEvents(...events) {

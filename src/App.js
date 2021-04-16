@@ -313,12 +313,9 @@ class App extends React.Component {
       }
     }
 
-    console.log(finalResult);
-    console.log(finalResult || "0 is false")
-
     this.setState({
       done: true,
-      result: (finalResult || "") + "",
+      result: finalResult + "",
     });
   };
 
