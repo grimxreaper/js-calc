@@ -124,7 +124,7 @@ class App extends React.Component {
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
       if (
-        "*/-+0123456789.".includes(result) ||
+        "*/-+0123456789.".includes(button) ||
         (button.key === ")" && numberOfOpenP > numberOfCloseP)
       ) {
         return result + button;
@@ -226,24 +226,35 @@ class App extends React.Component {
 
     
     // "" - - -> is not possible
-    return "not yet coded";
+    //return "not yet coded";
+    return result;
   };
+
+  getLastChar = (from) => {
+    return from.slice(-1);
+  }
 
   calculate = () => {
     const { result, operate, originalLastNum } = this.state;
     let finalResult = 0;
+    var tempResult = result;
+
+    // Special case with expression ending with operatore, after CE use
+    if ("-+*/".includes(this.getLastChar(result))) {
+      tempResult = result.slice(0,-1);
+    }
 
     // Handling double equal
     // If I only have sign + digit(s) + dot + digit(s)
     const regex = /-{0,1}[0123456789]*(\.[0123456789]*){0,1}/g;
-    const matches = result.match(regex) || [];
-    if (matches.length > 1 && matches[0] === result) {
+    const matches = tempResult.match(regex) || [];
+    if (matches.length > 1 && matches[0] === tempResult) {
       //I need to handle the double equal
       if ("+-/*".includes(operate) && !isNaN(originalLastNum)) {
         // finalResult = evaluate(result + operate + originalLastNum) + "";
 
         try {
-          finalResult = evaluate(result + operate + originalLastNum) + "";
+          finalResult = evaluate(tempResult + operate + originalLastNum) + "";
         } catch(error) {
           //throw error
         }
@@ -270,7 +281,7 @@ class App extends React.Component {
       // level(nested) -> ( inside () -> 2(*(2+5))*5 -> 3*((2*5)/5)
       //  Rule: First you calculate the () withtout ( or ) inside
 
-      var tempResultString = result;
+      var tempResultString = tempResult;
       //We need to detect the non nested parenthesis
       //Open ( and no other ( before the next close
       // '(' 0123456789-+*/.(not (, not ) ) ')'
