@@ -107,6 +107,7 @@ class App extends React.Component {
   };
 
   changeKeys = (result, button) => {
+    console.log("start");
     if (result === "") {
       if ("+-(0123456789".includes(button)) {
         return button;
@@ -120,7 +121,9 @@ class App extends React.Component {
 // - operator
 // - ), only if there are more ( than )
 // .
+    console.log("here");
     if ("0123456789".includes(result[result.length - 1])) {
+      console.log("checking after digit");
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
       if (
@@ -128,6 +131,8 @@ class App extends React.Component {
         (button.key === ")" && numberOfOpenP > numberOfCloseP)
       ) {
         return result + button;
+      } else {
+        return result;
       }
     }
     // After a (, you can only have *same as empty expression
