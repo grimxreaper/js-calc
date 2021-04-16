@@ -82,7 +82,7 @@ class App extends React.Component {
 
     //We need to take the last one
     let lastNum = results[results.length - 1];
-    console.log();
+    // console.log();
 
     // If there is no operator -> we return the value
     if (!"-+/*".includes(lastNum[0])) {
@@ -174,9 +174,9 @@ class App extends React.Component {
     // - (
     // - ., but we need to add a zero before
 
-    if (result[result.length - 2].includes("0123456789)")) {
+    if ("0123456789)".includes(result[result.length - 2])) {
       //checking "digit, ) -> operator"
-      if (result[result.length - 1].includes("/*+-")) {
+      if ("/*+-".includes(result[result.length - 1])) {
         if ("+-(0123456789".includes(button)) {
           return result + button;
         }
@@ -191,8 +191,8 @@ class App extends React.Component {
     // - (
     // - ., but we need to add a zero before
 
-    if (result[result.length - 2].includes("/*+-(")) {
-      if (result[result.length - 1].includes("-+")) {
+    if ("/*+-(".includes(result[result.length - 2])) {
+      if ("-+".includes(result[result.length - 1])) {
         if ("0123456789(".includes(button)) {
           return result + button;
         }
@@ -205,7 +205,7 @@ class App extends React.Component {
     //After a dot, you can only have
     // - digit
 
-    if (result[result.length - 1].includes(".")) {
+    if ((result[result.length - 1] || "").includes(".")) {
       console.log(result[result.length - 1])
       if ("0123456789".includes(button)) {
         return result + button;
@@ -214,7 +214,7 @@ class App extends React.Component {
 
     //ATTN -> added rule below myself outside of our tutoring
        //🪲 72.2 + doesn't work FIXED
-    if (result.includes('.')) {
+    if ((result || "").includes('.')) {
       if ("+-*/0123456789".includes(button)) {
         return result + button;
       }
@@ -240,7 +240,13 @@ class App extends React.Component {
     if (matches.length > 1 && matches[0] === result) {
       //I need to handle the double equal
       if ("+-/*".includes(operate) && !isNaN(originalLastNum)) {
-        finalResult = evaluate(result + operate + originalLastNum) + "";
+        // finalResult = evaluate(result + operate + originalLastNum) + "";
+
+        try {
+          finalResult = evaluate(result + operate + originalLastNum) + "";
+        } catch(error) {
+          //throw error
+        }
       }
     } else {
       /*
@@ -276,15 +282,24 @@ class App extends React.Component {
           //we extract the first expression ex:  (2+5)
           let expression = parenthesisToCalculate[i];
           //We calculate the value ex: 7
-          let tempResult = evaluate(expression);
-          //We need to replace the expression by the calculation
-          tempResultString = tempResultString.replace(expression, tempResult);
+          try {
+            let tempResult = evaluate(expression);
+
+            //We need to replace the expression by the calculation
+            tempResultString = tempResultString.replace(expression, tempResult);
+          } catch(error) {
+            //throw error
+          }
         }
         parenthesisToCalculate = tempResultString.match(reg) || [];
       }
       //In tempResultString we have the last expression withtout any ()
 
-      finalResult = evaluate(tempResultString);
+      try {
+        finalResult = evaluate(tempResultString);
+      } catch(error) {
+        //throw error
+      }
     }
 
     this.setState({
@@ -309,7 +324,7 @@ class App extends React.Component {
   };
 
   render() {
-    console.log(this.state);
+    // console.log(this.state);
 
     return (
       <div className="container">
