@@ -13,10 +13,14 @@ script:
   # - yarn test
   # - yarn run build 
   - echo "script!"
-  # - mkdir build
-  # - cp index.html build/
-  # - cp styles.css build/
-
+  - mkdir build
+  - cp index.html build/
+  - cp index.js build/
+  - cp App.js build/
+  - cp App.css build/
+  - cp KeyPadComponent.js build/
+  - cp ResultComponent.js build/
+  - cp App.test.js build/
 
   
 deploy:
