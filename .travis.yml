@@ -1,0 +1,28 @@
+language: node_js
+node_js:
+  - 14.15.5
+
+
+before_install: 
+install:
+  - echo "install!"
+  # - yarn install
+  # - npm i -g webpack
+
+script:
+  # - yarn test
+  # - yarn run build 
+  - echo "script!"
+  # - mkdir build
+  # - cp index.html build/
+  # - cp styles.css build/
+
+
+  
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  local_dir: build
+  on:
+    branch: main
