@@ -116,14 +116,11 @@ class App extends React.Component {
         return "0.";
       }
     }
-    // After a digit, you can only have
-    // - digit
-    // - operator
-    // - ), only if there are more ( than )
-    // .
+
     console.log("here");
     if ("0123456789".includes(result[result.length - 1])) {
       console.log("checking after digit");
+      console.log(result[result.length - 1]);
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
       if (
@@ -135,12 +132,6 @@ class App extends React.Component {
         return result;
       }
     }
-    // After a (, you can only have *same as empty expression
-    // - Digit
-    // - (
-    // - sign
-    // - ., but we need to add a zero before
-
     if (result[result.length - 1] === "(") {
       if ("+-(0123456789".includes(button)) {
         return result + button;
@@ -149,10 +140,6 @@ class App extends React.Component {
         return result + "0.";
       }
     }
-
-    // After a ), you can only have
-    // - operator
-    // - ), only if there are more ( than )
 
     if (result[result.length - 1] === ")") {
       const numberOfOpenP = (result.match(/\(/g) || []).length;
@@ -164,21 +151,6 @@ class App extends React.Component {
         return result + button;
       }
     }
-    //BUG 🪲-> (7 + 2 isn't working
-
-    //QS: will we run into a problem in differentiating an operator from a sign? */
-    //For  + / , how do you know it's an operator, or a sign (7--)
-    // You need to watch what is before
-    // digit, ) -> operator
-    // operator, ( -> sign
-    // . -> cannot
-
-    // After an operator, you can only have
-    // - Digit
-    // - sign
-    // - (
-    // - ., but we need to add a zero before
-
     if ("0123456789)".includes(result[result.length - 2])) {
       //checking "digit, ) -> operator"
       if ("/*+-".includes(result[result.length - 1])) {
@@ -190,12 +162,6 @@ class App extends React.Component {
         }
       }
     }
-
-    // After a sign, you can only have
-    // - digit
-    // - (
-    // - ., but we need to add a zero before
-
     if ("/*+-(".includes(result[result.length - 2])) {
       if ("-+".includes(result[result.length - 1])) {
         if ("0123456789(".includes(button)) {
@@ -207,9 +173,6 @@ class App extends React.Component {
       }
     }
 
-    //After a dot, you can only have
-    // - digit
-
     if ((result[result.length - 1] || "").includes(".")) {
       console.log(result[result.length - 1]);
       if ("0123456789".includes(button)) {
@@ -217,20 +180,12 @@ class App extends React.Component {
       }
     }
 
-    //ATTN -> added rule below myself outside of our tutoring
-    //🪲 72.2 + doesn't work FIXED
     if ((result || "").includes(".")) {
       if ("+-*/0123456789".includes(button)) {
         return result + button;
       }
     }
 
-    // 72(7+2 returns "not yet coded"
-
-    // operator + operator -> replace the first operator
-
-    // "" - - -> is not possible
-    //return "not yet coded";
     return result;
   };
 
