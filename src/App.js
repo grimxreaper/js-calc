@@ -107,7 +107,6 @@ class App extends React.Component {
   };
 
   changeKeys = (result, button) => {
-    let newtext = "";
     console.log("click params", result, button);
     if ("(".includes(button)) {
       if (result.length > 1) {
