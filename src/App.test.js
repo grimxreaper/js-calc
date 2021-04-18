@@ -1,5 +1,5 @@
 import { render, userEvent, fireEvent, screen } from "@testing-library/react";
-import { evaluate } from "mathjs";
+import { all, create, evaluate } from "mathjs";
 import App from "./App";
 import ResultComponent from "./Components/ResultComponent";
 
@@ -53,6 +53,17 @@ test("displays correct result of multiplying 8 by 7", () => {
 
 test("displays correct result of adding -7 to 7", () => {
   expect(evaluate('7+-7')).toBe(0);
+});
+
+test("displays correct result of adding 0.1 and 0.2", () => {
+
+  const config = {
+    number: 'number',
+    precision: 10,
+  }
+  const math = create(all, config)
+  //expect(math.round(math.evaluate(0.1+0.2),10)).toBe(0.3);
+  expect(math.evaluate(0.1+0.2)).toBe(0.3);
 });
 
 describe("check the operation of 2 numbers", () => {

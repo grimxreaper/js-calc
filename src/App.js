@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import ResultComponent from "./Components/ResultComponent";
 import KeyPadComponent from "./Components/KeyPadComponent";
-import { evaluate } from "mathjs";
+import { evaluate, round } from "mathjs";
 
 class App extends React.Component {
   state = {
@@ -186,6 +186,12 @@ class App extends React.Component {
     return from.slice(-1);
   };
 
+
+  roundedResult = (expression) => {
+    const digitAfterComma = 13
+    round(evaluate(expression), digitAfterComma)
+  }
+
   calculate = () => {
     const { result, operate, originalLastNum } = this.state;
     let finalResult = 0;
@@ -205,7 +211,7 @@ class App extends React.Component {
       if ("+-/*".includes(operate) && !isNaN(originalLastNum)) {
         // finalResult = evaluate(result + operate + originalLastNum) + "";
         try {
-          finalResult = evaluate(tempResult + operate + originalLastNum) + "";
+          finalResult = this.roundedResult(tempResult + operate + originalLastNum) + "";
         } catch (error) {
           //throw error
         }
@@ -225,7 +231,7 @@ class App extends React.Component {
           let expression = parenthesisToCalculate[i];
           //We calculate the value ex: 7
           try {
-            let tempResult = evaluate(expression);
+            let tempResult = round(evaluate(expression), 13);
 
             //We need to replace the expression by the calculation
             tempResultString = tempResultString.replace(expression, tempResult);
@@ -238,7 +244,7 @@ class App extends React.Component {
       //In tempResultString we have the last expression withtout any ()
 
       try {
-        finalResult = evaluate(tempResultString);
+        finalResult = round(evaluate(tempResultString), 13);
       } catch (error) {
         //throw error
       }
