@@ -116,11 +116,11 @@ class App extends React.Component {
         return "0.";
       }
     }
-// After a digit, you can only have
-// - digit
-// - operator
-// - ), only if there are more ( than )
-// .
+    // After a digit, you can only have
+    // - digit
+    // - operator
+    // - ), only if there are more ( than )
+    // .
     console.log("here");
     if ("0123456789".includes(result[result.length - 1])) {
       console.log("checking after digit");
@@ -211,25 +211,24 @@ class App extends React.Component {
     // - digit
 
     if ((result[result.length - 1] || "").includes(".")) {
-      console.log(result[result.length - 1])
+      console.log(result[result.length - 1]);
       if ("0123456789".includes(button)) {
         return result + button;
       }
     }
 
     //ATTN -> added rule below myself outside of our tutoring
-       //🪲 72.2 + doesn't work FIXED
-    if ((result || "").includes('.')) {
+    //🪲 72.2 + doesn't work FIXED
+    if ((result || "").includes(".")) {
       if ("+-*/0123456789".includes(button)) {
         return result + button;
       }
     }
- 
+
     // 72(7+2 returns "not yet coded"
 
     // operator + operator -> replace the first operator
 
-    
     // "" - - -> is not possible
     //return "not yet coded";
     return result;
@@ -237,16 +236,17 @@ class App extends React.Component {
 
   getLastChar = (from) => {
     return from.slice(-1);
-  }
+  };
 
   calculate = () => {
     const { result, operate, originalLastNum } = this.state;
     let finalResult = 0;
     var tempResult = result;
 
-    // Special case with expression ending with operatore, after CE use
+
+    // Special case with expression ending with operator, after CE use
     if ("-+*/".includes(this.getLastChar(result))) {
-      tempResult = result.slice(0,-1);
+      tempResult = result.slice(0, -1);
     }
 
     // Handling double equal
@@ -257,10 +257,9 @@ class App extends React.Component {
       //I need to handle the double equal
       if ("+-/*".includes(operate) && !isNaN(originalLastNum)) {
         // finalResult = evaluate(result + operate + originalLastNum) + "";
-
         try {
           finalResult = evaluate(tempResult + operate + originalLastNum) + "";
-        } catch(error) {
+        } catch (error) {
           //throw error
         }
       }
@@ -303,7 +302,7 @@ class App extends React.Component {
 
             //We need to replace the expression by the calculation
             tempResultString = tempResultString.replace(expression, tempResult);
-          } catch(error) {
+          } catch (error) {
             //throw error
           }
         }
@@ -313,7 +312,7 @@ class App extends React.Component {
 
       try {
         finalResult = evaluate(tempResultString);
-      } catch(error) {
+      } catch (error) {
         //throw error
       }
     }
