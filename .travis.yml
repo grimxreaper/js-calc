@@ -6,16 +6,15 @@ node_js:
 before_install: 
 install:
   - echo "install!"
-  
+
 
 
 script:
   # - npm test
   - npm run build
-  
-  
+  - ls node_modules
 
-
+  
   
 deploy:
   provider: pages
