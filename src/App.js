@@ -79,11 +79,8 @@ class App extends React.Component {
     if (results.length === 0) {
       return "";
     }
-
     //We need to take the last one
     let lastNum = results[results.length - 1];
-    // console.log();
-
     // If there is no operator -> we return the value
     if (!"-+/*".includes(lastNum[0])) {
       return lastNum;
@@ -92,18 +89,6 @@ class App extends React.Component {
       operate: lastNum[0],
     });
     return lastNum.substr(1);
-
-    /*
-    // If there is one sign, we remove itr
-    const operatorsCount = (result.match(/[-+/*]/g) || []).length;
-    if (operatorsCount === 1) {
-      return lastNum.substr(1)
-    }
-    // If there are two operator (operator+sign) -> we remove the first and keep the sign
-    if (operatorsCount === 2) {
-      return lastNum.substr(1)
-    }
-*/
   };
 
   changeKeys = (result, button) => {
@@ -117,10 +102,17 @@ class App extends React.Component {
       }
     }
 
-    console.log("here");
     if ("0123456789".includes(result[result.length - 1])) {
       console.log("checking after digit");
-      console.log(result[result.length - 1]);
+      console.log(result[result.length - 1]); //1
+      console.log(
+        "result:",
+        result,
+        "originalLastNum:",
+        this.state.originalLastNum,
+        "Operator:",
+        this.state.operate
+      );
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
       if (
@@ -132,6 +124,7 @@ class App extends React.Component {
         return result;
       }
     }
+
     if (result[result.length - 1] === "(") {
       if ("+-(0123456789".includes(button)) {
         return result + button;
@@ -174,7 +167,7 @@ class App extends React.Component {
     }
 
     if ((result[result.length - 1] || "").includes(".")) {
-      console.log(result[result.length - 1]);
+
       if ("0123456789".includes(button)) {
         return result + button;
       }
@@ -198,7 +191,6 @@ class App extends React.Component {
     let finalResult = 0;
     var tempResult = result;
 
-
     // Special case with expression ending with operator, after CE use
     if ("-+*/".includes(this.getLastChar(result))) {
       tempResult = result.slice(0, -1);
@@ -219,27 +211,7 @@ class App extends React.Component {
         }
       }
     } else {
-      /*
-    let lastKey = result.split(operate);
-    if (lastKey[1]) {
-      //check if string is not alone
-      if ("123456789".includes(lastKey[lastKey.length - 1])) {
-      this.setState({ originalLastNum: lastKey[lastKey.length - 1] })
-      }
-    }
-    console.log(lastKey, this.originalLastNum)
-*/
       // Handle paraenthesis
-      //= 0 -> run the calculation
-
-      // 1 -> run calculation insde (), replace () with result -> run calculation
-      //We need to count the number of (
-      // +1 ->
-      // 2 differents issues
-      // no level -> no ( inside ()) -> (2+5)*(5+6) -> order
-      // level(nested) -> ( inside () -> 2(*(2+5))*5 -> 3*((2*5)/5)
-      //  Rule: First you calculate the () withtout ( or ) inside
-
       var tempResultString = tempResult;
       //We need to detect the non nested parenthesis
       //Open ( and no other ( before the next close
