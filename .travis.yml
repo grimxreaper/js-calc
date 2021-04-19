@@ -6,22 +6,16 @@ node_js:
 before_install: 
 install:
   - echo "install!"
-  # - yarn install
-  # - npm i -g webpack
+  - npm install
+
+
 
 script:
-  # - yarn test
-  # - yarn run build 
-  - echo "script!"
-  - mkdir build
-  - cp index.html build/
-  - cp index.js build/
-  - cp App.js build/
-  - cp App.css build/
-  - cp KeyPadComponent.js build/
-  - cp ResultComponent.js build/
-  - cp App.test.js build/
+  # - npm test
+  - npm run build
+  # - ls node_modules
 
+  
   
 deploy:
   provider: pages
