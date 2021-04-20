@@ -82,7 +82,7 @@ class App extends React.Component {
 
     //We need to take the last one
     let lastNum = results[results.length - 1];
-    console.log();
+    // console.log();
 
     // If there is no operator -> we return the value
     if (!"-+/*".includes(lastNum[0])) {
@@ -107,6 +107,15 @@ class App extends React.Component {
   };
 
   changeKeys = (result, button) => {
+
+    if ("(".includes(button)) {
+      if (result.length > 1) {
+        if ("0123456789".includes(result[result.length - 1])) {
+          //remove the previous number and return the last number
+          return result + button.replace("(", "*(");
+        }
+      }
+    }
     if (result === "") {
       if ("+-(0123456789".includes(button)) {
         return button;
@@ -120,7 +129,7 @@ class App extends React.Component {
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
       if (
-        "*/-+0123456789.".includes(result) ||
+        "*/-+0123456789.".includes(button) ||
         (button.key === ")" && numberOfOpenP > numberOfCloseP)
       ) {
         return result + button;
@@ -131,7 +140,7 @@ class App extends React.Component {
     // - (
     // - sign
     // - ., but we need to add a zero before
-
+    //ex: 59 - (
     if (result[result.length - 1] === "(") {
       if ("+-(0123456789".includes(button)) {
         return result + button;
@@ -139,6 +148,15 @@ class App extends React.Component {
       if (".".includes(button)) {
         return result + "0.";
       }
+    }
+
+    //🪲BUG -> (7 +  isn't working, attempting fix with this if conditional
+    if (
+      result[result.length - 1] === "(" &&
+      "/*+-".includes(button) &&
+      result[result.length - 2].includes("0123456789(")
+    ) {
+      return result + button;
     }
 
     // After a ), you can only have
@@ -169,9 +187,9 @@ class App extends React.Component {
     // - (
     // - ., but we need to add a zero before
 
-    if (result[result.length - 2].includes("0123456789)")) {
+    if ("0123456789)".includes(result[result.length - 2])) {
       //checking "digit, ) -> operator"
-      if (result[result.length - 1].includes("/*+-")) {
+      if ("/*+-".includes(result[result.length - 1])) {
         if ("+-(0123456789".includes(button)) {
           return result + button;
         }
@@ -186,8 +204,8 @@ class App extends React.Component {
     // - (
     // - ., but we need to add a zero before
 
-    if (result[result.length - 2].includes("/*+-(")) {
-      if (result[result.length - 1].includes("-+")) {
+    if ("/*+-(".includes(result[result.length - 2])) {
+      if ("-+".includes(result[result.length - 1])) {
         if ("0123456789(".includes(button)) {
           return result + button;
         }
@@ -213,51 +231,56 @@ class App extends React.Component {
       }
     }
 
-    //After a dot, you can only have
-    // - digit
+    if ((result[result.length - 1] || "").includes(".")) {
 
-    if (result[result.length - 1].includes(".")) {
-      console.log(result[result.length - 1]);
       if ("0123456789".includes(button)) {
         return result + button;
       }
     }
 
-    //ATTN -> added rule below myself outside of tutoring
-
-    if (result.includes(".")) {
-      if ("0123456789".includes(button)) {
-        return result + button;
-      }
-    }
 
     //🪲 72.2 + doesn't work FIXED
     if (result.includes(".")) {
+      
+    //ATTN -> added rule below myself outside of our tutoring
+       //🪲 72.2 + doesn't work FIXED
+    if ((result || "").includes('.')) {
+
       if ("+-*/0123456789".includes(button)) {
         return result + button;
       }
     }
-
-    // 72(7+2 returns "not yet coded"
-
-    // operator + operator -> replace the first operator
-
-    // "" - - -> is not possible
-    return "not yet coded";
+    return result;
   };
+
+  getLastChar = (from) => {
+    return from.slice(-1);
+  }
 
   calculate = () => {
     const { result, operate, originalLastNum } = this.state;
     let finalResult = 0;
+    var tempResult = result;
+
+    // Special case with expression ending with operatore, after CE use
+    if ("-+*/".includes(this.getLastChar(result))) {
+      tempResult = result.slice(0,-1);
+    }
 
     // Handling double equal
     // If I only have sign + digit(s) + dot + digit(s)
     const regex = /-{0,1}[0123456789]*(\.[0123456789]*){0,1}/g;
-    const matches = result.match(regex) || [];
-    if (matches.length > 1 && matches[0] === result) {
+    const matches = tempResult.match(regex) || [];
+    if (matches.length > 1 && matches[0] === tempResult) {
       //I need to handle the double equal
       if ("+-/*".includes(operate) && !isNaN(originalLastNum)) {
-        finalResult = evaluate(result + operate + originalLastNum) + "";
+        // finalResult = evaluate(result + operate + originalLastNum) + "";
+
+        try {
+          finalResult = evaluate(tempResult + operate + originalLastNum) + "";
+        } catch(error) {
+          //throw error
+        }
       }
     } else {
       /*
@@ -281,7 +304,7 @@ class App extends React.Component {
       // level(nested) -> ( inside () -> 2(*(2+5))*5 -> 3*((2*5)/5)
       //  Rule: First you calculate the () withtout ( or ) inside
 
-      var tempResultString = result;
+      var tempResultString = tempResult;
       //We need to detect the non nested parenthesis
       //Open ( and no other ( before the next close
       // '(' 0123456789-+*/.(not (, not ) ) ')'
@@ -293,15 +316,24 @@ class App extends React.Component {
           //we extract the first expression ex:  (2+5)
           let expression = parenthesisToCalculate[i];
           //We calculate the value ex: 7
-          let tempResult = evaluate(expression);
-          //We need to replace the expression by the calculation
-          tempResultString = tempResultString.replace(expression, tempResult);
+          try {
+            let tempResult = evaluate(expression);
+
+            //We need to replace the expression by the calculation
+            tempResultString = tempResultString.replace(expression, tempResult);
+          } catch(error) {
+            //throw error
+          }
         }
         parenthesisToCalculate = tempResultString.match(reg) || [];
       }
       //In tempResultString we have the last expression withtout any ()
 
-      finalResult = evaluate(tempResultString);
+      try {
+        finalResult = evaluate(tempResultString);
+      } catch(error) {
+        //throw error
+      }
     }
 
     this.setState({
@@ -326,7 +358,7 @@ class App extends React.Component {
   };
 
   render() {
-    console.log(this.state);
+    // console.log(this.state);
 
     return (
       <div className="container">
