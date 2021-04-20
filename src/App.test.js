@@ -189,8 +189,8 @@ describe("check the operation of 3 numbers", () => {
 });
 
 
-describe('error message displaying at correct times', () => {
-  test("multiplying 3 by 7 then adding 8 and hitting CE must equal error", () => {
+
+  test("multiplying 3 by 7 then adding 8 and hitting CE must delete 8 and return 3 * 7", () => {
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId(3));
@@ -215,7 +215,6 @@ describe('error message displaying at correct times', () => {
 
     expect(getByTestId("result")).toHaveTextContent("0")
   });
-})
 
 // function fireEvents(...events) {
 //   events.forEach(key => {
