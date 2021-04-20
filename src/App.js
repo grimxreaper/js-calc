@@ -92,7 +92,18 @@ class App extends React.Component {
   };
 
   changeKeys = (result, button) => {
-    console.log("start");
+
+
+    if ("(".includes(button)) {
+      if (result.length > 1) {
+        //these few lines below, did not work to fix another bug
+        if ("0123456789".includes(result[result.length - 1])) {
+          //remove the previous number and return the last number
+          return result + button.replace("(", "*(");
+        }
+      }
+    }
+
     if (result === "") {
       if ("+-(0123456789".includes(button)) {
         return button;
@@ -102,17 +113,8 @@ class App extends React.Component {
       }
     }
 
+
     if ("0123456789".includes(result[result.length - 1])) {
-      console.log("checking after digit");
-      console.log(result[result.length - 1]); //1
-      console.log(
-        "result:",
-        result,
-        "originalLastNum:",
-        this.state.originalLastNum,
-        "Operator:",
-        this.state.operate
-      );
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
       if (
@@ -123,7 +125,6 @@ class App extends React.Component {
       } else {
         return result;
       }
-    }
 
     if (result[result.length - 1] === "(") {
       if ("+-(0123456789".includes(button)) {
@@ -144,6 +145,7 @@ class App extends React.Component {
         return result + button;
       }
     }
+
     if ("0123456789)".includes(result[result.length - 2])) {
       //checking "digit, ) -> operator"
       if ("/*+-".includes(result[result.length - 1])) {
@@ -165,6 +167,7 @@ class App extends React.Component {
         }
       }
     }
+
 
     if ((result[result.length - 1] || "").includes(".")) {
 
@@ -200,7 +203,7 @@ class App extends React.Component {
     // Special case with expression ending with operator, after CE use
     if ("-+*/".includes(this.getLastChar(result))) {
       tempResult = result.slice(0, -1);
-    }
+
 
     // Handling double equal
     // If I only have sign + digit(s) + dot + digit(s)
@@ -211,6 +214,7 @@ class App extends React.Component {
       if ("+-/*".includes(operate) && !isNaN(originalLastNum)) {
         // finalResult = evaluate(result + operate + originalLastNum) + "";
         try {
+
           finalResult = this.roundedResult(tempResult + operate + originalLastNum) + "";
         } catch (error) {
           //throw error
@@ -218,6 +222,7 @@ class App extends React.Component {
       }
     } else {
       // Handle paraenthesis
+
       var tempResultString = tempResult;
       //We need to detect the non nested parenthesis
       //Open ( and no other ( before the next close
