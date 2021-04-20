@@ -216,46 +216,4 @@ describe("check the operation of 3 numbers", () => {
     expect(getByTestId("result")).toHaveTextContent("0")
   });
 
-// function fireEvents(...events) {
-//   events.forEach(key => {
-//     fireEvent.click(getByTestId(key))
-//   })
-// }
 
-// test('equal button is called one time', () => {
-//   const x = 3;
-//   const y = 4;
-//   const onSubmit = jest.fn();
-//   render(<App onSubmit={"="} />);
-//   const { getByTestId } = render(<App />);
-
-//   userEvent.click(screen.getAllByRole('button', { name: /3/i }))
-
-//   userEvent.click(screen.getAllByRole('button', { name: /4/i }))
-
-//   userEvent.click(screen.getByRole('button', { name: /=/i }));
-//   fireEvent.click(screen.getByTestId("="));
-
-//   expect(getByTestId("=")).toHaveBeenCalledTimes(1);
-//   expect(onSubmit).toHaveBeenCalledWith({
-//     x,
-//     y
-//   });
-// });
-
-//const calculate = require('./App')
-// test('displays correct result of multiplying 8 by 7', () => {
-//   const { getByTestId } = render(<App />);
-
-//   expect(calculate(`${x} ${operation} ${y}`)).toBe(56)
-// })
-
-// it('displays correct result of multiplying 8 by 7', () => {
-//   const { getByTestId } = render(<App />);
-
-//   fireEvent.click(getByTestId("8"), getByTestId("*"), getByTestId("7"), getByTestId("="))
-
-//   expect(getByTestId("result")).toHaveTextContent("56")
-// })
-
-//Testing keyboard events
