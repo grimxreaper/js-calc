@@ -304,27 +304,17 @@ class App extends React.Component {
                 done: true,
                 result: tempResultString + ""
               })
-
               return result;
             }
          
-            
-            //commenting out lines below to try solution
             //We need to replace the expression by the calculation
-            // tempResultString = tempResultString.replace(expression, tempResult);
-            
+            tempResultString = tempResultString.replace(expression, tempResult);
 
-            //but this is fine, it is only replace (4+4) with 8 which is what we want
-            //but it seems to also be affixing the 2 to tempResult, but where is that happening?
-
-            console.log('tempResultString:', tempResultString) //28
           } catch (error) {
             //throw error
           }
         }
-        //commenting out lines below to try solution
-        // parenthesisToCalculate = tempResultString.match(reg) || [];
-        // console.log('parenthesisToCalculate', parenthesisToCalculate)
+        parenthesisToCalculate = tempResultString.match(reg) || [];
       }
       //In tempResultString we have the last expression withtout any ()
 
