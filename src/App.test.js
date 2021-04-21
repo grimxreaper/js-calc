@@ -219,3 +219,15 @@ test("2 multiplied by what is inside the parentheses (4 +4)", () => {
 
   expect(getByTestId("result")).toHaveTextContent("16")
 });
+
+// test("Manually add * operator", () => {
+//   const { getByTestId } = render(<App />);
+
+//   const expression1 = "" 
+//   const expression2 = "2*(2+2)" 
+//   const expression3 = "2(2+2)" 
+
+//   expect(this.addMultiplier(expression1)).toHaveTextContent("")
+//   expect(this.addMultiplier(expression2)).toHaveTextContent(expression2)
+//   expect(this.addMultiplier(expression3)).toHaveTextContent(expression2)
+// });

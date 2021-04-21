@@ -235,6 +235,18 @@ class App extends React.Component {
       }
     }
 
+    if ("=".includes(button)) {
+      const numberOfOpenP = (result.match(/\(/g) || []).length;
+      const numberOfCloseP = (result.match(/\)/g) || []).length;
+    
+      if (numberOfOpenP > numberOfCloseP) {
+      //why is it going in the multiplier block?
+        return result + ")" + button
+      }
+    }
+
+
+
     // 72(7+2 returns "not yet coded"
 
     // operator + operator -> replace the first operator
@@ -248,6 +260,20 @@ class App extends React.Component {
     return from.slice(-1);
   };
 
+  // Inpout: expression
+  // output: expression with missing multipleier
+  addMultiplier = (expression) => {
+
+    //Find all pattern Digit + (
+    //expression ="1(2+6)+23(6+9)+(2+3)9"
+
+    const digitAndP = /([0123456789])(\()/g;
+    const pAndDigit = /(\))([0123456789])/g;
+
+    //return the value
+    return expression.replace(digitAndP, '$1*$2').replace(pAndDigit, '$1*$2')
+  }
+
   calculate = () => {
     const { result, operate, originalLastNum } = this.state;
     let finalResult = 0;
@@ -258,6 +284,12 @@ class App extends React.Component {
     if ("-+*/".includes(this.getLastChar(result))) {
       tempResult = result.slice(0, -1);
     }
+
+    //Call Method to manually insert * operator
+    tempResult = this.addMultiplier(tempResult) + ""
+
+    console.log(tempResult)
+
 
     // Handling double equal
     // If I only have sign + digit(s) + dot + digit(s)
@@ -286,9 +318,9 @@ class App extends React.Component {
           //we extract the first expression ex:  (2+5)
           let expression = parenthesisToCalculate[i];
           //We calculate the value ex: 7
-      
-          let multiplier = tempResultString.toString().replace(expression, ""); //take out expression
-          console.log('multiplier:', multiplier)
+          
+          // let multiplier = tempResultString.toString().replace(expression, ""); //take out expression
+         
           try {
             let tempResult = evaluate(expression);
 
@@ -296,16 +328,16 @@ class App extends React.Component {
             console.log('expression', expression) //(4+4)
             console.log('result', result) //2(4+4)
 
-            if (multiplier) {
-              console.log('inside of this multiplier if block')
-              tempResultString = multiplier * tempResult + "";
+            // if (multiplier) {
+            //   console.log('inside of this multiplier if block')
+            //   tempResultString = multiplier * tempResult + "";
               
-              this.setState({
-                done: true,
-                result: tempResultString + ""
-              })
-              return result;
-            }
+            //   this.setState({
+            //     done: true,
+            //     result: tempResultString + ""
+            //   })
+            //   return result;
+            // }
          
             //We need to replace the expression by the calculation
             tempResultString = tempResultString.replace(expression, tempResult);
