@@ -287,7 +287,7 @@ class App extends React.Component {
           let expression = parenthesisToCalculate[i];
           //We calculate the value ex: 7
       
-          let multiplier = tempResultString.replace(expression, ""); //take out expression
+          let multiplier = tempResultString.toString().replace(expression, ""); //take out expression
           console.log('multiplier:', multiplier)
           try {
             let tempResult = evaluate(expression);
@@ -300,7 +300,13 @@ class App extends React.Component {
             if (multiplier) {
               console.log('inside of this multiplier if block')
               tempResultString = multiplier * tempResult
+              
+              this.setState({
+                done: true,
+                result: tempResultString + ""
+              })
             }
+         
             
             //commenting out lines below to try solution
             //We need to replace the expression by the calculation
@@ -320,8 +326,6 @@ class App extends React.Component {
         // console.log('parenthesisToCalculate', parenthesisToCalculate)
       }
       //In tempResultString we have the last expression withtout any ()
-
- 
 
       try {
         finalResult = evaluate(tempResultString);
