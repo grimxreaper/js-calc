@@ -235,6 +235,17 @@ class App extends React.Component {
       }
     }
 
+    if ("=".includes(button)) {
+      const numberOfOpenP = (result.match(/\(/g) || []).length;
+      const numberOfCloseP = (result.match(/\)/g) || []).length;
+    
+      if (numberOfOpenP > numberOfCloseP) {
+        return result + ")"
+      }
+    }
+
+
+
     // 72(7+2 returns "not yet coded"
 
     // operator + operator -> replace the first operator

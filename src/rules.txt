@@ -125,7 +125,7 @@ if ((result.length - 1).includes('.')) {
       }
 }
 
-//adding this for issue 8:
+//adding this for issue 13:
 //if there is a number directly outside of a parens with no operators
 //do the operation inside the parens first and then multiply that by the number outside
 //what its doing right now is it is doing the operation inside the parens,
