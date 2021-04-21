@@ -130,3 +130,21 @@ if ((result.length - 1).includes('.')) {
 //do the operation inside the parens first and then multiply that by the number outside
 //what its doing right now is it is doing the operation inside the parens,
 // but then just affixing the number outside the parens to the result
+
+
+if there is more open parens than closed parens, add in the closed
+parens automatically after '=' is pressed.
+
+Once '=' is pressed, we can tell where the closed parens should be, right?
+4(5+5(6)(1+)
+okay, there are 3 "(" and only 2 ")"
+so, insert a ")" at the end?
+
+if ("=".includes(button)) {
+  const numberOfOpenP = (result.match(/\(/g) || []).length;
+  const numberOfCloseP = (result.match(/\)/g) || []).length;
+
+  if (numberOfOpenP > numberOfCloseP) {
+    return result + ")" + button
+  }
+}
