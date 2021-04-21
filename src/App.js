@@ -293,18 +293,19 @@ class App extends React.Component {
             let tempResult = evaluate(expression);
 
             console.log('tempResultString:', tempResultString)
-            console.log('tempResult', tempResult) //8
             console.log('expression', expression) //(4+4)
             console.log('result', result) //2(4+4)
 
             if (multiplier) {
               console.log('inside of this multiplier if block')
-              tempResultString = multiplier * tempResult
+              tempResultString = multiplier * tempResult + "";
               
               this.setState({
                 done: true,
                 result: tempResultString + ""
               })
+
+              return result;
             }
          
             
