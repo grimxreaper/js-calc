@@ -107,7 +107,6 @@ class App extends React.Component {
   };
 
   changeKeys = (result, button) => {
-    console.log("start");
     if (result === "") {
       if ("+-(0123456789".includes(button)) {
         return button;
@@ -121,15 +120,14 @@ class App extends React.Component {
     // - operator
     // - ), only if there are more ( than )
     // .
-    console.log("here");
     if ("0123456789".includes(result[result.length - 1])) {
-      console.log("checking after digit");
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
       if (
         "*/-+0123456789.".includes(button) ||
         (button.key === ")" && numberOfOpenP > numberOfCloseP)
       ) {
+        console.log('HEREE')
         return result + button;
       } else {
         return result;
@@ -158,12 +156,24 @@ class App extends React.Component {
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
       if ("/*-+".includes(button)) {
+        console.log('entered this first if')
         return result + button;
       }
       if (")".includes(button) && numberOfOpenP > numberOfCloseP) {
+        console.log('entered this condition')
         return result + button;
+
       }
     }
+
+//     if (result[result.length - 1] === ")") {
+// //and what is outside the open parens is a number without an operator
+// //then store that number in a variable and then multiply that times
+// //the tempResult that is a result of the calculation of what is inside the parens
+
+//     }
+
+
     //BUG 🪲-> (7 + 2 isn't working
 
     //QS: will we run into a problem in differentiating an operator from a sign? */
@@ -264,27 +274,6 @@ class App extends React.Component {
         }
       }
     } else {
-      /*
-    let lastKey = result.split(operate);
-    if (lastKey[1]) {
-      //check if string is not alone
-      if ("123456789".includes(lastKey[lastKey.length - 1])) {
-      this.setState({ originalLastNum: lastKey[lastKey.length - 1] })
-      }
-    }
-    console.log(lastKey, this.originalLastNum)
-*/
-      // Handle paraenthesis
-      //= 0 -> run the calculation
-
-      // 1 -> run calculation insde (), replace () with result -> run calculation
-      //We need to count the number of (
-      // +1 ->
-      // 2 differents issues
-      // no level -> no ( inside ()) -> (2+5)*(5+6) -> order
-      // level(nested) -> ( inside () -> 2(*(2+5))*5 -> 3*((2*5)/5)
-      //  Rule: First you calculate the () withtout ( or ) inside
-
       var tempResultString = tempResult;
       //We need to detect the non nested parenthesis
       //Open ( and no other ( before the next close
@@ -297,18 +286,42 @@ class App extends React.Component {
           //we extract the first expression ex:  (2+5)
           let expression = parenthesisToCalculate[i];
           //We calculate the value ex: 7
+          let multiplier = tempResultString.replace(expression, ""); //take out expression
+          console.log('multiplier:', multiplier)
           try {
             let tempResult = evaluate(expression);
 
+            console.log('tempResultString:', tempResultString)
+            console.log('tempResult', tempResult) //8
+            console.log('expression', expression) //(4+4)
+            console.log('resu;t', result) //2(4+4)
+
+            if (multiplier) {
+              console.log('inside of this multiplier if block')
+              tempResultString = multiplier * tempResult
+            }
+            
+
             //We need to replace the expression by the calculation
             tempResultString = tempResultString.replace(expression, tempResult);
+            
+
+            //but this is fine, it is only replace (4+4) with 8 which is what we want
+            //but it seems to also be affixing the 2 to tempResult, but where is that happening?
+
+
+
+            console.log('tempResultString:', tempResultString) //28
           } catch (error) {
             //throw error
           }
         }
         parenthesisToCalculate = tempResultString.match(reg) || [];
+        console.log('parenthesisToCalculate', parenthesisToCalculate)
       }
       //In tempResultString we have the last expression withtout any ()
+
+ 
 
       try {
         finalResult = evaluate(tempResultString);
