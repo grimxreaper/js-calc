@@ -274,7 +274,7 @@ class App extends React.Component {
     return from.slice(-1);
   };
 
-  multiplyNumWithParens = (equation) => {
+  addMultiplier = (equation) => {
 
   //1- if there is a digit and an open parens immediately after it...
   //add a * in between them
@@ -304,8 +304,7 @@ class App extends React.Component {
     }
 
     tempResult = this.closeParens(tempResult) + "";
-    tempResult = this.multiplyNumWithParens(tempResult) + "";
-    // tempResult = this.addMultiplier(tempResult) + "";
+    tempResult = this.addMultiplier(tempResult) + "";
 
 
     // Handling double equal
