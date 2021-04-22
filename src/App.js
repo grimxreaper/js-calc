@@ -127,7 +127,7 @@ class App extends React.Component {
         "*/-+0123456789.".includes(button) ||
         (button.key === ")" && numberOfOpenP > numberOfCloseP)
       ) {
-        console.log("HEREE");
+        console.log('HEREE')
         return result + button;
       } else {
         return result;
@@ -156,21 +156,23 @@ class App extends React.Component {
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
       if ("/*-+".includes(button)) {
-        console.log("entered this first if");
+        console.log('entered this first if')
         return result + button;
       }
       if (")".includes(button) && numberOfOpenP > numberOfCloseP) {
-        console.log("entered this condition");
+        console.log('entered this condition')
         return result + button;
+
       }
     }
 
-    //     if (result[result.length - 1] === ")") {
-    // //and what is outside the open parens is a number without an operator
-    // //then store that number in a variable and then multiply that times
-    // //the tempResult that is a result of the calculation of what is inside the parens
+//     if (result[result.length - 1] === ")") {
+// //and what is outside the open parens is a number without an operator
+// //then store that number in a variable and then multiply that times
+// //the tempResult that is a result of the calculation of what is inside the parens
 
-    //     }
+//     }
+
 
     //BUG 🪲-> (7 + 2 isn't working
 
@@ -233,6 +235,9 @@ class App extends React.Component {
       }
     }
 
+
+
+
     // 72(7+2 returns "not yet coded"
 
     // operator + operator -> replace the first operator
@@ -242,41 +247,42 @@ class App extends React.Component {
     return result;
   };
 
-  closeParens = (result) => {
-    // const { result, button } = this.state;
+
+closeParens = (result) => {
+
     const numberOfOpenP = (result.match(/\(/g) || []).length;
     const numberOfCloseP = (result.match(/\)/g) || []).length;
-    const difference = numberOfOpenP - numberOfCloseP;
 
     if (numberOfOpenP > numberOfCloseP) {
-      return result + ")".repeat(difference);
+      return result + ")"
     }
-  };
+
+  return result
+}
 
   getLastChar = (from) => {
     return from.slice(-1);
   };
 
   addMultiplier = (expression) => {
+
     //Find all pattern Digit + (
     //expression ="1(2+6)+23(6+9)+(2+3)9"
 
     const digitAndP = /([0123456789])(\()/g;
     const pAndDigit = /(\))([0123456789])/g;
     // )( -> )*(
-    const pAndp = /(\))(\()/g;
+      const pAndp = /(\))(\()/g;
 
     //return the value
-    return expression
-      .replace(digitAndP, "$1*$2")
-      .replace(pAndDigit, "$1*$2")
-      .replace(pAndp, "$1*$2");
-  };
+    return expression.replace(digitAndP, '$1*$2').replace(pAndDigit, '$1*$2').replace(pAndp, '$1*$2')
+  }
 
   calculate = () => {
     const { result, operate, originalLastNum } = this.state;
     let finalResult = 0;
     var tempResult = result;
+
 
     // Special case with expression ending with operator, after CE use
     if ("-+*/".includes(this.getLastChar(result))) {
@@ -313,16 +319,19 @@ class App extends React.Component {
           //we extract the first expression ex:  (2+5)
           let expression = parenthesisToCalculate[i];
           //We calculate the value ex: 7
+      
 
           try {
             let tempResult = evaluate(expression);
 
-            console.log("tempResultString:", tempResultString);
-            console.log("expression", expression); //(4+4)
-            console.log("result", result); //2(4+4)
+            console.log('tempResultString:', tempResultString)
+            console.log('expression', expression) //(4+4)
+            console.log('result', result) //2(4+4)
 
+         
             //We need to replace the expression by the calculation
             tempResultString = tempResultString.replace(expression, tempResult);
+
           } catch (error) {
             //throw error
           }
@@ -374,3 +383,4 @@ class App extends React.Component {
   }
 }
 export default App;
+
