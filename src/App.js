@@ -289,8 +289,7 @@ class App extends React.Component {
       .replace(pAndDigit, "$1*$2")
       .replace(pAndp, "$1*$2");
 
-    //return "not yet coded";
-    return result;
+
   };
 
 
