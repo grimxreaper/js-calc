@@ -107,11 +107,11 @@ class App extends React.Component {
   };
 
   changeKeys = (result, button) => {
-
     if ("(".includes(button)) {
       if (result.length > 1) {
         //these few lines below, did not work to fix another bug
-  
+
+
         if ("0123456789".includes(result[result.length - 1])) {
           //remove the previous number and return the last number
           return result + button.replace("(", "*(");
@@ -231,7 +231,6 @@ class App extends React.Component {
 
 
     if ((result[result.length - 1] || "").includes(".")) {
-      console.log(result[result.length - 1]);
       if ("0123456789".includes(button)) {
         return result + button;
       }
@@ -247,15 +246,13 @@ class App extends React.Component {
       }
     }
 
-    // 🪲 72(7+2 returns "not yet coded"
-
 
     // operator + operator -> replace the first operator
 
-    // "" - - -> is not possible
     //return "not yet coded";
     return result;
   };
+
 
   closeParens = (result) => {
     var numberOfOpenP = (result.match(/\(/g) || []).length;
@@ -291,8 +288,7 @@ class App extends React.Component {
     
     return equation;
   }
-
-
+  
   calculate = () => {
     const { result, operate, originalLastNum } = this.state;
     let finalResult = 0;
@@ -305,7 +301,6 @@ class App extends React.Component {
 
     tempResult = this.closeParens(tempResult) + "";
     tempResult = this.addMultiplier(tempResult) + "";
-
 
     // Handling double equal
     // If I only have sign + digit(s) + dot + digit(s)
@@ -322,6 +317,7 @@ class App extends React.Component {
         }
       }
     } else {
+
       var tempResultString = tempResult;
       //We need to detect the non nested parenthesis
       //Open ( and no other ( before the next close
