@@ -253,7 +253,7 @@ class App extends React.Component {
       result = result + ")";
       numberOfOpenP--;
     }
-    return result;
+    return result
   };
 
   getLastChar = (from) => {
