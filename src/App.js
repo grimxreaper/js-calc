@@ -276,24 +276,20 @@ class App extends React.Component {
 
   multiplyNumWithParens = (equation) => {
 
-      //1- if there is a digit and an open parens immediately after it...
-      //add a * in between them
-      //2- if there is a close parens and a number immediately after it...
-      //add a * in between them
-      //3- if there is a close parens and another open parens immediately after it...
-      //insert a * in between them
+  //1- if there is a digit and an open parens immediately after it...
+  //add a * in between them
+  //2- if there is a close parens and a number immediately after it...
+  //add a * in between them
+  //3- if there is a close parens and another open parens immediately after it...
+  //insert a * in between them
 
     const digitAndOpenP = /([0123456789.]*)(\()/g;
     const closeParensAndDigit = /(\))([0123456789.]*)/g;
-    const twoGroupsOfParens = /(\)) (\()/g;
-  
+    const twoGroupsOfParens = /(\))(\()/g;
 
     equation.replace(digitAndOpenP, "$1*$2").replace(closeParensAndDigit, "$1*$2").replace(twoGroupsOfParens, "$1*$2")
-
-
-
+    
     return equation;
-  
   }
 
 
@@ -339,13 +335,6 @@ class App extends React.Component {
           //we extract the first expression ex:  (2+5)
           let expression = parenthesisToCalculate[i];
           //We calculate the value ex: 7
-          let multiplier = tempResultString.toString().replace(expression, ""); //take out expression
-          //so the problem seems to be that what this registers as a multiplier will be anything
-          //outside the first inner parens, so multiplier can look like (7+
-          //and so we may need a condition for it so that only numbers with no operator and only digits
-          //can be a multiplier
-          //here instead of having a multiplier, we can instead of registering a multiplier we
-          //can simply add a '*' in between numbers
 
           try {
             let tempResult = evaluate(expression);
