@@ -125,6 +125,7 @@ class App extends React.Component {
       } else {
         return result;
       }
+    }
 
     if (result[result.length - 1] === "(") {
       if ("+-(0123456789".includes(button)) {
@@ -260,6 +261,7 @@ class App extends React.Component {
       result: finalResult + "",
     });
   };
+}
 
   reset = () => {
     this.setState({
@@ -276,7 +278,7 @@ class App extends React.Component {
     });
   };
 
-  render() {
+  render(){
     // console.log(this.state);
 
     return (
