@@ -252,6 +252,7 @@ class App extends React.Component {
     }
     return result;
   };
+  }
 
   getLastChar = (from) => {
     return from.slice(-1);
