@@ -90,22 +90,68 @@ class App extends React.Component {
       operate: lastNum[0],
     });
     return lastNum.substr(1);
-
   };
 
   forParens = (result, button) => {
+    
+    if (this.getLastChar(result) === "(") {
+      if ("+-(0123456789".includes(button)) {
+        return result + button;
+      }
+      if (".".includes(button)) {
+        return result + "0.";
+      }
+    }
 
+    if (
+      this.getLastChar(result) === "(" &&
+      this.isOperator(button) &&
+      result[result.length - 2].includes("0123456789(")
+    ) {
+      return result + button;
+    }
 
-  }
+    // After a ), you can only have
+    // - operator
+    // - ), only if there are more ( than )
 
-  
+    if (this.getLastChar(result) === ")") {
+      const numberOfOpenP = (result.match(/\(/g) || []).length;
+      const numberOfCloseP = (result.match(/\)/g) || []).length;
+      if (this.isOperator(button)) {
+        return result + button;
+      }
+      if (")".includes(button) && numberOfOpenP > numberOfCloseP) {
+        return result + button;
+      }
+    }
+    return result;
+  };
 
+  isOperator = (button) => {
+    return button === "+" || button === "-" || button === "*" || button === "/";
+    // return "/*-+"
+  };
+
+  isNumber = (button) => {
+    //strings not numbers
+    return (
+      button === '1' ||
+      button === '2' ||
+      button === '3' ||
+      button === '4' ||
+      button === '5' ||
+      button === '6' ||
+      button === '7' ||
+      button === '8' ||
+      button === '9'
+    );
+  };
 
   changeKeys = (result, button) => {
     if ("(".includes(button)) {
       if (result.length > 1) {
         //these few lines below, did not work to fix another bug
-
 
         if ("0123456789".includes(result[result.length - 1])) {
           //remove the previous number and return the last number
@@ -134,7 +180,6 @@ class App extends React.Component {
         "*/-+0123456789.".includes(button) ||
         (button.key === ")" && numberOfOpenP > numberOfCloseP)
       ) {
-      
         return result + button;
       } else {
         return result;
@@ -146,39 +191,40 @@ class App extends React.Component {
     // - sign
     // - ., but we need to add a zero before
     //ex: 59 - (
-    if (result[result.length - 1] === "(") {
-      if ("+-(0123456789".includes(button)) {
-        return result + button;
-      }
-      if (".".includes(button)) {
-        return result + "0.";
-      }
-    }
 
-    //🪲BUG -> (7 +  isn't working, attempting fix with this if conditional
-    if (
-      result[result.length - 1] === "(" &&
-      "/*+-".includes(button) &&
-      result[result.length - 2].includes("0123456789(")
-    ) {
-      return result + button;
-    }
+    // if (result[result.length - 1] === "(") {
+    //   if ("+-(0123456789".includes(button)) {
+    //     return result + button;
+    //   }
+    //   if (".".includes(button)) {
+    //     return result + "0.";
+    //   }
+    // }
 
-    // After a ), you can only have
-    // - operator
-    // - ), only if there are more ( than )
+    // //🪲BUG -> (7 +  isn't working, attempting fix with this if conditional
 
-    if (result[result.length - 1] === ")") {
-      const numberOfOpenP = (result.match(/\(/g) || []).length;
-      const numberOfCloseP = (result.match(/\)/g) || []).length;
-      if ("/*-+".includes(button)) {
-        return result + button;
-      }
-      if (")".includes(button) && numberOfOpenP > numberOfCloseP) {
-        return result + button;
-      }
-    }
+    // if (
+    //   result[result.length - 1] === "(" &&
+    //   "/*+-".includes(button) &&
+    //   result[result.length - 2].includes("0123456789(")
+    // ) {
+    //   return result + button;
+    // }
 
+    // // After a ), you can only have
+    // // - operator
+    // // - ), only if there are more ( than )
+
+    // if (result[result.length - 1] === ")") {
+    //   const numberOfOpenP = (result.match(/\(/g) || []).length;
+    //   const numberOfCloseP = (result.match(/\)/g) || []).length;
+    //   if ("/*-+".includes(button)) {
+    //     return result + button;
+    //   }
+    //   if (")".includes(button) && numberOfOpenP > numberOfCloseP) {
+    //     return result + button;
+    //   }
+    // }
 
     //QS: will we run into a problem in differentiating an operator from a sign? */
     //For  + / , how do you know it's an operator, or a sign (7--)
@@ -224,7 +270,6 @@ class App extends React.Component {
     //After a dot, you can only have
     // - digit
 
-
     if ((result[result.length - 1] || "").includes(".")) {
       if ("0123456789".includes(button)) {
         return result + button;
@@ -233,21 +278,18 @@ class App extends React.Component {
 
     //ATTN -> added rule below myself outside of our tutoring
 
-       //🪲 72.2 + doesn't work FIXED
-    if ((result || "").includes('.')) {
-
+    //🪲 72.2 + doesn't work FIXED
+    if ((result || "").includes(".")) {
       if ("+-*/0123456789".includes(button)) {
         return result + button;
       }
     }
-
 
     // operator + operator -> replace the first operator
 
     //return "not yet coded";
     return result;
   };
-
 
   closeParens = (result) => {
     var numberOfOpenP = (result.match(/\(/g) || []).length;
@@ -257,7 +299,7 @@ class App extends React.Component {
       result = result + ")";
       numberOfOpenP--;
     }
-    return result
+    return result;
   };
 
   getLastChar = (from) => {
@@ -269,11 +311,14 @@ class App extends React.Component {
     const closeParensAndDigit = /(\))([0123456789.]*)/g;
     const twoGroupsOfParens = /(\))(\()/g;
 
-    equation.replace(digitAndOpenP, "$1*$2").replace(closeParensAndDigit, "$1*$2").replace(twoGroupsOfParens, "$1*$2")
-    
+    equation
+      .replace(digitAndOpenP, "$1*$2")
+      .replace(closeParensAndDigit, "$1*$2")
+      .replace(twoGroupsOfParens, "$1*$2");
+
     return equation;
-  }
-  
+  };
+
   calculate = () => {
     const { result, operate, originalLastNum } = this.state;
     let finalResult = 0;
@@ -297,12 +342,11 @@ class App extends React.Component {
         // finalResult = evaluate(result + operate + originalLastNum) + "";
         try {
           finalResult = evaluate(tempResult + operate + originalLastNum) + "";
-        } catch(error) {
+        } catch (error) {
           //throw error
         }
       }
     } else {
-
       var tempResultString = tempResult;
       //We need to detect the non nested parenthesis
       //Open ( and no other ( before the next close
