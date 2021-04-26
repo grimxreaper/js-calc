@@ -105,7 +105,7 @@ class App extends React.Component {
   };
 
   forParens = (result, button) => {
-    
+    console.log("🚀 ~ file: App.js ~ line 108 ~ App ~ button", button);
     console.log("🚀 ~ file: App.js ~ line 111 ~ App ~ result", result);
     console.log("INSIDE forPARENS");
 
@@ -119,17 +119,16 @@ class App extends React.Component {
     //   }
     // }
 
-       if (result[result.length - 1] === "(") {
-         console.log("inside first if block", button)
+    if (result[result.length - 1] === "(") {
+      console.log("inside first if block", button);
       if ("+-(0123456789".includes(button)) {
-        console.log('inside here')
+        console.log("inside here");
         return result + button;
       }
       if (".".includes(button)) {
         return result + "0.";
       }
     }
-
 
     if (
       result[result.length - 1] === "(" &&
@@ -140,15 +139,14 @@ class App extends React.Component {
       return result + button;
     }
 
-
     if (result[result.length - 1] === ")") {
-      console.log('inside third if')
+      console.log("inside third if");
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
       if ("/*-+".includes(button)) {
         //it is not entering this if conditional and that is why we don't
         //see the operator displayed but the calculation still evaluates
-        console.log(button)
+        console.log(button);
         return result + button;
       }
       if (")".includes(button) && numberOfOpenP > numberOfCloseP) {
