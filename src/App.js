@@ -32,7 +32,6 @@ class App extends React.Component {
             (this.state.originalLastNum + "").includes(".")
           ) {
             this.setState({
-              //originalLastNum: this.state.originalLastNum + button.key,
               originalLastNum: this.recordLastNum(
                 this.state.result + button.key
               ),
@@ -40,7 +39,6 @@ class App extends React.Component {
             });
           } else {
             this.setState({
-              //originalLastNum: button.key,
               originalLastNum: this.recordLastNum(
                 this.state.result + button.key
               ),
@@ -63,13 +61,6 @@ class App extends React.Component {
           result: this.changeKeys(this.state.result, button.key),
         });
       }
-      // else if (button.key === "(" || button.key === ")") {
-      //   this.setState({
-      //     operate: button.key,
-      //     result: this.forParens(this.state.result, button.key),
-
-      //   })
-      // }
     }
     // if (button.key === "(" || button.key === ")") {
     //  this.setState({
@@ -104,75 +95,75 @@ class App extends React.Component {
     return lastNum.substr(1);
   };
 
-  forParens = (result, button) => {
-    console.log("🚀 ~ file: App.js ~ line 108 ~ App ~ button", button);
-    console.log("🚀 ~ file: App.js ~ line 111 ~ App ~ result", result);
-    console.log("INSIDE forPARENS");
+  // forParens = (result, button) => {
+  //   console.log("🚀 ~ file: App.js ~ line 108 ~ App ~ button", button);
+  //   console.log("🚀 ~ file: App.js ~ line 111 ~ App ~ result", result);
+  //   console.log("INSIDE forPARENS");
 
-    // if (result[result.length - 1] === "(") {
-    //   console.log("inside first if block");
-    //   if ("+-(0123456789".includes(button)) {
-    //     return result + button;
-    //   }
-    //   if (".".includes(button)) {
-    //     return result + "0.";
-    //   }
-    // }
+  //   // if (result[result.length - 1] === "(") {
+  //   //   console.log("inside first if block");
+  //   //   if ("+-(0123456789".includes(button)) {
+  //   //     return result + button;
+  //   //   }
+  //   //   if (".".includes(button)) {
+  //   //     return result + "0.";
+  //   //   }
+  //   // }
 
-    if (result[result.length - 1] === "(") {
-      console.log("inside first if block", button);
-      if ("+-(0123456789".includes(button)) {
-        console.log("inside here");
-        return result + button;
-      }
-      if (".".includes(button)) {
-        return result + "0.";
-      }
-    }
+  //   if (result[result.length - 1] === "(") {
+  //     console.log("inside first if block", button);
+  //     if ("+-(0123456789".includes(button)) {
+  //       console.log("inside here");
+  //       return result + button;
+  //     }
+  //     if (".".includes(button)) {
+  //       return result + "0.";
+  //     }
+  //   }
 
-    if (
-      result[result.length - 1] === "(" &&
-      "/*+-".includes(button) &&
-      result[result.length - 2].includes("0123456789(")
-    ) {
-      console.log("inside second if block");
-      return result + button;
-    }
+  //   if (
+  //     result[result.length - 1] === "(" &&
+  //     "/*+-".includes(button) &&
+  //     result[result.length - 2].includes("0123456789(")
+  //   ) {
+  //     console.log("inside second if block");
+  //     return result + button;
+  //   }
 
-    if (result[result.length - 1] === ")") {
-      console.log("inside third if");
-      const numberOfOpenP = (result.match(/\(/g) || []).length;
-      const numberOfCloseP = (result.match(/\)/g) || []).length;
-      if ("/*-+".includes(button)) {
-        //it is not entering this if conditional and that is why we don't
-        //see the operator displayed but the calculation still evaluates
-        console.log(button);
-        return result + button;
-      }
-      if (")".includes(button) && numberOfOpenP > numberOfCloseP) {
-        return result + button;
-      }
-    }
-    // if (this.getLastChar(result) === ")") {
-    //   console.log('inside the third if block')
-    //   const numberOfOpenP = (result.match(/\(/g) || []).length;
-    //   const numberOfCloseP = (result.match(/\)/g) || []).length;
-    //   if ("/*+-".includes(button)) {
-    //     console.log(button)
-    //     return result + button;
-    //   }
-    //   if (")".includes(button) && numberOfOpenP > numberOfCloseP) {
-    //     return result + button;
-    //   }
-    // }
-    try {
-      return result;
-    } catch (error) {
-      this.setState({
-        result: "error",
-      });
-    }
-  };
+  //   if (result[result.length - 1] === ")") {
+  //     console.log("inside third if");
+  //     const numberOfOpenP = (result.match(/\(/g) || []).length;
+  //     const numberOfCloseP = (result.match(/\)/g) || []).length;
+  //     if ("/*-+".includes(button)) {
+  //       //it is not entering this if conditional and that is why we don't
+  //       //see the operator displayed but the calculation still evaluates
+  //       console.log(button);
+  //       return result + button;
+  //     }
+  //     if (")".includes(button) && numberOfOpenP > numberOfCloseP) {
+  //       return result + button;
+  //     }
+  //   }
+  //   // if (this.getLastChar(result) === ")") {
+  //   //   console.log('inside the third if block')
+  //   //   const numberOfOpenP = (result.match(/\(/g) || []).length;
+  //   //   const numberOfCloseP = (result.match(/\)/g) || []).length;
+  //   //   if ("/*+-".includes(button)) {
+  //   //     console.log(button)
+  //   //     return result + button;
+  //   //   }
+  //   //   if (")".includes(button) && numberOfOpenP > numberOfCloseP) {
+  //   //     return result + button;
+  //   //   }
+  //   // }
+  //   try {
+  //     return result;
+  //   } catch (error) {
+  //     this.setState({
+  //       result: "error",
+  //     });
+  //   }
+  // };
 
   isOperator = (button) => {
     return button === "+" || button === "-" || button === "*" || button === "/";
@@ -195,6 +186,9 @@ class App extends React.Component {
   };
 
   changeKeys = (result, button) => {
+  console.log("🚀 ~ file: App.js ~ line 191 ~ App ~ button", button)
+  console.log("🚀 ~ file: App.js ~ line 191 ~ App ~ result", result)
+
     if ("(".includes(button)) {
       if (result.length > 1) {
         //these few lines below, did not work to fix another bug
@@ -214,11 +208,6 @@ class App extends React.Component {
       }
     }
 
-    // After a digit, you can only have
-    // - digit
-    // - operator
-    // - ), only if there are more ( than )
-    // .
     if ("0123456789".includes(result[result.length - 1])) {
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
@@ -231,67 +220,45 @@ class App extends React.Component {
         return result;
       }
     }
-    // After a (, you can only have *same as empty expression
-    // - Digit
-    // - (
-    // - sign
-    // - ., but we need to add a zero before
-    //ex: 59 - (
-
+ 
     if (result[result.length - 1] === "(") {
-      this.forParens(this.state.result, button.key);
+      console.log('inside of A')
+      if ("+-(0123456789".includes(button)) {
+        return result + button;
+      }
+      if (".".includes(button)) {
+        return result + "0.";
+      }
     }
 
-    // if (result[result.length - 1] === "(") {
-    //   if ("+-(0123456789".includes(button)) {
-    //     return result + button;
-    //   }
-    //   if (".".includes(button)) {
-    //     return result + "0.";
-    //   }
-    // }
-
-    // //🪲BUG -> (7 +  isn't working, attempting fix with this if conditional
-
-    // if (
-    //   result[result.length - 1] === "(" &&
-    //   "/*+-".includes(button) &&
-    //   result[result.length - 2].includes("0123456789(")
-    // ) {
-    //   return result + button;
-    // }
+    if (
+      result[result.length - 1] === "(" &&
+      "/*+-".includes(button) &&
+      result[result.length - 2].includes("0123456789(")
+    ) {
+      console.log('inside of B')
+      return result + button;
+    }
 
     // // After a ), you can only have
     // // - operator
     // // - ), only if there are more ( than )
 
-    if (result[result.length - 1] === ")") {
-      this.forParens(this.state.result, button.key);
-    }
-
     // if (result[result.length - 1] === ")") {
-    //   const numberOfOpenP = (result.match(/\(/g) || []).length;
-    //   const numberOfCloseP = (result.match(/\)/g) || []).length;
-    //   if ("/*-+".includes(button)) {
-    //     return result + button;
-    //   }
-    //   if (")".includes(button) && numberOfOpenP > numberOfCloseP) {
-    //     return result + button;
-    //   }
+    //   this.forParens(this.state.result, button.key);
     // }
 
-    //QS: will we run into a problem in differentiating an operator from a sign? */
-    //For  + / , how do you know it's an operator, or a sign (7--)
-    // You need to watch what is before
-    // digit, ) -> operator
-    // operator, ( -> sign
-    // . -> cannot
-
-    // After an operator, you can only have
-    // - Digit
-    // - sign
-    // - (
-    // - ., but we need to add a zero before
+    if (result[result.length - 1] === ")") {
+      console.log('inside of C')
+      const numberOfOpenP = (result.match(/\(/g) || []).length;
+      const numberOfCloseP = (result.match(/\)/g) || []).length;
+      if ("/*-+".includes(button)) {
+        return result + button;
+      }
+      if (")".includes(button) && numberOfOpenP > numberOfCloseP) {
+        return result + button;
+      }
+    }
 
     if ("0123456789)".includes(result[result.length - 2])) {
       //checking "digit, ) -> operator"
@@ -305,11 +272,6 @@ class App extends React.Component {
       }
     }
 
-    // After a sign, you can only have
-    // - digit
-    // - (
-    // - ., but we need to add a zero before
-
     if ("/*+-(".includes(result[result.length - 2])) {
       if ("-+".includes(result[result.length - 1])) {
         if ("0123456789(".includes(button)) {
@@ -321,26 +283,17 @@ class App extends React.Component {
       }
     }
 
-    //After a dot, you can only have
-    // - digit
-
     if ((result[result.length - 1] || "").includes(".")) {
       if ("0123456789".includes(button)) {
         return result + button;
       }
     }
 
-    //ATTN -> added rule below myself outside of our tutoring
-
-    //🪲 72.2 + doesn't work FIXED
     if ((result || "").includes(".")) {
       if ("+-*/0123456789".includes(button)) {
         return result + button;
       }
     }
-
-    // operator + operator -> replace the first operator
-
     //return "not yet coded";
     return result;
   };
