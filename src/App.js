@@ -56,7 +56,6 @@ class App extends React.Component {
         button.key !== "(" &&
         button.key !== "AC" &&
         button.key !== ")" //why do we have both parens in here?
-
       ) {
         this.setState({
           operate: button.key,
@@ -105,15 +104,25 @@ class App extends React.Component {
     return lastNum.substr(1);
   };
 
-
-  
   forParens = (result, button) => {
-  console.log("🚀 ~ file: App.js ~ line 111 ~ App ~ result", result)
-    console.log('INSIDE forPARENS')
     
-    if (this.getLastChar(result) === "(") {
-      console.log('inside first if block')
+    console.log("🚀 ~ file: App.js ~ line 111 ~ App ~ result", result);
+    console.log("INSIDE forPARENS");
+
+    // if (result[result.length - 1] === "(") {
+    //   console.log("inside first if block");
+    //   if ("+-(0123456789".includes(button)) {
+    //     return result + button;
+    //   }
+    //   if (".".includes(button)) {
+    //     return result + "0.";
+    //   }
+    // }
+
+       if (result[result.length - 1] === "(") {
+         console.log("inside first if block", button)
       if ("+-(0123456789".includes(button)) {
+        console.log('inside here')
         return result + button;
       }
       if (".".includes(button)) {
@@ -121,20 +130,24 @@ class App extends React.Component {
       }
     }
 
+
     if (
-      this.getLastChar(result) === "(" &&
+      result[result.length - 1] === "(" &&
       "/*+-".includes(button) &&
       result[result.length - 2].includes("0123456789(")
     ) {
-      console.log('inside second if block')
+      console.log("inside second if block");
       return result + button;
     }
 
-    if (this.getLastChar(result) === ")") {
-      console.log('inside the third if block')
+
+    if (result[result.length - 1] === ")") {
+      console.log('inside third if')
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
-      if ("/*+-".includes(button)) {
+      if ("/*-+".includes(button)) {
+        //it is not entering this if conditional and that is why we don't
+        //see the operator displayed but the calculation still evaluates
         console.log(button)
         return result + button;
       }
@@ -142,7 +155,25 @@ class App extends React.Component {
         return result + button;
       }
     }
-    return result;
+    // if (this.getLastChar(result) === ")") {
+    //   console.log('inside the third if block')
+    //   const numberOfOpenP = (result.match(/\(/g) || []).length;
+    //   const numberOfCloseP = (result.match(/\)/g) || []).length;
+    //   if ("/*+-".includes(button)) {
+    //     console.log(button)
+    //     return result + button;
+    //   }
+    //   if (")".includes(button) && numberOfOpenP > numberOfCloseP) {
+    //     return result + button;
+    //   }
+    // }
+    try {
+      return result;
+    } catch (error) {
+      this.setState({
+        result: "error",
+      });
+    }
   };
 
   isOperator = (button) => {
@@ -153,15 +184,15 @@ class App extends React.Component {
   isNumber = (button) => {
     //strings not numbers
     return (
-      button === '1' ||
-      button === '2' ||
-      button === '3' ||
-      button === '4' ||
-      button === '5' ||
-      button === '6' ||
-      button === '7' ||
-      button === '8' ||
-      button === '9'
+      button === "1" ||
+      button === "2" ||
+      button === "3" ||
+      button === "4" ||
+      button === "5" ||
+      button === "6" ||
+      button === "7" ||
+      button === "8" ||
+      button === "9"
     );
   };
 
@@ -209,9 +240,9 @@ class App extends React.Component {
     // - ., but we need to add a zero before
     //ex: 59 - (
 
-      if (result[result.length - 1] === "(") {
-        this.forParens(this.state.result, button.key)
-      }
+    if (result[result.length - 1] === "(") {
+      this.forParens(this.state.result, button.key);
+    }
 
     // if (result[result.length - 1] === "(") {
     //   if ("+-(0123456789".includes(button)) {
@@ -223,7 +254,6 @@ class App extends React.Component {
     // }
 
     // //🪲BUG -> (7 +  isn't working, attempting fix with this if conditional
-
 
     // if (
     //   result[result.length - 1] === "(" &&
@@ -238,7 +268,7 @@ class App extends React.Component {
     // // - ), only if there are more ( than )
 
     if (result[result.length - 1] === ")") {
-      this.forParens(this.state.result, button.key)
+      this.forParens(this.state.result, button.key);
     }
 
     // if (result[result.length - 1] === ")") {
@@ -369,7 +399,9 @@ class App extends React.Component {
         try {
           finalResult = evaluate(tempResult + operate + originalLastNum) + "";
         } catch (error) {
-          //throw error
+          this.setState({
+            result: "error",
+          });
         }
       }
     } else {
@@ -402,7 +434,9 @@ class App extends React.Component {
       try {
         finalResult = evaluate(tempResultString);
       } catch (error) {
-        //throw error
+        this.setState({
+          result: "error",
+        });
       }
     }
 
