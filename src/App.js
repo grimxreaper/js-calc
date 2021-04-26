@@ -92,8 +92,6 @@ class App extends React.Component {
   };
 
   changeKeys = (result, button) => {
-
-
     if ("(".includes(button)) {
       if (result.length > 1) {
         //these few lines below, did not work to fix another bug
@@ -103,7 +101,6 @@ class App extends React.Component {
         }
       }
     }
-
     if (result === "") {
       if ("+-(0123456789".includes(button)) {
         return button;
@@ -112,8 +109,6 @@ class App extends React.Component {
         return "0.";
       }
     }
-
-
     if ("0123456789".includes(result[result.length - 1])) {
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
@@ -126,7 +121,6 @@ class App extends React.Component {
         return result;
       }
     }
-
     if (result[result.length - 1] === "(") {
       if ("+-(0123456789".includes(button)) {
         return result + button;
@@ -135,7 +129,6 @@ class App extends React.Component {
         return result + "0.";
       }
     }
-
     if (result[result.length - 1] === ")") {
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
@@ -146,7 +139,6 @@ class App extends React.Component {
         return result + button;
       }
     }
-
     if ("0123456789)".includes(result[result.length - 2])) {
       //checking "digit, ) -> operator"
       if ("/*+-".includes(result[result.length - 1])) {
@@ -168,21 +160,16 @@ class App extends React.Component {
         }
       }
     }
-
-
     if ((result[result.length - 1] || "").includes(".")) {
-
       if ("0123456789".includes(button)) {
         return result + button;
       }
     }
-
     if ((result || "").includes(".")) {
       if ("+-*/0123456789".includes(button)) {
         return result + button;
       }
     }
-
     return result;
   };
 
@@ -190,78 +177,74 @@ class App extends React.Component {
     return from.slice(-1);
   };
 
-
   roundedResult = (expression) => {
-    const digitAfterComma = 13
-    round(evaluate(expression), digitAfterComma)
-  }
+    const digitAfterComma = 13;
+    round(evaluate(expression), digitAfterComma);
+  };
 
   calculate = () => {
     const { result, operate, originalLastNum } = this.state;
     let finalResult = 0;
     var tempResult = result;
-
     // Special case with expression ending with operator, after CE use
     if ("-+*/".includes(this.getLastChar(result))) {
       tempResult = result.slice(0, -1);
-
-
-    // Handling double equal
-    // If I only have sign + digit(s) + dot + digit(s)
-    const regex = /-{0,1}[0123456789]*(\.[0123456789]*){0,1}/g;
-    const matches = tempResult.match(regex) || [];
-    if (matches.length > 1 && matches[0] === tempResult) {
-      //I need to handle the double equal
-      if ("+-/*".includes(operate) && !isNaN(originalLastNum)) {
-        // finalResult = evaluate(result + operate + originalLastNum) + "";
-        try {
-
-          finalResult = this.roundedResult(tempResult + operate + originalLastNum) + "";
-        } catch (error) {
-          //throw error
-        }
-      }
-    } else {
-      // Handle paraenthesis
-
-      var tempResultString = tempResult;
-      //We need to detect the non nested parenthesis
-      //Open ( and no other ( before the next close
-      // '(' 0123456789-+*/.(not (, not ) ) ')'
-      // ( + any number of the 15 chars + ) : (7+2) (-3.25478/+6.587)
-      const reg = /\(([0123456789/*-+.]*)\)/g;
-      var parenthesisToCalculate = tempResultString.match(reg) || [];
-      while (parenthesisToCalculate.length > 0) {
-        for (var i = 0; i < parenthesisToCalculate.length; i++) {
-          //we extract the first expression ex:  (2+5)
-          let expression = parenthesisToCalculate[i];
-          //We calculate the value ex: 7
+      // Handling double equal
+      // If I only have sign + digit(s) + dot + digit(s)
+      const regex = /-{0,1}[0123456789]*(\.[0123456789]*){0,1}/g;
+      const matches = tempResult.match(regex) || [];
+      if (matches.length > 1 && matches[0] === tempResult) {
+        //I need to handle the double equal
+        if ("+-/*".includes(operate) && !isNaN(originalLastNum)) {
+          // finalResult = evaluate(result + operate + originalLastNum) + "";
           try {
-            let tempResult = round(evaluate(expression), 13);
-
-            //We need to replace the expression by the calculation
-            tempResultString = tempResultString.replace(expression, tempResult);
+            finalResult =
+              this.roundedResult(tempResult + operate + originalLastNum) + "";
           } catch (error) {
             //throw error
           }
         }
-        parenthesisToCalculate = tempResultString.match(reg) || [];
-      }
-      //In tempResultString we have the last expression withtout any ()
+      } else {
+        // Handle paraenthesis
+        var tempResultString = tempResult;
+        //We need to detect the non nested parenthesis
+        //Open ( and no other ( before the next close
+        // '(' 0123456789-+*/.(not (, not ) ) ')'
+        // ( + any number of the 15 chars + ) : (7+2) (-3.25478/+6.587)
+        const reg = /\(([0123456789/*-+.]*)\)/g;
+        var parenthesisToCalculate = tempResultString.match(reg) || [];
+        while (parenthesisToCalculate.length > 0) {
+          for (var i = 0; i < parenthesisToCalculate.length; i++) {
+            //we extract the first expression ex:  (2+5)
+            let expression = parenthesisToCalculate[i];
+            //We calculate the value ex: 7
+            try {
+              let tempResult = round(evaluate(expression), 13);
 
-      try {
-        finalResult = round(evaluate(tempResultString), 13);
-      } catch (error) {
-        //throw error
+              //We need to replace the expression by the calculation
+              tempResultString = tempResultString.replace(
+                expression,
+                tempResult
+              );
+            } catch (error) {
+              //throw error
+            }
+          }
+          parenthesisToCalculate = tempResultString.match(reg) || [];
+        }
+        //In tempResultString we have the last expression withtout any ()
+        try {
+          finalResult = round(evaluate(tempResultString), 13);
+        } catch (error) {
+          //throw error
+        }
       }
+      this.setState({
+        done: true,
+        result: finalResult + "",
+      });
     }
-
-    this.setState({
-      done: true,
-      result: finalResult + "",
-    });
   };
-}
 
   reset = () => {
     this.setState({
@@ -278,9 +261,7 @@ class App extends React.Component {
     });
   };
 
-  render(){
-    // console.log(this.state);
-
+  render() {
     return (
       <div className="container">
         <h1>Pocket Js Calculator</h1>
