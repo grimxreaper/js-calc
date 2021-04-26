@@ -79,11 +79,8 @@ class App extends React.Component {
     if (results.length === 0) {
       return "";
     }
-
     //We need to take the last one
     let lastNum = results[results.length - 1];
-    // console.log();
-
     // If there is no operator -> we return the value
     if (!"-+/*".includes(lastNum[0])) {
       return lastNum;
@@ -92,18 +89,6 @@ class App extends React.Component {
       operate: lastNum[0],
     });
     return lastNum.substr(1);
-
-    /*
-    // If there is one sign, we remove itr
-    const operatorsCount = (result.match(/[-+/*]/g) || []).length;
-    if (operatorsCount === 1) {
-      return lastNum.substr(1)
-    }
-    // If there are two operator (operator+sign) -> we remove the first and keep the sign
-    if (operatorsCount === 2) {
-      return lastNum.substr(1)
-    }
-*/
   };
 
   changeKeys = (result, button) => {
