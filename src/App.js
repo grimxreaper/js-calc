@@ -107,7 +107,6 @@ class App extends React.Component {
   };
 
   changeKeys = (result, button) => {
-
     if ("(".includes(button)) {
       if (result.length > 1) {
         //these few lines below, did not work to fix another bug
