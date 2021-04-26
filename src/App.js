@@ -55,7 +55,8 @@ class App extends React.Component {
         button.key !== "=" &&
         button.key !== "(" &&
         button.key !== "AC" &&
-        button.key !== ")"
+        button.key !== ")" //why do we have both parens in here?
+
       ) {
         this.setState({
           operate: button.key,
@@ -63,7 +64,19 @@ class App extends React.Component {
           result: this.changeKeys(this.state.result, button.key),
         });
       }
+      // else if (button.key === "(" || button.key === ")") {
+      //   this.setState({
+      //     operate: button.key,
+      //     result: this.forParens(this.state.result, button.key),
+
+      //   })
+      // }
     }
+    // if (button.key === "(" || button.key === ")") {
+    //  this.setState({
+    //    result: this.forParens(this.state.result, button.key),
+    //  })
+    // }
     if (button.key === "=") {
       this.calculate();
     } else if (button.key === "AC") {
@@ -92,9 +105,14 @@ class App extends React.Component {
     return lastNum.substr(1);
   };
 
+
+  
   forParens = (result, button) => {
+  console.log("🚀 ~ file: App.js ~ line 111 ~ App ~ result", result)
+    console.log('INSIDE forPARENS')
     
     if (this.getLastChar(result) === "(") {
+      console.log('inside first if block')
       if ("+-(0123456789".includes(button)) {
         return result + button;
       }
@@ -105,20 +123,19 @@ class App extends React.Component {
 
     if (
       this.getLastChar(result) === "(" &&
-      this.isOperator(button) &&
+      "/*+-".includes(button) &&
       result[result.length - 2].includes("0123456789(")
     ) {
+      console.log('inside second if block')
       return result + button;
     }
 
-    // After a ), you can only have
-    // - operator
-    // - ), only if there are more ( than )
-
     if (this.getLastChar(result) === ")") {
+      console.log('inside the third if block')
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
-      if (this.isOperator(button)) {
+      if ("/*+-".includes(button)) {
+        console.log(button)
         return result + button;
       }
       if (")".includes(button) && numberOfOpenP > numberOfCloseP) {
@@ -192,6 +209,10 @@ class App extends React.Component {
     // - ., but we need to add a zero before
     //ex: 59 - (
 
+      if (result[result.length - 1] === "(") {
+        this.forParens(this.state.result, button.key)
+      }
+
     // if (result[result.length - 1] === "(") {
     //   if ("+-(0123456789".includes(button)) {
     //     return result + button;
@@ -202,6 +223,7 @@ class App extends React.Component {
     // }
 
     // //🪲BUG -> (7 +  isn't working, attempting fix with this if conditional
+
 
     // if (
     //   result[result.length - 1] === "(" &&
@@ -214,6 +236,10 @@ class App extends React.Component {
     // // After a ), you can only have
     // // - operator
     // // - ), only if there are more ( than )
+
+    if (result[result.length - 1] === ")") {
+      this.forParens(this.state.result, button.key)
+    }
 
     // if (result[result.length - 1] === ")") {
     //   const numberOfOpenP = (result.match(/\(/g) || []).length;
