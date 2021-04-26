@@ -210,25 +210,6 @@ describe("check the operation of 3 or more numbers", () => {
   });
 });
 
-// describe('clicking equals runs the operation again every time', () => {
-//   const { getByTestId } = render(<App />);
-
-//   fireEvent.click(getByTestId(1));
-//   fireEvent.click(getByTestId("."));
-//   fireEvent.click(getByTestId(1));
-//   fireEvent.click(getByTestId("+"));
-//   fireEvent.click(getByTestId(1));
-//   fireEvent.click(getByTestId("."));
-//   fireEvent.click(getByTestId(2));
-//   fireEvent.click(getByTestId("="));
-//   fireEvent.click(getByTestId("="));
-
-//   expect(getByTestId("result").toHaveTextContent(""))
-
-
-// })
-
-
 describe('removes characters appropriately', () => {
   test("multiplying 3 by 7 then adding 8 and hitting CE must remove 8", () => {
     const { getByTestId } = render(<App />);
@@ -265,22 +246,3 @@ describe('removes characters appropriately', () => {
     expect(getByTestId("result")).toHaveTextContent("7*")
   })
 })
-
-
-
-//const calculate = require('./App')
-// test('displays correct result of multiplying 8 by 7', () => {
-//   const { getByTestId } = render(<App />);
-
-//   expect(calculate(`${x} ${operation} ${y}`)).toBe(56)
-// })
-
-// it('displays correct result of multiplying 8 by 7', () => {
-//   const { getByTestId } = render(<App />);
-
-//   fireEvent.click(getByTestId("8"), getByTestId("*"), getByTestId("7"), getByTestId("="))
-
-//   expect(getByTestId("result")).toHaveTextContent("56")
-// })
-
-//Testing keyboard events

@@ -1,5 +1,4 @@
 Rules for the last number
-
 - digits
 - (
 - )
@@ -11,7 +10,6 @@ lastNum: empty
 - digits : add it
 - sign: add it
 - . add it
-
 - (,),operator: replace next
 
 (2*(22*-986))
@@ -20,9 +18,7 @@ last num: number : + - [digits]
 22
 -986
 //
-
 const regex = /[-+/*]{0,}[0-9]{1,}[.]{0,1}[0-9]*/g;
-
 {1,} -> this is to say: At lEast one digit
 //
 ......

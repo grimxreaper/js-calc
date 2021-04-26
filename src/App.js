@@ -107,7 +107,6 @@ class App extends React.Component {
   };
 
   changeKeys = (result, button) => {
-
     if ("(".includes(button)) {
       if (result.length > 1) {
         if ("0123456789".includes(result[result.length - 1])) {
@@ -124,7 +123,6 @@ class App extends React.Component {
         return "0.";
       }
     }
-
     if ("0123456789".includes(result[result.length - 1])) {
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
@@ -149,7 +147,6 @@ class App extends React.Component {
         return result + "0.";
       }
     }
-
     //🪲BUG -> (7 +  isn't working, attempting fix with this if conditional
     if (
       result[result.length - 1] === "(" &&
@@ -158,11 +155,9 @@ class App extends React.Component {
     ) {
       return result + button;
     }
-
     // After a ), you can only have
     // - operator
     // - ), only if there are more ( than )
-
     if (result[result.length - 1] === ")") {
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
@@ -173,7 +168,6 @@ class App extends React.Component {
         return result + button;
       }
     }
-
     //QS: will we run into a problem in differentiating an operator from a sign? */
     //For  + / , how do you know it's an operator, or a sign (7--)
     // You need to watch what is before
@@ -186,7 +180,6 @@ class App extends React.Component {
     // - sign
     // - (
     // - ., but we need to add a zero before
-
     if ("0123456789)".includes(result[result.length - 2])) {
       //checking "digit, ) -> operator"
       if ("/*+-".includes(result[result.length - 1])) {
@@ -198,12 +191,10 @@ class App extends React.Component {
         }
       }
     }
-
     // After a sign, you can only have
     // - digit
     // - (
     // - ., but we need to add a zero before
-
     if ("/*+-(".includes(result[result.length - 2])) {
       if ("-+".includes(result[result.length - 1])) {
         if ("0123456789(".includes(button)) {
@@ -214,12 +205,10 @@ class App extends React.Component {
         }
       }
     }
-
     // After a sign, you can only have
     // - digit
     // - (
     // - ., but we need to add a zero before
-
     if (result[result.length - 2].includes("/*+-(")) {
       if (result[result.length - 1].includes("-+")) {
         if ("0123456789(".includes(button)) {
@@ -230,18 +219,14 @@ class App extends React.Component {
         }
       }
     }
-
     if ((result[result.length - 1] || "").includes(".")) {
 
       if ("0123456789".includes(button)) {
         return result + button;
       }
     }
-
-
     //🪲 72.2 + doesn't work FIXED
     if (result.includes(".")) {
-      
     //ATTN -> added rule below myself outside of our tutoring
        //🪲 72.2 + doesn't work FIXED
     if ((result || "").includes('.')) {
@@ -253,21 +238,17 @@ class App extends React.Component {
     return result;
   };
   }
-
   getLastChar = (from) => {
     return from.slice(-1);
   }
-
   calculate = () => {
     const { result, operate, originalLastNum } = this.state;
     let finalResult = 0;
     var tempResult = result;
-
     // Special case with expression ending with operatore, after CE use
     if ("-+*/".includes(this.getLastChar(result))) {
       tempResult = result.slice(0,-1);
     }
-
     // Handling double equal
     // If I only have sign + digit(s) + dot + digit(s)
     const regex = /-{0,1}[0123456789]*(\.[0123456789]*){0,1}/g;
@@ -304,7 +285,6 @@ class App extends React.Component {
       // no level -> no ( inside ()) -> (2+5)*(5+6) -> order
       // level(nested) -> ( inside () -> 2(*(2+5))*5 -> 3*((2*5)/5)
       //  Rule: First you calculate the () withtout ( or ) inside
-
       var tempResultString = tempResult;
       //We need to detect the non nested parenthesis
       //Open ( and no other ( before the next close
@@ -319,7 +299,6 @@ class App extends React.Component {
           //We calculate the value ex: 7
           try {
             let tempResult = evaluate(expression);
-
             //We need to replace the expression by the calculation
             tempResultString = tempResultString.replace(expression, tempResult);
           } catch(error) {
@@ -329,14 +308,12 @@ class App extends React.Component {
         parenthesisToCalculate = tempResultString.match(reg) || [];
       }
       //In tempResultString we have the last expression withtout any ()
-
       try {
         finalResult = evaluate(tempResultString);
       } catch(error) {
         //throw error
       }
     }
-
     this.setState({
       done: true,
       result: (finalResult || "") + "",
@@ -359,8 +336,6 @@ class App extends React.Component {
   };
 
   render() {
-    // console.log(this.state);
-
     return (
       <div className="container">
         <h1>Pocket Js Calculator</h1>
