@@ -231,7 +231,7 @@ class App extends React.Component {
     //return "not yet coded";
     return result;
   };
-
+  }
 
   closeParens = (result) => {
     var numberOfOpenP = (result.match(/\(/g) || []).length;
