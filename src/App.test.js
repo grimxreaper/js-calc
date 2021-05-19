@@ -2,7 +2,7 @@ import { render, userEvent, fireEvent, screen } from "@testing-library/react";
 import { evaluate } from "mathjs";
 import App from "./App";
 import ResultComponent from "./Components/ResultComponent";
-import { evaluate } from "mathjs";
+
 
 //snapshot
 it("matches snapshot", () => {
