@@ -107,11 +107,11 @@ class App extends React.Component {
   };
 
   changeKeys = (result, button) => {
-    console.log("click params", result, button);
     if ("(".includes(button)) {
       if (result.length > 1) {
         //these few lines below, did not work to fix another bug
-       console.log('here')
+
+
         if ("0123456789".includes(result[result.length - 1])) {
           //remove the previous number and return the last number
           return result + button.replace("(", "*(");
@@ -139,7 +139,10 @@ class App extends React.Component {
         "*/-+0123456789.".includes(button) ||
         (button.key === ")" && numberOfOpenP > numberOfCloseP)
       ) {
+      
         return result + button;
+      } else {
+        return result;
       }
     }
     // After a (, you can only have *same as empty expression
@@ -180,6 +183,7 @@ class App extends React.Component {
         return result + button;
       }
     }
+
 
     //QS: will we run into a problem in differentiating an operator from a sign? */
     //For  + / , how do you know it's an operator, or a sign (7--)
@@ -227,13 +231,13 @@ class App extends React.Component {
 
 
     if ((result[result.length - 1] || "").includes(".")) {
-      console.log(result[result.length - 1])
       if ("0123456789".includes(button)) {
         return result + button;
       }
     }
 
     //ATTN -> added rule below myself outside of our tutoring
+
        //🪲 72.2 + doesn't work FIXED
     if ((result || "").includes('.')) {
 
@@ -241,31 +245,62 @@ class App extends React.Component {
         return result + button;
       }
     }
-    console.log("coming here");
 
-    // 🪲 72(7+2 returns "not yet coded"
 
     // operator + operator -> replace the first operator
-
-    // "" - - -> is not possible
 
     //return "not yet coded";
     return result;
   };
 
+
+  closeParens = (result) => {
+    var numberOfOpenP = (result.match(/\(/g) || []).length;
+    var numberOfCloseP = (result.match(/\)/g) || []).length;
+    //this solution works but only if there is one parenthesis missing,
+    //instead, account for all parens missing
+
+    while (numberOfOpenP > numberOfCloseP) {
+      result = result + ")";
+      numberOfOpenP--;
+    }
+    return result
+  };
+
   getLastChar = (from) => {
     return from.slice(-1);
-  }
+  };
 
+  addMultiplier = (equation) => {
+
+  //1- if there is a digit and an open parens immediately after it...
+  //add a * in between them
+  //2- if there is a close parens and a number immediately after it...
+  //add a * in between them
+  //3- if there is a close parens and another open parens immediately after it...
+  //insert a * in between them
+
+    const digitAndOpenP = /([0123456789.]*)(\()/g;
+    const closeParensAndDigit = /(\))([0123456789.]*)/g;
+    const twoGroupsOfParens = /(\))(\()/g;
+
+    equation.replace(digitAndOpenP, "$1*$2").replace(closeParensAndDigit, "$1*$2").replace(twoGroupsOfParens, "$1*$2")
+    
+    return equation;
+  }
+  
   calculate = () => {
     const { result, operate, originalLastNum } = this.state;
     let finalResult = 0;
     var tempResult = result;
 
-    // Special case with expression ending with operatore, after CE use
+    // Special case with expression ending with operator, after CE use
     if ("-+*/".includes(this.getLastChar(result))) {
-      tempResult = result.slice(0,-1);
+      tempResult = result.slice(0, -1);
     }
+
+    tempResult = this.closeParens(tempResult) + "";
+    tempResult = this.addMultiplier(tempResult) + "";
 
     // Handling double equal
     // If I only have sign + digit(s) + dot + digit(s)
@@ -275,7 +310,6 @@ class App extends React.Component {
       //I need to handle the double equal
       if ("+-/*".includes(operate) && !isNaN(originalLastNum)) {
         // finalResult = evaluate(result + operate + originalLastNum) + "";
-
         try {
           finalResult = evaluate(tempResult + operate + originalLastNum) + "";
         } catch(error) {
@@ -283,26 +317,6 @@ class App extends React.Component {
         }
       }
     } else {
-      /*
-    let lastKey = result.split(operate);
-    if (lastKey[1]) {
-      //check if string is not alone
-      if ("123456789".includes(lastKey[lastKey.length - 1])) {
-      this.setState({ originalLastNum: lastKey[lastKey.length - 1] })
-      }
-    }
-    console.log(lastKey, this.originalLastNum)
-*/
-      // Handle paraenthesis
-      //= 0 -> run the calculation
-
-      // 1 -> run calculation insde (), replace () with result -> run calculation
-      //We need to count the number of (
-      // +1 ->
-      // 2 differents issues
-      // no level -> no ( inside ()) -> (2+5)*(5+6) -> order
-      // level(nested) -> ( inside () -> 2(*(2+5))*5 -> 3*((2*5)/5)
-      //  Rule: First you calculate the () withtout ( or ) inside
 
       var tempResultString = tempResult;
       //We need to detect the non nested parenthesis
@@ -316,12 +330,13 @@ class App extends React.Component {
           //we extract the first expression ex:  (2+5)
           let expression = parenthesisToCalculate[i];
           //We calculate the value ex: 7
+
           try {
             let tempResult = evaluate(expression);
 
             //We need to replace the expression by the calculation
             tempResultString = tempResultString.replace(expression, tempResult);
-          } catch(error) {
+          } catch (error) {
             //throw error
           }
         }
@@ -331,14 +346,14 @@ class App extends React.Component {
 
       try {
         finalResult = evaluate(tempResultString);
-      } catch(error) {
+      } catch (error) {
         //throw error
       }
     }
 
     this.setState({
       done: true,
-      result: (finalResult || "") + "",
+      result: finalResult + "",
     });
   };
 
