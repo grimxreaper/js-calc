@@ -1,5 +1,5 @@
 import { render, userEvent, fireEvent, screen } from "@testing-library/react";
-// import { evaluate } from "mathjs";
+import { evaluate } from "mathjs";
 import App from "./App";
 import ResultComponent from "./Components/ResultComponent";
 import { evaluate } from "mathjs";
@@ -21,7 +21,8 @@ test("division button displays when clicked", () => {
   const { getByTestId } = render(<App />);
 
   fireEvent.click(getByTestId("/"));
-  expect(getByTestId("result")).toHaveTextContent("");
+
+  expect(getByTestId("result")).not.toHaveTextContent("/");
 });
 
 test("result displays correct number and operation when used together", () => {
@@ -50,6 +51,10 @@ const operation = "*";
 
 test("displays correct result of multiplying 8 by 7", () => {
   expect(evaluate(`${x} ${operation} ${y}`)).toBe(56);
+});
+
+test("displays correct result of adding -7 to 7", () => {
+  expect(evaluate('7+-7')).toBe(0);
 });
 
 describe("check the operation of 2 numbers", () => {
@@ -221,8 +226,6 @@ describe('removes characters appropriately', () => {
     fireEvent.click(getByTestId(8));
     fireEvent.click(getByTestId("CE"));
     fireEvent.click(getByTestId("="));
-    // fireEvents(3, "*", 7, "+", 8, "CE")
-
 
     expect(getByTestId("result")).toHaveTextContent("3*7+")
   });
@@ -245,4 +248,42 @@ describe('removes characters appropriately', () => {
 
     expect(getByTestId("result")).toHaveTextContent("7*")
   })
+
+  test("returns 0 instead of an empty string", () => {
+    const { getByTestId } = render(<App />);
+
+    fireEvent.click(getByTestId(7));
+    fireEvent.click(getByTestId("+"));
+    fireEvent.click(getByTestId("-"));
+    fireEvent.click(getByTestId(7));
+    fireEvent.click(getByTestId("="));
+
+    expect(getByTestId("result")).toHaveTextContent("0")
+  });
 })
+
+test("2 multiplied by what is inside the parentheses (4 +4)", () => {
+  const { getByTestId } = render(<App />);
+
+  fireEvent.click(getByTestId(2));
+  fireEvent.click(getByTestId("("));
+  fireEvent.click(getByTestId(4));
+  fireEvent.click(getByTestId("+"));
+  fireEvent.click(getByTestId(4));
+  fireEvent.click(getByTestId(")"));
+  fireEvent.click(getByTestId("="));
+
+  expect(getByTestId("result")).toHaveTextContent("16")
+});
+
+// test("Manually add * operator", () => {
+//   const { getByTestId } = render(<App />);
+
+//   const expression1 = "" 
+//   const expression2 = "2*(2+2)" 
+//   const expression3 = "2(2+2)" 
+
+//   expect(this.addMultiplier(expression1)).toHaveTextContent("")
+//   expect(this.addMultiplier(expression2)).toHaveTextContent(expression2)
+//   expect(this.addMultiplier(expression3)).toHaveTextContent(expression2)
+// });
