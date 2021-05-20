@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import ResultComponent from "./Components/ResultComponent";
 import KeyPadComponent from "./Components/KeyPadComponent";
-import { evaluate } from "mathjs";
+import { evaluate, map } from "mathjs";
 
 class App extends React.Component {
   state = {
@@ -10,10 +10,16 @@ class App extends React.Component {
     counter: 0,
     done: false,
     operate: undefined,
-    originalLastNum: "",
+    originalLastNum: "", //lastResult === ['7*8', '(7*8)*8', '((7*8)*8)*8']
+    lastFormula: '',
   };
 
   onClick = (button) => {
+    console.log('onClick', this.state.result)
+
+    // const [result, lastFormula] = this.nextResult(button, this.state.result, this.state.lastFormula)
+    // this.setState({result, lastFormula})
+
     if (button.type === "key" || button.key === "(" || button.key === ")") {
       if (this.state.done) {
         this.setState({
@@ -57,6 +63,7 @@ class App extends React.Component {
         button.key !== "AC" &&
         button.key !== ")"
       ) {
+        console.log('entering this if loop', 'result:', this.state.result, 'operate', this.state.operate)
         this.setState({
           operate: button.key,
           //result: this.state.result + button.key,
@@ -92,16 +99,16 @@ class App extends React.Component {
   };
 
   changeKeys = (result, button) => {
+
     if ("(".includes(button)) {
       if (result.length > 1) {
-
         if ("0123456789".includes(result[result.length - 1])) {
           //remove the previous number and return the last number
           return result + button.replace("(", "*(");
         }
       }
     }
-    if (result === "") {
+    if (result === "") { //result === '2+', button === '.'
       if ("+-(0123456789".includes(button)) {
         return button;
       }
@@ -109,7 +116,7 @@ class App extends React.Component {
         return "0.";
       }
     }
-    if ("0123456789".includes(result[result.length - 1])) {
+    if (result && result.length >= 1 && "0123456789".includes(result[result.length - 1])) {
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
       if (
@@ -128,7 +135,7 @@ class App extends React.Component {
     // - sign
     // - ., but we need to add a zero before
     //ex: 59 - (
-    if (result[result.length - 1] === "(") {
+    if (result && result.length >= 1 && result[result.length - 1] === "(") {
       if ("+-(0123456789".includes(button)) {
         return result + button;
       }
@@ -138,7 +145,7 @@ class App extends React.Component {
     }
     //🪲BUG -> (7 +  isn't working, attempting fix with this if conditional
     if (
-      result[result.length - 1] === "(" &&
+      result && result.length >= 2 && result[result.length - 1] === "(" &&
       "/*+-".includes(button) &&
       result[result.length - 2].includes("0123456789(")
     ) {
@@ -147,7 +154,7 @@ class App extends React.Component {
     // After a ), you can only have
     // - operator
     // - ), only if there are more ( than )
-    if (result[result.length - 1] === ")") {
+    if (result && result.length >= 1 && result[result.length - 1] === ")") {
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
       if ("/*-+".includes(button)) {
@@ -170,7 +177,7 @@ class App extends React.Component {
     // - sign
     // - (
     // - ., but we need to add a zero before
-    if ("0123456789)".includes(result[result.length - 2])) {
+    if (result && result.length >= 2 && "0123456789)".includes(result[result.length - 2])) {
       //checking "digit, ) -> operator"
       if ("/*+-".includes(result[result.length - 1])) {
         if ("+-(0123456789".includes(button)) {
@@ -185,7 +192,7 @@ class App extends React.Component {
     // - digit
     // - (
     // - ., but we need to add a zero before
-    if ("/*+-(".includes(result[result.length - 2])) {
+    if (result && result.length >= 2 && "/*+-(".includes(result[result.length - 2])) {
       if ("-+".includes(result[result.length - 1])) {
         if ("0123456789(".includes(button)) {
           return result + button;
@@ -199,7 +206,7 @@ class App extends React.Component {
     // - digit
     // - (
     // - ., but we need to add a zero before
-    if (result[result.length - 2].includes("/*+-(")) {
+    if (result && result.length >= 2 && result[result.length - 2].includes("/*+-(")) {
       if (result[result.length - 1].includes("-+")) {
         if ("0123456789(".includes(button)) {
           return result + button;
@@ -209,13 +216,13 @@ class App extends React.Component {
         }
       }
     }
-    if ((result[result.length - 1] || "").includes(".")) {
+    if (result && result.length >= 1 && (result[result.length - 1] || "").includes(".")) {
       if ("0123456789".includes(button)) {
         return result + button;
       }
     }
     //🪲 72.2 + doesn't work FIXED
-    if (result.includes(".")) {
+    if (result && result.includes(".")) {
     //ATTN -> added rule below myself outside of our tutoring
 
        //🪲 72.2 + doesn't work FIXED

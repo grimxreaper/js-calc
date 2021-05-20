@@ -227,7 +227,7 @@ describe('removes characters appropriately', () => {
     fireEvent.click(getByTestId("CE"));
     fireEvent.click(getByTestId("="));
 
-    expect(getByTestId("result")).toHaveTextContent("3*7+")
+    expect(getByTestId("result")).toHaveTextContent("21")
   });
 
   test("double negative at the beginning of an expression defaults to one negative sign", () => {
