@@ -106,6 +106,11 @@ class App extends React.Component {
 */
   };
 
+  setCharAt = (str,index,chr) => {
+    if(index > str.length - 1) return str;
+    return str.substring(0,index) + chr + str.substring(index + 1);
+  }
+
   changeKeys = (result, button) => {
     if ("(".includes(button)) {
       if (result.length > 1) {
@@ -197,14 +202,28 @@ class App extends React.Component {
     // - (
     // - ., but we need to add a zero before
 
+
     if ("0123456789)".includes(result[result.length - 2])) {
       //checking "digit, ) -> operator"
       if ("/*+-".includes(result[result.length - 1])) {
+        console.log('inside of line 220')
         if ("+-(0123456789".includes(button)) {
           return result + button;
         }
         if (".".includes(button)) {
           return result + "0.";
+        }
+        if ("/".includes(button) && result[result.length -1] === "-") {
+          return this.setCharAt(result, result.length - 1, '/')
+        }
+        if ("/".includes(button) && result[result.length -1] === "+") {
+          return this.setCharAt(result, result.length - 1, '/')
+        }
+        if ("*".includes(button) && result[result.length -1] === "-") {
+          return this.setCharAt(result, result.length - 1, '*')
+        }
+        if ("*".includes(button) && result[result.length -1] === "+") {
+          return this.setCharAt(result, result.length - 1, '*')
         }
       }
     }
@@ -215,6 +234,7 @@ class App extends React.Component {
     // - ., but we need to add a zero before
 
     if ("/*+-(".includes(result[result.length - 2])) {
+      console.log('inside of line 234')
       if ("-+".includes(result[result.length - 1])) {
         if ("0123456789(".includes(button)) {
           return result + button;

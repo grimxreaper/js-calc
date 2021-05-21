@@ -1,5 +1,4 @@
 Rules for the last number
-
 - digits
 - (
 - )
@@ -11,7 +10,6 @@ lastNum: empty
 - digits : add it
 - sign: add it
 - . add it
-
 - (,),operator: replace next
 
 (2*(22*-986))
