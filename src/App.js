@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import ResultComponent from "./Components/ResultComponent";
 import KeyPadComponent from "./Components/KeyPadComponent";
-import { evaluate } from "mathjs";
+import { evaluate, round } from "mathjs";
 
 class App extends React.Component {
   state = {
@@ -79,11 +79,8 @@ class App extends React.Component {
     if (results.length === 0) {
       return "";
     }
-
     //We need to take the last one
     let lastNum = results[results.length - 1];
-    // console.log();
-
     // If there is no operator -> we return the value
     if (!"-+/*".includes(lastNum[0])) {
       return lastNum;
@@ -92,18 +89,6 @@ class App extends React.Component {
       operate: lastNum[0],
     });
     return lastNum.substr(1);
-
-    /*
-    // If there is one sign, we remove itr
-    const operatorsCount = (result.match(/[-+/*]/g) || []).length;
-    if (operatorsCount === 1) {
-      return lastNum.substr(1)
-    }
-    // If there are two operator (operator+sign) -> we remove the first and keep the sign
-    if (operatorsCount === 2) {
-      return lastNum.substr(1)
-    }
-*/
   };
 
   setCharAt = (str,index,chr) => {
@@ -115,7 +100,7 @@ class App extends React.Component {
     if ("(".includes(button)) {
       if (result.length > 1) {
         //these few lines below, did not work to fix another bug
-  
+
         if ("0123456789".includes(result[result.length - 1])) {
           //remove the previous number and return the last number
           return result + button.replace("(", "*(");
@@ -130,12 +115,6 @@ class App extends React.Component {
         return "0.";
       }
     }
-
-    // After a digit, you can only have
-    // - digit
-    // - operator
-    // - ), only if there are more ( than )
-    // .
     if ("0123456789".includes(result[result.length - 1])) {
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
@@ -149,12 +128,6 @@ class App extends React.Component {
         return result;
       }
     }
-    // After a (, you can only have *same as empty expression
-    // - Digit
-    // - (
-    // - sign
-    // - ., but we need to add a zero before
-    //ex: 59 - (
     if (result[result.length - 1] === "(") {
       if ("+-(0123456789".includes(button)) {
         return result + button;
@@ -163,20 +136,6 @@ class App extends React.Component {
         return result + "0.";
       }
     }
-
-    //🪲BUG -> (7 +  isn't working, attempting fix with this if conditional
-    if (
-      result[result.length - 1] === "(" &&
-      "/*+-".includes(button) &&
-      result[result.length - 2].includes("0123456789(")
-    ) {
-      return result + button;
-    }
-
-    // After a ), you can only have
-    // - operator
-    // - ), only if there are more ( than )
-
     if (result[result.length - 1] === ")") {
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
@@ -188,7 +147,7 @@ class App extends React.Component {
       }
     }
 
-
+    
     //QS: will we run into a problem in differentiating an operator from a sign? */
     //For  + / , how do you know it's an operator, or a sign (7--)
     // You need to watch what is before
@@ -201,6 +160,7 @@ class App extends React.Component {
     // - sign
     // - (
     // - ., but we need to add a zero before
+
 
 
     if ("0123456789)".includes(result[result.length - 2])) {
@@ -227,12 +187,6 @@ class App extends React.Component {
         }
       }
     }
-
-    // After a sign, you can only have
-    // - digit
-    // - (
-    // - ., but we need to add a zero before
-
     if ("/*+-(".includes(result[result.length - 2])) {
       console.log('inside of line 234')
       if ("-+".includes(result[result.length - 1])) {
@@ -244,19 +198,12 @@ class App extends React.Component {
         }
       }
     }
-
-    //After a dot, you can only have
-    // - digit
-
-
     if ((result[result.length - 1] || "").includes(".")) {
       console.log(result[result.length - 1]);
       if ("0123456789".includes(button)) {
         return result + button;
       }
     }
-
-    //ATTN -> added rule below myself outside of our tutoring
 
        //🪲 72.2 + doesn't work FIXED
     if ((result || "").includes('.')) {
@@ -273,6 +220,7 @@ class App extends React.Component {
 
     // "" - - -> is not possible
     //return "not yet coded";
+
     return result;
   };
 
@@ -291,6 +239,12 @@ class App extends React.Component {
 
   getLastChar = (from) => {
     return from.slice(-1);
+  };
+
+
+  roundedResult = (expression) => {
+    const digitAfterComma = 13;
+    round(evaluate(expression), digitAfterComma);
   };
 
   addMultiplier = (expression) => {
@@ -312,6 +266,7 @@ class App extends React.Component {
   };
 
 
+
   calculate = () => {
     const { result, operate, originalLastNum } = this.state;
     let finalResult = 0;
@@ -321,6 +276,7 @@ class App extends React.Component {
     if ("-+*/".includes(this.getLastChar(result))) {
       tempResult = result.slice(0, -1);
     }
+
 
     tempResult = this.closeParens(tempResult) + "";
     tempResult = this.addMultiplier(tempResult) + "";
@@ -335,7 +291,7 @@ class App extends React.Component {
       if ("+-/*".includes(operate) && !isNaN(originalLastNum)) {
         // finalResult = evaluate(result + operate + originalLastNum) + "";
         try {
-          finalResult = evaluate(tempResult + operate + originalLastNum) + "";
+          finalResult = this.roundedResult(tempResult + operate + originalLastNum) + "";
         } catch(error) {
 
           //throw error
@@ -356,30 +312,31 @@ class App extends React.Component {
           //We calculate the value ex: 7
 
           try {
-            let tempResult = evaluate(expression);
+            let tempResult = round(evaluate(expression), 13);
 
             //We need to replace the expression by the calculation
             tempResultString = tempResultString.replace(expression, tempResult);
+
           } catch (error) {
             //throw error
           }
         }
+
         parenthesisToCalculate = tempResultString.match(reg) || [];
       }
       //In tempResultString we have the last expression withtout any ()
 
       try {
-        finalResult = evaluate(tempResultString);
+       finalResult = round(evaluate(tempResultString), 13);
       } catch (error) {
         //throw error
       }
+      this.setState({
+        done: true,
+        result: finalResult + "",
+      });
     }
-
-    this.setState({
-      done: true,
-      result: finalResult + "",
-    });
-  };
+  }
 
   reset = () => {
     this.setState({
@@ -397,8 +354,6 @@ class App extends React.Component {
   };
 
   render() {
-    // console.log(this.state);
-
     return (
       <div className="container">
         <h1>Pocket Js Calculator</h1>

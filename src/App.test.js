@@ -1,5 +1,5 @@
 import { render, userEvent, fireEvent, screen } from "@testing-library/react";
-import { evaluate } from "mathjs";
+import { all, create, evaluate } from "mathjs";
 import App from "./App";
 import ResultComponent from "./Components/ResultComponent";
 
@@ -45,13 +45,6 @@ it("state is updated when a button is clicked", () => {
 });
 
 //Testing events: multiplication calculation with eval
-const x = 8;
-const y = 7;
-const operation = "*";
-
-test("displays correct result of multiplying 8 by 7", () => {
-  expect(evaluate(`${x} ${operation} ${y}`)).toBe(56);
-});
 
 test("displays correct result of adding -7 to 7", () => {
   expect(evaluate('7+-7')).toBe(0);
@@ -215,6 +208,7 @@ describe("check the operation of 3 or more numbers", () => {
   });
 });
 
+
 describe('removes characters appropriately', () => {
   test("multiplying 3 by 7 then adding 8 and hitting CE must remove 8", () => {
     const { getByTestId } = render(<App />);
@@ -230,7 +224,6 @@ describe('removes characters appropriately', () => {
     expect(getByTestId("result")).toHaveTextContent("21")
   });
 
-
   test("double negative at the beginning of an expression defaults to one negative sign", () => {
     const { getByTestId } = render(<App />);
 
@@ -241,6 +234,7 @@ describe('removes characters appropriately', () => {
   })
 
   test("using an addition followed by a multiplication operator defaults to a multiplication operator", () => {
+
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId(7));
@@ -322,4 +316,5 @@ test("must add 6 parentheses to the end of the equation and return 874", () => {
 //   expect(this.addMultiplier(expression2)).toHaveTextContent(expression2)
 //   expect(this.addMultiplier(expression3)).toHaveTextContent(expression2)
 // });
+
 
