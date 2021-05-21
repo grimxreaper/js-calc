@@ -1,3 +1,3 @@
-JS Calculator built with React.
+JS Calculator built with React!
 
 https://grimxreaper.github.io/js-calc/
