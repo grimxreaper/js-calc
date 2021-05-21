@@ -230,6 +230,7 @@ describe('removes characters appropriately', () => {
     expect(getByTestId("result")).toHaveTextContent("21")
   });
 
+
   test("double negative at the beginning of an expression defaults to one negative sign", () => {
     const { getByTestId } = render(<App />);
 
@@ -248,6 +249,7 @@ describe('removes characters appropriately', () => {
 
     expect(getByTestId("result")).toHaveTextContent("7*")
   })
+
 
   test("returns 0 instead of an empty string", () => {
     const { getByTestId } = render(<App />);
@@ -276,6 +278,39 @@ test("2 multiplied by what is inside the parentheses (4 +4)", () => {
   expect(getByTestId("result")).toHaveTextContent("16")
 });
 
+
+test("must add 6 parentheses to the end of the equation and return 874", () => {
+  const { getByTestId } = render(<App />);
+
+  fireEvent.click(getByTestId("("));
+  fireEvent.click(getByTestId(1));
+  fireEvent.click(getByTestId("+"));
+  fireEvent.click(getByTestId(1));
+  fireEvent.click(getByTestId("("));
+  fireEvent.click(getByTestId(1));
+  fireEvent.click(getByTestId("+"));
+  fireEvent.click(getByTestId(2));
+  fireEvent.click(getByTestId("("));
+  fireEvent.click(getByTestId(1));
+  fireEvent.click(getByTestId("+"));
+  fireEvent.click(getByTestId(3));
+  fireEvent.click(getByTestId("("));
+  fireEvent.click(getByTestId(1));
+  fireEvent.click(getByTestId("+"));
+  fireEvent.click(getByTestId(4));
+  fireEvent.click(getByTestId("("));
+  fireEvent.click(getByTestId(1));
+  fireEvent.click(getByTestId("+"));
+  fireEvent.click(getByTestId(5));
+  fireEvent.click(getByTestId("("));
+  fireEvent.click(getByTestId(1));
+  fireEvent.click(getByTestId("+"));
+  fireEvent.click(getByTestId(6));
+  fireEvent.click(getByTestId("="));
+
+  expect(getByTestId("result")).toHaveTextContent("874")
+});
+
 // test("Manually add * operator", () => {
 //   const { getByTestId } = render(<App />);
 
@@ -287,3 +322,4 @@ test("2 multiplied by what is inside the parentheses (4 +4)", () => {
 //   expect(this.addMultiplier(expression2)).toHaveTextContent(expression2)
 //   expect(this.addMultiplier(expression3)).toHaveTextContent(expression2)
 // });
+

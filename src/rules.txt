@@ -132,6 +132,7 @@ if ((result.length - 1).includes('.')) {
 // but then just affixing the number outside the parens to the result
 
 
+
 //if there is an operator of * or / entered after a + or -
 //the operator should default to the * or /
 //so 7-* should default to 7* and 7+/ should default to 7/
@@ -153,4 +154,5 @@ const groupsOfOperators = /(\+-)(\*\\)/g;
 const multiplyOrDivide = /\*\//g;
 const addOrSub = /\+-/g;
 const subAndDiv = /(-\/)/g
+
 
