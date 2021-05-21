@@ -189,6 +189,7 @@ class App extends React.Component {
     // Special case with expression ending with operator, after CE use
     if ("-+*/".includes(this.getLastChar(result))) {
       tempResult = result.slice(0, -1);
+    }
       // Handling double equal
       // If I only have sign + digit(s) + dot + digit(s)
       const regex = /-{0,1}[0123456789]*(\.[0123456789]*){0,1}/g;
@@ -219,6 +220,7 @@ class App extends React.Component {
             let expression = parenthesisToCalculate[i];
             //We calculate the value ex: 7
             try {
+              console.log(expression)
               let tempResult = round(evaluate(expression), 13);
 
               //We need to replace the expression by the calculation
@@ -243,8 +245,9 @@ class App extends React.Component {
         done: true,
         result: finalResult + "",
       });
+      console.log('final', finalResult, 'result', result)
     }
-  };
+  
 
   reset = () => {
     this.setState({
