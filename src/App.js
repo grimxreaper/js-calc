@@ -106,12 +106,16 @@ class App extends React.Component {
 */
   };
 
+  setCharAt = (str,index,chr) => {
+    if(index > str.length - 1) return str;
+    return str.substring(0,index) + chr + str.substring(index + 1);
+  }
+
   changeKeys = (result, button) => {
     if ("(".includes(button)) {
       if (result.length > 1) {
         //these few lines below, did not work to fix another bug
-
-
+  
         if ("0123456789".includes(result[result.length - 1])) {
           //remove the previous number and return the last number
           return result + button.replace("(", "*(");
@@ -198,14 +202,28 @@ class App extends React.Component {
     // - (
     // - ., but we need to add a zero before
 
+
     if ("0123456789)".includes(result[result.length - 2])) {
       //checking "digit, ) -> operator"
       if ("/*+-".includes(result[result.length - 1])) {
+        console.log('inside of line 220')
         if ("+-(0123456789".includes(button)) {
           return result + button;
         }
         if (".".includes(button)) {
           return result + "0.";
+        }
+        if ("/".includes(button) && result[result.length -1] === "-") {
+          return this.setCharAt(result, result.length - 1, '/')
+        }
+        if ("/".includes(button) && result[result.length -1] === "+") {
+          return this.setCharAt(result, result.length - 1, '/')
+        }
+        if ("*".includes(button) && result[result.length -1] === "-") {
+          return this.setCharAt(result, result.length - 1, '*')
+        }
+        if ("*".includes(button) && result[result.length -1] === "+") {
+          return this.setCharAt(result, result.length - 1, '*')
         }
       }
     }
@@ -216,6 +234,7 @@ class App extends React.Component {
     // - ., but we need to add a zero before
 
     if ("/*+-(".includes(result[result.length - 2])) {
+      console.log('inside of line 234')
       if ("-+".includes(result[result.length - 1])) {
         if ("0123456789(".includes(button)) {
           return result + button;
@@ -231,6 +250,7 @@ class App extends React.Component {
 
 
     if ((result[result.length - 1] || "").includes(".")) {
+      console.log(result[result.length - 1]);
       if ("0123456789".includes(button)) {
         return result + button;
       }
@@ -246,13 +266,15 @@ class App extends React.Component {
       }
     }
 
+    // 🪲 72(7+2 returns "not yet coded"
+
 
     // operator + operator -> replace the first operator
 
+    // "" - - -> is not possible
     //return "not yet coded";
     return result;
   };
-
 
   closeParens = (result) => {
     var numberOfOpenP = (result.match(/\(/g) || []).length;
@@ -271,24 +293,25 @@ class App extends React.Component {
     return from.slice(-1);
   };
 
-  addMultiplier = (equation) => {
+  addMultiplier = (expression) => {
+    //Find all pattern Digit + (
+    //expression ="1(2+6)+23(6+9)+(2+3)9"
 
-  //1- if there is a digit and an open parens immediately after it...
-  //add a * in between them
-  //2- if there is a close parens and a number immediately after it...
-  //add a * in between them
-  //3- if there is a close parens and another open parens immediately after it...
-  //insert a * in between them
+    const digitAndP = /([0123456789])(\()/g;
+    const pAndDigit = /(\))([0123456789])/g;
+    // )( -> )*(
+    const pAndp = /(\))(\()/g;
 
-    const digitAndOpenP = /([0123456789.]*)(\()/g;
-    const closeParensAndDigit = /(\))([0123456789.]*)/g;
-    const twoGroupsOfParens = /(\))(\()/g;
+    //return the value
+    return expression
+      .replace(digitAndP, "$1*$2")
+      .replace(pAndDigit, "$1*$2")
+      .replace(pAndp, "$1*$2");
 
-    equation.replace(digitAndOpenP, "$1*$2").replace(closeParensAndDigit, "$1*$2").replace(twoGroupsOfParens, "$1*$2")
-    
-    return equation;
-  }
-  
+
+  };
+
+
   calculate = () => {
     const { result, operate, originalLastNum } = this.state;
     let finalResult = 0;
@@ -302,6 +325,7 @@ class App extends React.Component {
     tempResult = this.closeParens(tempResult) + "";
     tempResult = this.addMultiplier(tempResult) + "";
 
+
     // Handling double equal
     // If I only have sign + digit(s) + dot + digit(s)
     const regex = /-{0,1}[0123456789]*(\.[0123456789]*){0,1}/g;
@@ -313,11 +337,11 @@ class App extends React.Component {
         try {
           finalResult = evaluate(tempResult + operate + originalLastNum) + "";
         } catch(error) {
+
           //throw error
         }
       }
     } else {
-
       var tempResultString = tempResult;
       //We need to detect the non nested parenthesis
       //Open ( and no other ( before the next close
