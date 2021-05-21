@@ -245,7 +245,6 @@ class App extends React.Component {
         done: true,
         result: finalResult + "",
       });
-      console.log('final', finalResult, 'result', result)
     }
   
 
