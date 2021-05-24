@@ -4,6 +4,9 @@ import ResultComponent from "./Components/ResultComponent";
 import KeyPadComponent from "./Components/KeyPadComponent";
 import { evaluate, round } from "mathjs";
 
+function someUniqueName(button, result) {
+}
+
 class App extends React.Component {
   state = {
     result: "",
@@ -13,7 +16,23 @@ class App extends React.Component {
     originalLastNum: "",
   };
 
+  // REFACTORS
+  // 1. extract method/function (CHECK FOR HANDLING RETURNS)
+  //   - make empty function, silly name
+  //   - CUT code
+  //   - PASTE into function
+  //   - add function call to original location
+  // 2. inline method/function (CHECK VARIABLE NAMES UNIQUE)
+  // 3. extract variable (CHECK FOR MUTATIONS FROM DESTINATION TO STARTING)
+  // 4. inline variable (CHECK FOR MUTATIONS FROM STARTING TO DESTINATION)
+
+  // SUGGESTED REFACTORS
+  // 1. Replace state variables "done", "originalLastNum", and "operator" with "lastFormula"
+  // 2. Inline all functions inside onClick
+  // 3. Extract variables
+
   onClick = (button) => {
+
     if (button.type === "key" || button.key === "(" || button.key === ")") {
       if (this.state.done) {
         this.setState({
@@ -27,26 +46,29 @@ class App extends React.Component {
             result: this.state.result + button.key,
           });
         } else {
-          if (
-            button.key === "." ||
-            (this.state.originalLastNum + "").includes(".")
-          ) {
-            this.setState({
-              //originalLastNum: this.state.originalLastNum + button.key,
-              originalLastNum: this.recordLastNum(
-                this.state.result + button.key
-              ),
-              result: this.state.result + button.key,
-            });
-          } else {
-            this.setState({
-              //originalLastNum: button.key,
-              originalLastNum: this.recordLastNum(
-                this.state.result + button.key
-              ),
-              result: this.state.result + button.key,
-            });
+          const result = this.state.result + button.key
+          var originalLastNum
+          const regex = /[-+/*]{0,}[0-9]{1,}[.]{0,1}[0-9]*/g;
+          let results = result.match(regex) || [];
+          if (results.length === 0) {
+            originalLastNum = "";
           }
+          //We need to take the last one
+          let lastNum = results[results.length - 1];
+          // If there is no operator -> we originalLastNum the value
+          if (!"-+/*".includes(lastNum[0])) {
+            originalLastNum = lastNum;
+          }
+          this.setState({
+            operate: lastNum[0],
+          });
+          originalLastNum = lastNum.substr(1);
+          
+          this.setState({
+            //originalLastNum: this.state.originalLastNum + button.key,
+            originalLastNum: originalLastNum,
+            result: this.state.result + button.key,
+          });
         }
       }
     } else {
@@ -74,21 +96,6 @@ class App extends React.Component {
   };
 
   recordLastNum = (result) => {
-    const regex = /[-+/*]{0,}[0-9]{1,}[.]{0,1}[0-9]*/g;
-    let results = result.match(regex) || [];
-    if (results.length === 0) {
-      return "";
-    }
-    //We need to take the last one
-    let lastNum = results[results.length - 1];
-    // If there is no operator -> we return the value
-    if (!"-+/*".includes(lastNum[0])) {
-      return lastNum;
-    }
-    this.setState({
-      operate: lastNum[0],
-    });
-    return lastNum.substr(1);
   };
 
   setCharAt = (str,index,chr) => {
@@ -97,6 +104,15 @@ class App extends React.Component {
   }
 
   changeKeys = (result, button) => {
+
+    const numberOfOpenP = (result.match(/\(/g) || []).length;
+    const numberOfCloseP = (result.match(/\)/g) || []).length;
+    const needsExtraParens = "*/-+0123456789.".includes(button) ||
+    (button.key === ")" && numberOfOpenP > numberOfCloseP);
+    const isNumberPlusMinusOrLeftParen = "+-(0123456789".includes(button)
+    const isDot = ".".includes(button)
+
+
     if ("(".includes(button)) {
       if (result.length > 1) {
         //these few lines below, did not work to fix another bug
@@ -107,27 +123,24 @@ class App extends React.Component {
         }
       }
     }
+  
     if (result === "") {
-      if ("+-(0123456789".includes(button)) {
+      if (isNumberPlusMinusOrLeftParen) {
         return button;
       }
-      if (".".includes(button)) {
+      if (isDot) {
         return "0.";
       }
     }
+
     if ("0123456789".includes(result[result.length - 1])) {
-      const numberOfOpenP = (result.match(/\(/g) || []).length;
-      const numberOfCloseP = (result.match(/\)/g) || []).length;
-      if (
-        "*/-+0123456789.".includes(button) ||
-        (button.key === ")" && numberOfOpenP > numberOfCloseP)
-      ) {
-      
+      if (needsExtraParens) {
         return result + button;
       } else {
         return result;
       }
     }
+
     if (result[result.length - 1] === "(") {
       if ("+-(0123456789".includes(button)) {
         return result + button;
