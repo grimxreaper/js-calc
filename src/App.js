@@ -104,6 +104,7 @@ class App extends React.Component {
   }
 
   changeKeys = (result, button) => {
+        var newResult = "";
 
     const numberOfOpenP = (result.match(/\(/g) || []).length;
     const numberOfCloseP = (result.match(/\)/g) || []).length;
@@ -119,44 +120,53 @@ class App extends React.Component {
 
         if ("0123456789".includes(result[result.length - 1])) {
           //remove the previous number and return the last number
-          return result + button.replace("(", "*(");
+          newResult = result + button.replace("(", "*(");
         }
       }
     }
   
     if (result === "") {
       if (isNumberPlusMinusOrLeftParen) {
-        return button;
+        console.log('HERE11')
+        newResult = button;
       }
       if (isDot) {
-        return "0.";
+        newResult = "0.";
       }
     }
 
+    if ('-'.includes(result[result.length - 1])) {
+      if ('-'.includes(button)) {
+        newResult = result
+      }
+    }
+
+
+
     if ("0123456789".includes(result[result.length - 1])) {
       if (needsExtraParens) {
-        return result + button;
+        newResult = result + button;
       } else {
-        return result;
+        newResult = result;
       }
     }
 
     if (result[result.length - 1] === "(") {
       if ("+-(0123456789".includes(button)) {
-        return result + button;
+        newResult = result + button;
       }
       if (".".includes(button)) {
-        return result + "0.";
+        newResult = result + "0.";
       }
     }
     if (result[result.length - 1] === ")") {
       const numberOfOpenP = (result.match(/\(/g) || []).length;
       const numberOfCloseP = (result.match(/\)/g) || []).length;
       if ("/*-+".includes(button)) {
-        return result + button;
+        newResult = result + button;
       }
       if (")".includes(button) && numberOfOpenP > numberOfCloseP) {
-        return result + button;
+        newResult = result + button;
       }
     }
 
@@ -179,62 +189,68 @@ class App extends React.Component {
     if ("0123456789)".includes(result[result.length - 2])) {
       //checking "digit, ) -> operator"
       if ("/*+-".includes(result[result.length - 1])) {
-        console.log('inside of line 220')
+        console.log('H')
         if ("+-(0123456789".includes(button)) {
-          return result + button;
+          newResult = result + button;
+        }
+        if ('-'.includes(result[result.length - 1]) && "-".includes(button)) {
+          newResult = this.setCharAt(result, result.length - 1, '-')
+        }
+        if ('-'.includes(result[result.length - 1]) && '+'.includes(button)) {
+          newResult = this.setCharAt(result, result.length - 1, '+')
         }
         if (".".includes(button)) {
-          return result + "0.";
+          newResult = result + "0.";
         }
         if ("/".includes(button) && result[result.length -1] === "-") {
-          return this.setCharAt(result, result.length - 1, '/')
+          newResult = this.setCharAt(result, result.length - 1, '/')
         }
         if ("/".includes(button) && result[result.length -1] === "+") {
-          return this.setCharAt(result, result.length - 1, '/')
+          newResult = this.setCharAt(result, result.length - 1, '/')
         }
         if ("*".includes(button) && result[result.length -1] === "-") {
-          return this.setCharAt(result, result.length - 1, '*')
+          newResult = this.setCharAt(result, result.length - 1, '*')
         }
         if ("*".includes(button) && result[result.length -1] === "+") {
-          return this.setCharAt(result, result.length - 1, '*')
+          newResult = this.setCharAt(result, result.length - 1, '*')
         }
       }
     }
     if ("/*+-(".includes(result[result.length - 2])) {
-      console.log('inside of line 234')
+
       if ("-+".includes(result[result.length - 1])) {
+        console.log('HERE22')
         if ("0123456789(".includes(button)) {
-          return result + button;
+          newResult = result + button;
         }
         if (".".includes(button)) {
-          return result + "0.";
+          newResult = result + "0.";
         }
       }
     }
     if ((result[result.length - 1] || "").includes(".")) {
-      console.log(result[result.length - 1]);
+      console.log('HERE 2.5')
       if ("0123456789".includes(button)) {
-        return result + button;
+        newResult = result + button;
       }
     }
 
        //🪲 72.2 + doesn't work FIXED
     if ((result || "").includes('.')) {
-
+      console.log('HERE33')
       if ("+-*/0123456789".includes(button)) {
-        return result + button;
+        newResult = result + button;
       }
     }
 
-    // 🪲 72(7+2 returns "not yet coded"
+    // 🪲 72(7+2 newResult =s "not yet coded"
 
 
     // operator + operator -> replace the first operator
 
     // "" - - -> is not possible
-    //return "not yet coded";
-
-    return result;
+    //newResult = "not yet coded";
+return newResult;
   };
 
   closeParens = (result) => {
