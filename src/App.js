@@ -10,10 +10,10 @@ function someUniqueName(button, result) {
 class App extends React.Component {
   state = {
     result: "",
-    counter: 0,
     done: false,
     operate: undefined,
     originalLastNum: "",
+    lastFormula: "",
   };
 
   // REFACTORS
@@ -40,6 +40,8 @@ class App extends React.Component {
     const pressedCE = button.key === "CE";
     const pressedEqual = button.key === "=";
 
+    var newNewResult = "";
+
     if (numOrDecimal || openP || closedP) {
       if (this.state.done) {
         this.setState({
@@ -52,7 +54,8 @@ class App extends React.Component {
           this.setState({
             result: this.state.result + button.key,
           });
-        } else {
+        }
+        else {
           const result = this.state.result + button.key
           var originalLastNum
           const regex = /[-+/*]{0,}[0-9]{1,}[.]{0,1}[0-9]*/g;
@@ -70,7 +73,7 @@ class App extends React.Component {
             operate: lastNum[0],
           });
           originalLastNum = lastNum.substr(1);
-          
+
           this.setState({
             //originalLastNum: this.state.originalLastNum + button.key,
             originalLastNum: originalLastNum,
@@ -91,11 +94,21 @@ class App extends React.Component {
     if (pressedEqual) {
       this.calculate();
     } else if (pressedAC) {
-      this.reset();
+      this.setState({
+        result: "",
+        operate: "",
+        done: false,
+        originalLastNum: "",
+      });
     } else if (pressedCE) {
-      this.backspace();
+      this.setState({
+        result: this.state.result.slice(0, -1),
+      });
     }
   };
+
+
+
 
   recordLastNum = (result) => {
   };
@@ -390,20 +403,20 @@ class App extends React.Component {
     }
   }
 
-  reset = () => {
-    this.setState({
-      result: "",
-      operate: "",
-      done: false,
-      originalLastNum: "",
-    });
-  };
+  // reset = () => {
+  //   this.setState({
+  //     result: "",
+  //     operate: "",
+  //     done: false,
+  //     originalLastNum: "",
+  //   });
+  // };
 
-  backspace = () => {
-    this.setState({
-      result: this.state.result.slice(0, -1),
-    });
-  };
+  // backspace = () => {
+  //   this.setState({
+  //     result: this.state.result.slice(0, -1),
+  //   });
+  // };
 
   render() {
     return (
