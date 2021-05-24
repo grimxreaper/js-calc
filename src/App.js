@@ -28,12 +28,19 @@ class App extends React.Component {
 
   // SUGGESTED REFACTORS
   // 1. Replace state variables "done", "originalLastNum", and "operator" with "lastFormula"
-  // 2. Inline all functions inside onClick
+  // 2. Inline all functions inside onClick **QS: do you mean add all functions like changeKeys, reset, etc. inside of
   // 3. Extract variables
 
   onClick = (button) => {
+    const numOrDecimal = button.type === "key";
+    const openP = button.key === "(";
+    const closedP = button.key === ")"
+    const numOrDecimalOrOperator = button.key !== "CE" && button.key !== "=" && button.key !== "(" && button.key !== "AC" && button.key !== ")";
+    const pressedAC = button.key === "AC";
+    const pressedCE = button.key === "CE";
+    const pressedEqual = button.key === "=";
 
-    if (button.type === "key" || button.key === "(" || button.key === ")") {
+    if (numOrDecimal || openP || closedP) {
       if (this.state.done) {
         this.setState({
           done: false,
@@ -41,7 +48,7 @@ class App extends React.Component {
           result: button.key + "",
         });
       } else {
-        if (button.key === "(" || button.key === ")") {
+        if (openP || closedP) {
           this.setState({
             result: this.state.result + button.key,
           });
@@ -72,13 +79,7 @@ class App extends React.Component {
         }
       }
     } else {
-      if (
-        button.key !== "CE" &&
-        button.key !== "=" &&
-        button.key !== "(" &&
-        button.key !== "AC" &&
-        button.key !== ")"
-      ) {
+      if (numOrDecimalOrOperator) {
         this.setState({
           operate: button.key,
           //result: this.state.result + button.key,
@@ -86,11 +87,12 @@ class App extends React.Component {
         });
       }
     }
-    if (button.key === "=") {
+    
+    if (pressedEqual) {
       this.calculate();
-    } else if (button.key === "AC") {
+    } else if (pressedAC) {
       this.reset();
-    } else if (button.key === "CE") {
+    } else if (pressedCE) {
       this.backspace();
     }
   };
@@ -106,8 +108,8 @@ class App extends React.Component {
   changeKeys = (result, button) => {
     var newResult = "";
 
-    const numberOfOpenP = (result.match(/\(/g) || []).length;
-    const numberOfCloseP = (result.match(/\)/g) || []).length;
+    var numberOfOpenP = (result.match(/\(/g) || []).length;
+    var numberOfCloseP = (result.match(/\)/g) || []).length;
     const needsExtraParens = "*/-+0123456789.".includes(button) ||
     (button.key === ")" && numberOfOpenP > numberOfCloseP);
     const isNum = "0123456789".includes(button);
@@ -255,6 +257,7 @@ class App extends React.Component {
       }
     }
 
+
     // 🪲 72(7+2 newResult =s "not yet coded"
 
 
@@ -265,18 +268,18 @@ class App extends React.Component {
   return newResult;
   };
 
-  closeParens = (result) => {
-    var numberOfOpenP = (result.match(/\(/g) || []).length;
-    var numberOfCloseP = (result.match(/\)/g) || []).length;
-    //this solution works but only if there is one parenthesis missing,
-    //instead, account for all parens missing
+  // closeParens = (result) => {
+  //   var numberOfOpenP = (result.match(/\(/g) || []).length;
+  //   var numberOfCloseP = (result.match(/\)/g) || []).length;
+  //   //this solution works but only if there is one parenthesis missing,
+  //   //instead, account for all parens missing
 
-    while (numberOfOpenP > numberOfCloseP) {
-      result = result + ")";
-      numberOfOpenP--;
-    }
-    return result
-  };
+  //   while (numberOfOpenP > numberOfCloseP) {
+  //     result = result + ")";
+  //     numberOfOpenP--;
+  //   }
+  //   return result
+  // };
 
   getLastChar = (from) => {
     return from.slice(-1);
@@ -313,14 +316,21 @@ class App extends React.Component {
     let finalResult = 0;
     var tempResult = result;
     const lastCharIsOperator = "/*+-".includes(result[result.length - 1]);
+    var numberOfOpenP = (result.match(/\(/g) || []).length;
+    var numberOfCloseP = (result.match(/\)/g) || []).length;
 
     // Special case with expression ending with operator, after CE use
     if (lastCharIsOperator) {
       tempResult = result.slice(0, -1);
     }
 
+    while (numberOfOpenP > numberOfCloseP) {
+      tempResult = tempResult + ")";
+      numberOfOpenP--;
+    }
 
-    tempResult = this.closeParens(tempResult) + "";
+
+    // tempResult = this.closeParens(tempResult) + "";
     tempResult = this.addMultiplier(tempResult) + "";
 
 
