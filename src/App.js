@@ -304,23 +304,23 @@ class App extends React.Component {
     round(evaluate(expression), digitAfterComma);
   };
 
-  addMultiplier = (expression) => {
-    //Find all pattern Digit + (
-    //expression ="1(2+6)+23(6+9)+(2+3)9"
+  // addMultiplier = (expression) => {
+  //   //Find all pattern Digit + (
+  //   //expression ="1(2+6)+23(6+9)+(2+3)9"
 
-    const digitAndP = /([0123456789])(\()/g;
-    const pAndDigit = /(\))([0123456789])/g;
-    // )( -> )*(
-    const pAndp = /(\))(\()/g;
+  //   const digitAndP = /([0123456789])(\()/g;
+  //   const pAndDigit = /(\))([0123456789])/g;
+  //   // )( -> )*(
+  //   const pAndp = /(\))(\()/g;
 
-    //return the value
-    return expression
-      .replace(digitAndP, "$1*$2")
-      .replace(pAndDigit, "$1*$2")
-      .replace(pAndp, "$1*$2");
+  //   //return the value
+  //   return expression
+  //     .replace(digitAndP, "$1*$2")
+  //     .replace(pAndDigit, "$1*$2")
+  //     .replace(pAndp, "$1*$2");
 
 
-  };
+  // };
 
 
 
@@ -329,22 +329,34 @@ class App extends React.Component {
     let finalResult = 0;
     var tempResult = result;
     const lastCharIsOperator = "/*+-".includes(result[result.length - 1]);
-    var numberOfOpenP = (result.match(/\(/g) || []).length;
-    var numberOfCloseP = (result.match(/\)/g) || []).length;
 
     // Special case with expression ending with operator, after CE use
     if (lastCharIsOperator) {
       tempResult = result.slice(0, -1);
     }
 
+    var numberOfOpenP = (result.match(/\(/g) || []).length;
+    var numberOfCloseP = (result.match(/\)/g) || []).length;
+
     while (numberOfOpenP > numberOfCloseP) {
       tempResult = tempResult + ")";
       numberOfOpenP--;
     }
 
+    const digitAndP = /([0123456789])(\()/g;
+    const pAndDigit = /(\))([0123456789])/g;
+    // )( -> )*(
+    const pAndp = /(\))(\()/g;
+
+    tempResult = 
+    tempResult
+    .replace(digitAndP, "$1*$2")
+    .replace(pAndDigit, "$1*$2")
+    .replace(pAndp, "$1*$2");
+
 
     // tempResult = this.closeParens(tempResult) + "";
-    tempResult = this.addMultiplier(tempResult) + "";
+    // tempResult = this.addMultiplier(tempResult) + "";
 
 
     // Handling double equal
