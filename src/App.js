@@ -104,21 +104,40 @@ class App extends React.Component {
   }
 
   changeKeys = (result, button) => {
-        var newResult = "";
+    var newResult = "";
 
     const numberOfOpenP = (result.match(/\(/g) || []).length;
     const numberOfCloseP = (result.match(/\)/g) || []).length;
     const needsExtraParens = "*/-+0123456789.".includes(button) ||
     (button.key === ")" && numberOfOpenP > numberOfCloseP);
-    const isNumberPlusMinusOrLeftParen = "+-(0123456789".includes(button)
-    const isDot = ".".includes(button)
+    const isNum = "0123456789".includes(button);
+    const isNumberPlusMinusOrOpenParen = "+-(0123456789".includes(button);
+    const isNumOrOperator = "+-*/0123456789".includes(button);
+    const isNumOrOpenP = "0123456789(".includes(button);
+    const lastCharIsNum = "0123456789".includes(result[result.length - 1]);
+    const isDot = ".".includes(button);
+    const isOpenP = "(".includes(button);
+    const isClosedP = ")".includes(button);
+    const lastCharIsOpenP = result[result.length - 1] === "(";
+    const lastCharIsClosedP = result[result.length - 1] === ")";
+    const lastCharIsOperator = "/*+-".includes(result[result.length - 1]);
+    const lastCharIsMinus = '-'.includes(result[result.length - 1]);
+    const lastCharIsAddition = result[result.length -1] === "+";
+    const isMinus = "-".includes(button);
+    const isAddition = '+'.includes(button);
+    const isMultiply = "*".includes(button);
+    const isDivide = "/".includes(button);
+    const isOperator = "/*-+".includes(button);
+    const lastCharIsAddOrMinus = "-+".includes(result[result.length - 1]);
+    const charBfrLastIsOperatorOrOpenP = "/*+-(".includes(result[result.length - 2]);
+    const charBfrLastIsNumOrClosedP = "0123456789)".includes(result[result.length - 2]);
 
 
-    if ("(".includes(button)) {
+    if (isOpenP) {
       if (result.length > 1) {
         //these few lines below, did not work to fix another bug
 
-        if ("0123456789".includes(result[result.length - 1])) {
+        if (lastCharIsNum) {
           //remove the previous number and return the last number
           newResult = result + button.replace("(", "*(");
         }
@@ -126,8 +145,7 @@ class App extends React.Component {
     }
   
     if (result === "") {
-      if (isNumberPlusMinusOrLeftParen) {
-        console.log('HERE11')
+      if (isNumberPlusMinusOrOpenParen) {
         newResult = button;
       }
       if (isDot) {
@@ -135,15 +153,15 @@ class App extends React.Component {
       }
     }
 
-    if ('-'.includes(result[result.length - 1])) {
-      if ('-'.includes(button)) {
+    if (lastCharIsMinus) {
+      if (isMinus) {
         newResult = result
       }
     }
 
 
 
-    if ("0123456789".includes(result[result.length - 1])) {
+    if (lastCharIsNum) {
       if (needsExtraParens) {
         newResult = result + button;
       } else {
@@ -151,21 +169,19 @@ class App extends React.Component {
       }
     }
 
-    if (result[result.length - 1] === "(") {
-      if ("+-(0123456789".includes(button)) {
+    if (lastCharIsOpenP) {
+      if (isNumberPlusMinusOrOpenParen) {
         newResult = result + button;
       }
-      if (".".includes(button)) {
+      if (isDot) {
         newResult = result + "0.";
       }
     }
-    if (result[result.length - 1] === ")") {
-      const numberOfOpenP = (result.match(/\(/g) || []).length;
-      const numberOfCloseP = (result.match(/\)/g) || []).length;
-      if ("/*-+".includes(button)) {
+    if (lastCharIsClosedP) {
+      if (isOperator) {
         newResult = result + button;
       }
-      if (")".includes(button) && numberOfOpenP > numberOfCloseP) {
+      if (isClosedP && numberOfOpenP > numberOfCloseP) {
         newResult = result + button;
       }
     }
@@ -186,59 +202,55 @@ class App extends React.Component {
 
 
 
-    if ("0123456789)".includes(result[result.length - 2])) {
+    if (charBfrLastIsNumOrClosedP) {
       //checking "digit, ) -> operator"
-      if ("/*+-".includes(result[result.length - 1])) {
-        console.log('H')
-        if ("+-(0123456789".includes(button)) {
+      if (lastCharIsOperator) {
+        if (isNumberPlusMinusOrOpenParen) {
           newResult = result + button;
         }
-        if ('-'.includes(result[result.length - 1]) && "-".includes(button)) {
+        if (lastCharIsMinus && isMinus) {
           newResult = this.setCharAt(result, result.length - 1, '-')
         }
-        if ('-'.includes(result[result.length - 1]) && '+'.includes(button)) {
+        if (lastCharIsMinus && isAddition) {
           newResult = this.setCharAt(result, result.length - 1, '+')
         }
-        if (".".includes(button)) {
+        if (isDot) {
           newResult = result + "0.";
         }
-        if ("/".includes(button) && result[result.length -1] === "-") {
+        if (lastCharIsMinus && isDivide) {
           newResult = this.setCharAt(result, result.length - 1, '/')
         }
-        if ("/".includes(button) && result[result.length -1] === "+") {
+        if (lastCharIsAddition && isDivide) {
           newResult = this.setCharAt(result, result.length - 1, '/')
         }
-        if ("*".includes(button) && result[result.length -1] === "-") {
+        if (lastCharIsMinus && isMultiply) {
           newResult = this.setCharAt(result, result.length - 1, '*')
         }
-        if ("*".includes(button) && result[result.length -1] === "+") {
+        if (lastCharIsAddition && isMultiply) {
           newResult = this.setCharAt(result, result.length - 1, '*')
         }
       }
     }
-    if ("/*+-(".includes(result[result.length - 2])) {
+    if (charBfrLastIsOperatorOrOpenP) {
 
-      if ("-+".includes(result[result.length - 1])) {
-        console.log('HERE22')
-        if ("0123456789(".includes(button)) {
+      if (lastCharIsAddOrMinus) {
+        if (isNumOrOpenP) {
           newResult = result + button;
         }
-        if (".".includes(button)) {
+        if (isDot) {
           newResult = result + "0.";
         }
       }
     }
     if ((result[result.length - 1] || "").includes(".")) {
-      console.log('HERE 2.5')
-      if ("0123456789".includes(button)) {
+      if (isNum) {
         newResult = result + button;
       }
     }
 
        //🪲 72.2 + doesn't work FIXED
     if ((result || "").includes('.')) {
-      console.log('HERE33')
-      if ("+-*/0123456789".includes(button)) {
+      if (isNumOrOperator) {
         newResult = result + button;
       }
     }
@@ -250,7 +262,7 @@ class App extends React.Component {
 
     // "" - - -> is not possible
     //newResult = "not yet coded";
-return newResult;
+  return newResult;
   };
 
   closeParens = (result) => {
@@ -300,9 +312,10 @@ return newResult;
     const { result, operate, originalLastNum } = this.state;
     let finalResult = 0;
     var tempResult = result;
+    const lastCharIsOperator = "/*+-".includes(result[result.length - 1]);
 
     // Special case with expression ending with operator, after CE use
-    if ("-+*/".includes(this.getLastChar(result))) {
+    if (lastCharIsOperator) {
       tempResult = result.slice(0, -1);
     }
 
