@@ -98,6 +98,21 @@ describe("when equals is pressed", () => {
     expect(getByTestId("result")).toHaveTextContent("147");
   });
 
+  test("five times, it repeats the right hand side of previous operation every time", () => {
+    const { getByTestId } = render(<App />);
+
+    fireEvent.click(getByTestId(3));
+    fireEvent.click(getByTestId("*"));
+    fireEvent.click(getByTestId(7));
+    fireEvent.click(getByTestId("="));
+    fireEvent.click(getByTestId("="));
+    fireEvent.click(getByTestId("="));
+    fireEvent.click(getByTestId("="));
+    fireEvent.click(getByTestId("="));
+
+    expect(getByTestId("result")).toHaveTextContent("50421");
+  });
+
   describe("returns the correct result", () => {
     test("for division", () => {
       const { getByTestId } = render(<App />);
