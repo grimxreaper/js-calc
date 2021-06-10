@@ -1,9 +1,9 @@
-const pressedAnotherOperator = (button, hasLastChar) => {
-  const isMultLastAdd = button === "*" && hasLastChar("+");
-  const isMultLastSub = button === "*" && hasLastChar("-");
-  const isDivLastAdd = button === "/" && hasLastChar("+");
-  const isDivLastSub = button === "/" && hasLastChar("-");
-  const isMinusLastAdd = button === "+" && hasLastChar("-");
+const pressedAnotherOperator = (key, hasLastChar) => {
+  const isMultLastAdd = key === "*" && hasLastChar("+");
+  const isMultLastSub = key === "*" && hasLastChar("-");
+  const isDivLastAdd = key === "/" && hasLastChar("+");
+  const isDivLastSub = key === "/" && hasLastChar("-");
+  const isMinusLastAdd = key === "+" && hasLastChar("-");
 
   if (
     isMultLastAdd ||

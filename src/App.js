@@ -27,7 +27,7 @@ class App extends React.Component {
       return result.substr(-1) === char;
     };
 
-    if (isDisplayable(button)) {
+    if (isDisplayable(button.key)) {
       var tempResult = result;
       var currentBtn = button.key;
 

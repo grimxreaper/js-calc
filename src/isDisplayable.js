@@ -1,8 +1,8 @@
-const isDisplayable = (button) => {
-  const numOrDecimal = button.type === "key";
-  const openP = button.key === "(";
-  const closedP = button.key === ")";
-  const isOperator = "/*-+".includes(button.key);
+const isDisplayable = (key) => {
+  const numOrDecimal = "0123456789.".includes(key);
+  const openP = key === "(";
+  const closedP = key === ")";
+  const isOperator = "/*-+".includes(key);
   if (openP || closedP || numOrDecimal || isOperator) {
     return true;
   }
