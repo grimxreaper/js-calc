@@ -17,12 +17,6 @@ class App extends React.Component {
   onClick = (button) => {
     const { result, lastEquation } = this.state;
 
-    if (button.key !== "=") {
-      this.setState({
-        lastEquation: "",
-      });
-    }
-
     const hasLastChar = (char) => {
       return result.substr(-1) === char;
     };
@@ -50,7 +44,7 @@ class App extends React.Component {
 
     if (lastEquation !== "" && button.key !== "=") {
       //start new equation
-      this.setState({ result: "" + button.key });
+      this.setState({ result: "" + button.key, lastEquation: "" });
     }
 
     if (button.key === "=") {
