@@ -50,7 +50,7 @@ class App extends React.Component {
 
     if (lastEquation !== "" && button.key !== "=") {
       //start new equation
-      this.setState({ result: button.key });
+      this.setState({ result: "" + button.key });
     }
 
     if (button.key === "=") {

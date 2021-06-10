@@ -86,6 +86,19 @@ describe("when equals is pressed", () => {
     expect(getByTestId("result")).toHaveTextContent("7");
   });
 
+  test("pressing another key and an addition operator continues a new calculation", () => {
+    const { getByTestId } = render(<App />);
+
+    fireEvent.click(getByTestId(1));
+    fireEvent.click(getByTestId("+"));
+    fireEvent.click(getByTestId(2));
+    fireEvent.click(getByTestId("="));
+    fireEvent.click(getByTestId(7));
+    fireEvent.click(getByTestId("+"));
+
+    expect(getByTestId("result")).toHaveTextContent("7+");
+  });
+
   test("multiple times, applies last calculation to each result", () => {
     const { getByTestId } = render(<App />);
 
