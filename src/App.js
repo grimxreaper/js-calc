@@ -37,14 +37,15 @@ class App extends React.Component {
         tempResult = 0; //insert zero in front of multiply or divide
       }
 
+      if (lastEquation !== "" && button.key !== "=") {
+        //start new equation
+        tempResult = "";
+      }
+
       this.setState({
         result: tempResult + currentBtn,
+        lastEquation: "",
       });
-    }
-
-    if (lastEquation !== "" && button.key !== "=") {
-      //start new equation
-      this.setState({ result: "" + button.key, lastEquation: "" });
     }
 
     if (button.key === "=") {
