@@ -3,8 +3,8 @@ import "./App.css";
 import ResultComponent from "./Components/ResultComponent";
 import KeyPadComponent from "./Components/KeyPadComponent";
 import isDisplayable from "./isDisplayable";
-import updateTempResult from "./updateTempResult";
-import finalizeEquation from "./finalizeEquation";
+import updateDisplay from "./updateDisplay";
+import runEquation from "./runEquation";
 
 class App extends React.Component {
   state = {
@@ -20,7 +20,7 @@ class App extends React.Component {
     };
 
     if (isDisplayable(button.key)) {
-      var [tempResult, currentBtn] = updateTempResult(
+      var [tempResult, currentBtn] = updateDisplay(
         result,
         button.key,
         hasLastChar,
@@ -34,7 +34,7 @@ class App extends React.Component {
     }
 
     if (button.key === "=") {
-      var finalValues = finalizeEquation(result, lastEquation);
+      var finalValues = runEquation(result, lastEquation);
 
       this.setState({
         result: finalValues[1] + "",

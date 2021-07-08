@@ -1,6 +1,6 @@
 import pressedAnotherOperator from "./pressedAnotherOperator";
 
-const updateTempResult = (result, key, hasLastChar, lastEquation) => {
+const updateDisplay = (result, key, hasLastChar, lastEquation) => {
   var tempResult = result;
   var currentBtn = key;
 
@@ -23,4 +23,4 @@ const updateTempResult = (result, key, hasLastChar, lastEquation) => {
 
   return [tempResult, currentBtn];
 };
-export default updateTempResult;
+export default updateDisplay;

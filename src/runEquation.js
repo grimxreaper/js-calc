@@ -1,26 +1,17 @@
-import { evaluate, round } from "mathjs";
+import cleanupEquation from "./cleanupEquation";
+import repeatLastEquation from "./repeatLastEquation";
+import evaluateEquation from "./evaluateEquation";
 
-const runEquation = (expression) => {
-  try {
-    const digitAfterComma = 13;
-    const evalAndRound = (e) => round(evaluate(e), digitAfterComma);
-    const lastEquation = runParensCalculation(expression, evalAndRound);
-    const result = evalAndRound(lastEquation);
-    return [lastEquation, result];
-  } catch (error) {}
-};
+const runEquation = (result, lastEquation) => {
+  var nextEquation = cleanupEquation(result, lastEquation);
 
-const runParensCalculation = (equation, evalAndRound) => {
-  const nonNestedParens = /\(([0123456789/*-+.]*)\)/g;
-  var parensEquation = equation.match(nonNestedParens) || [];
-  while (parensEquation.length > 0) {
-    for (var i = 0; i < parensEquation.length; i++) {
-      let expression = parensEquation[i];
-      let tempResult = evalAndRound(expression);
-      equation = equation.replace(expression, tempResult);
-    }
-    parensEquation = equation.match(nonNestedParens) || [];
+  if (lastEquation.length > 0) {
+    nextEquation = repeatLastEquation(lastEquation, nextEquation);
   }
-  return equation;
+
+  let finalResult = 0;
+  [nextEquation, finalResult] = evaluateEquation(nextEquation);
+
+  return [nextEquation, finalResult];
 };
 export default runEquation;
