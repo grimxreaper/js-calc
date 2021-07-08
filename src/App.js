@@ -2,11 +2,9 @@ import React from "react";
 import "./App.css";
 import ResultComponent from "./Components/ResultComponent";
 import KeyPadComponent from "./Components/KeyPadComponent";
-import pressedAnotherOperator from "./pressedAnotherOperator";
-import runEquation from "./runEquation";
 import isDisplayable from "./isDisplayable";
-import cleanupEquation from "./cleanupEquation";
-import repeatLastEquation from "./repeatLastEquation";
+import updateTempResult from "./updateTempResult";
+import finalizeEquation from "./finalizeEquation";
 
 class App extends React.Component {
   state = {
@@ -22,25 +20,12 @@ class App extends React.Component {
     };
 
     if (isDisplayable(button.key)) {
-      var tempResult = result;
-      var currentBtn = button.key;
-
-      if (pressedAnotherOperator(button.key, hasLastChar)) {
-        tempResult = tempResult.slice(0, -1); //remove last character
-      }
-
-      if (button.key === "-" && hasLastChar("-")) {
-        currentBtn = ""; //no double negatives allowed
-      }
-
-      if ((button.key === "*" || button.key === "/") && result === "") {
-        tempResult = 0; //insert zero in front of multiply or divide
-      }
-
-      if (lastEquation !== "" && button.key !== "=") {
-        //start new equation
-        tempResult = "";
-      }
+      var [tempResult, currentBtn] = updateTempResult(
+        result,
+        button.key,
+        hasLastChar,
+        lastEquation
+      );
 
       this.setState({
         result: tempResult + currentBtn,
@@ -49,18 +34,11 @@ class App extends React.Component {
     }
 
     if (button.key === "=") {
-      var nextEquation = cleanupEquation(result, lastEquation);
-
-      if (lastEquation.length > 0) {
-        nextEquation = repeatLastEquation(lastEquation, nextEquation);
-      }
-
-      let finalResult = 0;
-      [nextEquation, finalResult] = runEquation(nextEquation);
+      var finalValues = finalizeEquation(result, lastEquation);
 
       this.setState({
-        result: finalResult + "",
-        lastEquation: nextEquation,
+        result: finalValues[1] + "",
+        lastEquation: finalValues[0],
       });
     } else if (button.key === "AC") {
       this.setState({
