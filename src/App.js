@@ -34,11 +34,11 @@ class App extends React.Component {
     }
 
     if (button.key === "=") {
-      var finalValues = runEquation(result, lastEquation);
+      var [nextEquation, finalResult] = runEquation(result, lastEquation);
 
       this.setState({
-        result: finalValues[1] + "",
-        lastEquation: finalValues[0],
+        result: finalResult + "",
+        lastEquation: nextEquation,
       });
     } else if (button.key === "AC") {
       this.setState({
