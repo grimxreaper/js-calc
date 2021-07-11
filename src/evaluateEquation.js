@@ -4,9 +4,9 @@ const evaluateEquation = (expression) => {
   try {
     const digitAfterComma = 13;
     const evalAndRound = (e) => round(evaluate(e), digitAfterComma);
-    const lastEquation = runParensCalculation(expression, evalAndRound);
-    const result = evalAndRound(lastEquation);
-    return [lastEquation, result];
+    const equation = runParensCalculation(expression, evalAndRound);
+    const result = evalAndRound(equation);
+    return [equation, result];
   } catch (error) {}
 };
 

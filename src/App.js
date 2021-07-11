@@ -13,33 +13,24 @@ class App extends React.Component {
 
   onClick = (button) => {
     const { result, lastEquation } = this.state;
+    let nextResult, nextEquation;
 
     if (button.isDisplayable) {
-      var nextResult = updateDisplay(result, button.key, lastEquation);
-
-      this.setState({
-        result: nextResult,
-        lastEquation: "",
-      });
-    }
-
-    if (button.key === "=") {
-      var [nextEquation, finalResult] = runEquation(result, lastEquation);
-
-      this.setState({
-        result: finalResult + "",
-        lastEquation: nextEquation,
-      });
+      nextResult = updateDisplay(result, button.key, lastEquation);
+      nextEquation = "";
+    } else if (button.key === "=") {
+      [nextEquation, nextResult] = runEquation(result, lastEquation);
     } else if (button.key === "AC") {
-      this.setState({
-        result: "",
-        lastEquation: "",
-      });
+      nextEquation = "";
+      nextResult = "";
     } else if (button.key === "CE") {
-      this.setState({
-        result: result.slice(0, -1),
-      });
+      nextResult = result.slice(0, -1);
     }
+  
+    this.setState({
+      result: nextResult,
+      lastEquation: nextEquation,
+    });
   };
 
   render() {

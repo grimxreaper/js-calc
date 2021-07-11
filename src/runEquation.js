@@ -9,9 +9,9 @@ const runEquation = (result, lastEquation) => {
     nextEquation = repeatLastEquation(lastEquation, nextEquation);
   }
 
-  let finalResult = 0;
-  [nextEquation, finalResult] = evaluateEquation(nextEquation);
+  let nextResult = 0;
+  [nextEquation, nextResult] = evaluateEquation(nextEquation);
 
-  return [nextEquation, finalResult];
+  return [nextEquation, nextResult + ""];
 };
 export default runEquation;
