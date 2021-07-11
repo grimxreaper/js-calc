@@ -2,8 +2,7 @@ import React from "react";
 import "./App.css";
 import ResultComponent from "./Components/ResultComponent";
 import KeyPadComponent from "./Components/KeyPadComponent";
-import updateDisplay from "./updateDisplay";
-import runEquation from "./runEquation";
+import handleButtonPress from "./handleButtonPress";
 
 class App extends React.Component {
   state = {
@@ -13,20 +12,12 @@ class App extends React.Component {
 
   onClick = (button) => {
     const { result, lastEquation } = this.state;
-    let nextResult, nextEquation;
+    const [nextResult, nextEquation] = handleButtonPress(
+      button,
+      result,
+      lastEquation
+    );
 
-    if (button.isDisplayable) {
-      nextResult = updateDisplay(result, button.key, lastEquation);
-      nextEquation = "";
-    } else if (button.key === "=") {
-      [nextEquation, nextResult] = runEquation(result, lastEquation);
-    } else if (button.key === "AC") {
-      nextEquation = "";
-      nextResult = "";
-    } else if (button.key === "CE") {
-      nextResult = result.slice(0, -1);
-    }
-  
     this.setState({
       result: nextResult,
       lastEquation: nextEquation,
