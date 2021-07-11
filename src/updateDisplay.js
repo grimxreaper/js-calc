@@ -1,26 +1,27 @@
 import pressedAnotherOperator from "./pressedAnotherOperator";
 
-const updateDisplay = (result, key, hasLastChar, lastEquation) => {
-  var tempResult = result;
-  var currentBtn = key;
+const updateDisplay = (result, key, lastEquation) => {
+  const hasLastChar = (char) => {
+    return result.substr(-1) === char;
+  };
 
   if (pressedAnotherOperator(key, hasLastChar)) {
-    tempResult = tempResult.slice(0, -1); //remove last character
+    result = result.slice(0, -1); //remove last character
   }
 
   if (key === "-" && hasLastChar("-")) {
-    currentBtn = ""; //no double negatives allowed
+    key = ""; //no double negatives allowed
   }
 
   if ((key === "*" || key === "/") && result === "") {
-    tempResult = 0; //insert zero in front of multiply or divide
+    result = 0; //insert zero in front of multiply or divide
   }
 
   if (lastEquation !== "" && key !== "=") {
     //start new equation
-    tempResult = "";
+    result = "";
   }
 
-  return [tempResult, currentBtn];
+  return result + key;
 };
 export default updateDisplay;

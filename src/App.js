@@ -2,7 +2,6 @@ import React from "react";
 import "./App.css";
 import ResultComponent from "./Components/ResultComponent";
 import KeyPadComponent from "./Components/KeyPadComponent";
-import isDisplayable from "./isDisplayable";
 import updateDisplay from "./updateDisplay";
 import runEquation from "./runEquation";
 
@@ -15,20 +14,11 @@ class App extends React.Component {
   onClick = (button) => {
     const { result, lastEquation } = this.state;
 
-    const hasLastChar = (char) => {
-      return result.substr(-1) === char;
-    };
-
-    if (isDisplayable(button.key)) {
-      var [tempResult, currentBtn] = updateDisplay(
-        result,
-        button.key,
-        hasLastChar,
-        lastEquation
-      );
+    if (button.isDisplayable) {
+      var nextResult = updateDisplay(result, button.key, lastEquation);
 
       this.setState({
-        result: tempResult + currentBtn,
+        result: nextResult,
         lastEquation: "",
       });
     }
