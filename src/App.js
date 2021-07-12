@@ -3,6 +3,7 @@ import "./App.css";
 import ResultComponent from "./Components/ResultComponent";
 import KeyPadComponent from "./Components/KeyPadComponent";
 import { evaluate, round } from "mathjs";
+import recordLastNum from "./recordLastNum";
 
 class App extends React.Component {
   state = {
@@ -30,19 +31,19 @@ class App extends React.Component {
             button.key === "." ||
             (this.state.originalLastNum + "").includes(".")
           ) {
+            var [originalLastNum, operate] = recordLastNum(
+              this.state.result + button.key
+            );
             this.setState({
               //originalLastNum: this.state.originalLastNum + button.key,
-              originalLastNum: this.recordLastNum(
-                this.state.result + button.key
-              ),
+              originalLastNum: originalLastNum,
+              operate: operate,
               result: this.state.result + button.key,
             });
           } else {
             this.setState({
               //originalLastNum: button.key,
-              originalLastNum: this.recordLastNum(
-                this.state.result + button.key
-              ),
+              originalLastNum: recordLastNum(this.state.result + button.key),
               result: this.state.result + button.key,
             });
           }
@@ -72,23 +73,23 @@ class App extends React.Component {
     }
   };
 
-  recordLastNum = (result) => {
-    const regex = /[-+/*]{0,}[0-9]{1,}[.]{0,1}[0-9]*/g;
-    let results = result.match(regex) || [];
-    if (results.length === 0) {
-      return "";
-    }
-    //We need to take the last one
-    let lastNum = results[results.length - 1];
-    // If there is no operator -> we return the value
-    if (!"-+/*".includes(lastNum[0])) {
-      return lastNum;
-    }
-    this.setState({
-      operate: lastNum[0],
-    });
-    return lastNum.substr(1);
-  };
+  // recordLastNum = (result) => {
+  //   const regex = /[-+/*]{0,}[0-9]{1,}[.]{0,1}[0-9]*/g;
+  //   let results = result.match(regex) || [];
+  //   if (results.length === 0) {
+  //     return "";
+  //   }
+  //   //We need to take the last one
+  //   let lastNum = results[results.length - 1];
+  //   // If there is no operator -> we return the value
+  //   if (!"-+/*".includes(lastNum[0])) {
+  //     return lastNum;
+  //   }
+  //   this.setState({
+  //     operate: lastNum[0],
+  //   });
+  //   return lastNum.substr(1);
+  // };
 
   setCharAt = (str, index, chr) => {
     if (index > str.length - 1) return str;
