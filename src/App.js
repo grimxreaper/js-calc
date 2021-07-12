@@ -4,6 +4,7 @@ import ResultComponent from "./Components/ResultComponent";
 import KeyPadComponent from "./Components/KeyPadComponent";
 import { evaluate, round } from "mathjs";
 import recordLastNum from "./recordLastNum";
+import closeParens from "./closeParens";
 
 class App extends React.Component {
   state = {
@@ -35,7 +36,6 @@ class App extends React.Component {
               this.state.result + button.key
             );
             this.setState({
-              //originalLastNum: this.state.originalLastNum + button.key,
               originalLastNum: originalLastNum,
               operate: operate,
               result: this.state.result + button.key,
@@ -72,24 +72,6 @@ class App extends React.Component {
       this.backspace();
     }
   };
-
-  // recordLastNum = (result) => {
-  //   const regex = /[-+/*]{0,}[0-9]{1,}[.]{0,1}[0-9]*/g;
-  //   let results = result.match(regex) || [];
-  //   if (results.length === 0) {
-  //     return "";
-  //   }
-  //   //We need to take the last one
-  //   let lastNum = results[results.length - 1];
-  //   // If there is no operator -> we return the value
-  //   if (!"-+/*".includes(lastNum[0])) {
-  //     return lastNum;
-  //   }
-  //   this.setState({
-  //     operate: lastNum[0],
-  //   });
-  //   return lastNum.substr(1);
-  // };
 
   setCharAt = (str, index, chr) => {
     if (index > str.length - 1) return str;
@@ -215,19 +197,6 @@ class App extends React.Component {
     return result;
   };
 
-  closeParens = (result) => {
-    var numberOfOpenP = (result.match(/\(/g) || []).length;
-    var numberOfCloseP = (result.match(/\)/g) || []).length;
-    //this solution works but only if there is one parenthesis missing,
-    //instead, account for all parens missing
-
-    while (numberOfOpenP > numberOfCloseP) {
-      result = result + ")";
-      numberOfOpenP--;
-    }
-    return result;
-  };
-
   getLastChar = (from) => {
     return from.slice(-1);
   };
@@ -263,7 +232,7 @@ class App extends React.Component {
       tempResult = result.slice(0, -1);
     }
 
-    tempResult = this.closeParens(tempResult) + "";
+    tempResult = closeParens(tempResult) + "";
     tempResult = this.addMultiplier(tempResult) + "";
 
     // Handling double equal
