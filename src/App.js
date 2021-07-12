@@ -7,7 +7,6 @@ import { evaluate, round } from "mathjs";
 class App extends React.Component {
   state = {
     result: "",
-    counter: 0,
     done: false,
     operate: undefined,
     originalLastNum: "",
@@ -91,10 +90,10 @@ class App extends React.Component {
     return lastNum.substr(1);
   };
 
-  setCharAt = (str,index,chr) => {
-    if(index > str.length - 1) return str;
-    return str.substring(0,index) + chr + str.substring(index + 1);
-  }
+  setCharAt = (str, index, chr) => {
+    if (index > str.length - 1) return str;
+    return str.substring(0, index) + chr + str.substring(index + 1);
+  };
 
   changeKeys = (result, button) => {
     if ("(".includes(button)) {
@@ -122,7 +121,6 @@ class App extends React.Component {
         "*/-+0123456789.".includes(button) ||
         (button.key === ")" && numberOfOpenP > numberOfCloseP)
       ) {
-      
         return result + button;
       } else {
         return result;
@@ -147,7 +145,6 @@ class App extends React.Component {
       }
     }
 
-    
     //QS: will we run into a problem in differentiating an operator from a sign? */
     //For  + / , how do you know it's an operator, or a sign (7--)
     // You need to watch what is before
@@ -161,34 +158,30 @@ class App extends React.Component {
     // - (
     // - ., but we need to add a zero before
 
-
-
     if ("0123456789)".includes(result[result.length - 2])) {
       //checking "digit, ) -> operator"
       if ("/*+-".includes(result[result.length - 1])) {
-        console.log('inside of line 220')
         if ("+-(0123456789".includes(button)) {
           return result + button;
         }
         if (".".includes(button)) {
           return result + "0.";
         }
-        if ("/".includes(button) && result[result.length -1] === "-") {
-          return this.setCharAt(result, result.length - 1, '/')
+        if ("/".includes(button) && result[result.length - 1] === "-") {
+          return this.setCharAt(result, result.length - 1, "/");
         }
-        if ("/".includes(button) && result[result.length -1] === "+") {
-          return this.setCharAt(result, result.length - 1, '/')
+        if ("/".includes(button) && result[result.length - 1] === "+") {
+          return this.setCharAt(result, result.length - 1, "/");
         }
-        if ("*".includes(button) && result[result.length -1] === "-") {
-          return this.setCharAt(result, result.length - 1, '*')
+        if ("*".includes(button) && result[result.length - 1] === "-") {
+          return this.setCharAt(result, result.length - 1, "*");
         }
-        if ("*".includes(button) && result[result.length -1] === "+") {
-          return this.setCharAt(result, result.length - 1, '*')
+        if ("*".includes(button) && result[result.length - 1] === "+") {
+          return this.setCharAt(result, result.length - 1, "*");
         }
       }
     }
     if ("/*+-(".includes(result[result.length - 2])) {
-      console.log('inside of line 234')
       if ("-+".includes(result[result.length - 1])) {
         if ("0123456789(".includes(button)) {
           return result + button;
@@ -199,22 +192,19 @@ class App extends React.Component {
       }
     }
     if ((result[result.length - 1] || "").includes(".")) {
-      console.log(result[result.length - 1]);
       if ("0123456789".includes(button)) {
         return result + button;
       }
     }
 
-       //🪲 72.2 + doesn't work FIXED
-    if ((result || "").includes('.')) {
-
+    //🪲 72.2 + doesn't work FIXED
+    if ((result || "").includes(".")) {
       if ("+-*/0123456789".includes(button)) {
         return result + button;
       }
     }
 
     // 🪲 72(7+2 returns "not yet coded"
-
 
     // operator + operator -> replace the first operator
 
@@ -234,13 +224,12 @@ class App extends React.Component {
       result = result + ")";
       numberOfOpenP--;
     }
-    return result
+    return result;
   };
 
   getLastChar = (from) => {
     return from.slice(-1);
   };
-
 
   roundedResult = (expression) => {
     const digitAfterComma = 13;
@@ -261,11 +250,7 @@ class App extends React.Component {
       .replace(digitAndP, "$1*$2")
       .replace(pAndDigit, "$1*$2")
       .replace(pAndp, "$1*$2");
-
-
   };
-
-
 
   calculate = () => {
     const { result, operate, originalLastNum } = this.state;
@@ -277,10 +262,8 @@ class App extends React.Component {
       tempResult = result.slice(0, -1);
     }
 
-
     tempResult = this.closeParens(tempResult) + "";
     tempResult = this.addMultiplier(tempResult) + "";
-
 
     // Handling double equal
     // If I only have sign + digit(s) + dot + digit(s)
@@ -291,9 +274,9 @@ class App extends React.Component {
       if ("+-/*".includes(operate) && !isNaN(originalLastNum)) {
         // finalResult = evaluate(result + operate + originalLastNum) + "";
         try {
-          finalResult = this.roundedResult(tempResult + operate + originalLastNum) + "";
-        } catch(error) {
-
+          finalResult =
+            this.roundedResult(tempResult + operate + originalLastNum) + "";
+        } catch (error) {
           //throw error
         }
       }
@@ -316,7 +299,6 @@ class App extends React.Component {
 
             //We need to replace the expression by the calculation
             tempResultString = tempResultString.replace(expression, tempResult);
-
           } catch (error) {
             //throw error
           }
@@ -327,7 +309,7 @@ class App extends React.Component {
       //In tempResultString we have the last expression withtout any ()
 
       try {
-       finalResult = round(evaluate(tempResultString), 13);
+        finalResult = round(evaluate(tempResultString), 13);
       } catch (error) {
         //throw error
       }
@@ -336,7 +318,7 @@ class App extends React.Component {
         result: finalResult + "",
       });
     }
-  }
+  };
 
   reset = () => {
     this.setState({
