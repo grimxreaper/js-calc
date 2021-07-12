@@ -5,6 +5,7 @@ import KeyPadComponent from "./Components/KeyPadComponent";
 import { evaluate, round } from "mathjs";
 import recordLastNum from "./recordLastNum";
 import closeParens from "./closeParens";
+import addMultiplier from "./addMultiplier";
 
 class App extends React.Component {
   state = {
@@ -206,22 +207,6 @@ class App extends React.Component {
     round(evaluate(expression), digitAfterComma);
   };
 
-  addMultiplier = (expression) => {
-    //Find all pattern Digit + (
-    //expression ="1(2+6)+23(6+9)+(2+3)9"
-
-    const digitAndP = /([0123456789])(\()/g;
-    const pAndDigit = /(\))([0123456789])/g;
-    // )( -> )*(
-    const pAndp = /(\))(\()/g;
-
-    //return the value
-    return expression
-      .replace(digitAndP, "$1*$2")
-      .replace(pAndDigit, "$1*$2")
-      .replace(pAndp, "$1*$2");
-  };
-
   calculate = () => {
     const { result, operate, originalLastNum } = this.state;
     let finalResult = 0;
@@ -233,7 +218,7 @@ class App extends React.Component {
     }
 
     tempResult = closeParens(tempResult) + "";
-    tempResult = this.addMultiplier(tempResult) + "";
+    tempResult = addMultiplier(tempResult) + "";
 
     // Handling double equal
     // If I only have sign + digit(s) + dot + digit(s)
