@@ -2,7 +2,6 @@ import React from "react";
 import "./App.css";
 import ResultComponent from "./Components/ResultComponent";
 import KeyPadComponent from "./Components/KeyPadComponent";
-import { evaluate, round } from "mathjs";
 import recordLastNum from "./recordLastNum";
 import changeKeys from "./changeKeys";
 import cleanupEquation from "./cleanupEquation";
@@ -17,7 +16,16 @@ class App extends React.Component {
   };
 
   onClick = (button) => {
-    if (button.type === "key" || button.key === "(" || button.key === ")") {
+    const pressedEqual = button.key === "=";
+    const openParens = button.key === "(";
+    const closeParens = button.key === ")";
+    const pressedDecimal = button.key === ".";
+    const numOrOperator = "+-*/0123456789.".includes(button.key);
+    const numOrDecimal = "0123456789.".includes(button.key);
+    const pressedAC = button.key === "AC";
+    const pressedCE = button.key === "CE";
+
+    if (numOrDecimal || openParens || closeParens) {
       if (this.state.done) {
         this.setState({
           done: false,
@@ -25,13 +33,13 @@ class App extends React.Component {
           result: button.key + "",
         });
       } else {
-        if (button.key === "(" || button.key === ")") {
+        if (openParens || closeParens) {
           this.setState({
             result: this.state.result + button.key,
           });
         } else {
           if (
-            button.key === "." ||
+            pressedDecimal ||
             (this.state.originalLastNum + "").includes(".")
           ) {
             var [originalLastNum, operate] = recordLastNum(
@@ -52,13 +60,7 @@ class App extends React.Component {
         }
       }
     } else {
-      if (
-        button.key !== "CE" &&
-        button.key !== "=" &&
-        button.key !== "(" &&
-        button.key !== "AC" &&
-        button.key !== ")"
-      ) {
+      if (numOrOperator) {
         this.setState({
           operate: button.key,
           //result: this.state.result + button.key,
@@ -66,22 +68,13 @@ class App extends React.Component {
         });
       }
     }
-    if (button.key === "=") {
+    if (pressedEqual) {
       this.calculate();
-    } else if (button.key === "AC") {
+    } else if (pressedAC) {
       this.reset();
-    } else if (button.key === "CE") {
+    } else if (pressedCE) {
       this.backspace();
     }
-  };
-
-  getLastChar = (from) => {
-    return from.slice(-1);
-  };
-
-  roundedResult = (expression) => {
-    const digitAfterComma = 13;
-    round(evaluate(expression), digitAfterComma);
   };
 
   calculate = () => {
