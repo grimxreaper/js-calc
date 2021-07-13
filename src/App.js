@@ -4,9 +4,8 @@ import ResultComponent from "./Components/ResultComponent";
 import KeyPadComponent from "./Components/KeyPadComponent";
 import { evaluate, round } from "mathjs";
 import recordLastNum from "./recordLastNum";
-import closeParens from "./closeParens";
-import addMultiplier from "./addMultiplier";
 import changeKeys from "./changeKeys";
+import cleanupEquation from "./cleanupEquation";
 
 class App extends React.Component {
   state = {
@@ -89,13 +88,7 @@ class App extends React.Component {
     let finalResult = 0;
     var tempResult = result;
 
-    // Special case with expression ending with operator, after CE use
-    if ("-+*/".includes(this.getLastChar(result))) {
-      tempResult = result.slice(0, -1);
-    }
-
-    tempResult = closeParens(tempResult) + "";
-    tempResult = addMultiplier(tempResult) + "";
+    tempResult = cleanupEquation(result);
 
     // Handling double equal
     // If I only have sign + digit(s) + dot + digit(s)
