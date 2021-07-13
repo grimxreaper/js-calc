@@ -13,6 +13,7 @@ class App extends React.Component {
     done: false,
     operate: undefined,
     originalLastNum: "",
+    lastEquation: "",
   };
 
   onClick = (button) => {
@@ -26,37 +27,28 @@ class App extends React.Component {
     const pressedCE = button.key === "CE";
 
     if (numOrDecimal || openParens || closeParens) {
-      if (this.state.done) {
+      if (openParens || closeParens) {
         this.setState({
-          done: false,
-          originalLastNum: "",
-          result: button.key + "",
+          result: this.state.result + button.key,
         });
       } else {
-        if (openParens || closeParens) {
+        if (pressedDecimal || (this.state.originalLastNum + "").includes(".")) {
+          var [originalLastNum, operate] = recordLastNum(
+            this.state.result + button.key
+          );
           this.setState({
+            originalLastNum: originalLastNum,
+            operate: operate,
             result: this.state.result + button.key,
+            // lastEquation: this.state.result + button.key,
           });
         } else {
-          if (
-            pressedDecimal ||
-            (this.state.originalLastNum + "").includes(".")
-          ) {
-            var [originalLastNum, operate] = recordLastNum(
-              this.state.result + button.key
-            );
-            this.setState({
-              originalLastNum: originalLastNum,
-              operate: operate,
-              result: this.state.result + button.key,
-            });
-          } else {
-            this.setState({
-              //originalLastNum: button.key,
-              originalLastNum: recordLastNum(this.state.result + button.key),
-              result: this.state.result + button.key,
-            });
-          }
+          this.setState({
+            //originalLastNum: button.key,
+            originalLastNum: recordLastNum(this.state.result + button.key),
+            result: this.state.result + button.key,
+            // lastEquation: this.state.result + button.key,
+          });
         }
       }
     } else {
@@ -91,6 +83,7 @@ class App extends React.Component {
     this.setState({
       done: true,
       result: finalResult + "",
+      lastEquation: finalResult + "",
     });
   };
 
@@ -100,6 +93,7 @@ class App extends React.Component {
       operate: "",
       done: false,
       originalLastNum: "",
+      lastEquation: "",
     });
   };
 
