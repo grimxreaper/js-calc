@@ -6,6 +6,7 @@ import { evaluate, round } from "mathjs";
 import recordLastNum from "./recordLastNum";
 import changeKeys from "./changeKeys";
 import cleanupEquation from "./cleanupEquation";
+import handleNestedParens from "./handleNestedParens";
 
 class App extends React.Component {
   state = {
@@ -85,47 +86,15 @@ class App extends React.Component {
 
   calculate = () => {
     const { result, operate, originalLastNum } = this.state;
-    let finalResult = 0;
-    var tempResult = result;
 
-    [tempResult, finalResult] = cleanupEquation(
+    var [tempResult, finalResult] = cleanupEquation(
       result,
       operate,
       originalLastNum
     );
 
-    var tempResultString = tempResult;
-    //We need to detect the non nested parenthesis
-    //Open ( and no other ( before the next close
-    // '(' 0123456789-+*/.(not (, not ) ) ')'
-    // ( + any number of the 15 chars + ) : (7+2) (-3.25478/+6.587)
-    const reg = /\(([0123456789/*-+.]*)\)/g;
-    var parenthesisToCalculate = tempResultString.match(reg) || [];
-    while (parenthesisToCalculate.length > 0) {
-      for (var i = 0; i < parenthesisToCalculate.length; i++) {
-        //we extract the first expression ex:  (2+5)
-        let expression = parenthesisToCalculate[i];
-        //We calculate the value ex: 7
+    handleNestedParens(tempResult);
 
-        try {
-          let tempResult = round(evaluate(expression), 13);
-
-          //We need to replace the expression by the calculation
-          tempResultString = tempResultString.replace(expression, tempResult);
-        } catch (error) {
-          //throw error
-        }
-      }
-
-      parenthesisToCalculate = tempResultString.match(reg) || [];
-    }
-    //In tempResultString we have the last expression withtout any ()
-
-    try {
-      finalResult = round(evaluate(tempResultString), 13);
-    } catch (error) {
-      //throw error
-    }
     this.setState({
       done: true,
       result: finalResult + "",
