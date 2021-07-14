@@ -2,66 +2,91 @@ import React from "react";
 import "./App.css";
 import ResultComponent from "./Components/ResultComponent";
 import KeyPadComponent from "./Components/KeyPadComponent";
-import recordLastNum from "./recordLastNum";
 import changeKeys from "./changeKeys";
-import cleanupEquation from "./cleanupEquation";
-import handleNestedParens from "./handleNestedParens";
+import closeOpenParens from "./closeOpenParens";
+import addMultiplier from "./addMultiplier";
+import { evaluate, round } from "mathjs";
 
 class App extends React.Component {
   state = {
     result: "",
-    done: false,
-    operate: undefined,
-    originalLastNum: "",
     lastEquation: "",
   };
 
   onClick = (button) => {
+    const { result, lastEquation } = this.state;
+
     const pressedEqual = button.key === "=";
     const openParens = button.key === "(";
     const closeParens = button.key === ")";
-    const pressedDecimal = button.key === ".";
     const numOrOperator = "+-*/0123456789.".includes(button.key);
     const numOrDecimal = "0123456789.".includes(button.key);
     const pressedAC = button.key === "AC";
     const pressedCE = button.key === "CE";
 
+    const getLastChar = (from) => {
+      return from.slice(-1);
+    };
+
     if (numOrDecimal || openParens || closeParens) {
-      if (openParens || closeParens) {
-        this.setState({
-          result: this.state.result + button.key,
-        });
-      } else {
-        if (pressedDecimal || (this.state.originalLastNum + "").includes(".")) {
-          var [originalLastNum, operate] = recordLastNum(
-            this.state.result + button.key
-          );
-          this.setState({
-            originalLastNum: originalLastNum,
-            operate: operate,
-            result: this.state.result + button.key,
-            // lastEquation: this.state.result + button.key,
-          });
-        } else {
-          this.setState({
-            //originalLastNum: button.key,
-            originalLastNum: recordLastNum(this.state.result + button.key),
-            result: this.state.result + button.key,
-            // lastEquation: this.state.result + button.key,
-          });
+      this.setState({
+        result: result + button.key,
+      });
+    } else if (numOrOperator) {
+      this.setState({
+        result: changeKeys(result, button.key),
+      });
+    } else if (pressedEqual) {
+      var cleanEquation = result;
+
+      if ("-+*/".includes(getLastChar(result))) {
+        cleanEquation = result.slice(0, -1);
+      }
+
+      cleanEquation = closeOpenParens(cleanEquation);
+      cleanEquation = addMultiplier(cleanEquation);
+
+      let finalResult = 0;
+      var nextEquation = cleanEquation;
+
+      if (lastEquation.length > 0) {
+        const operatorAndNumRegex = /[-+/*]{0,}[0-9]{1,}[.]{0,1}[0-9]*/g;
+        const results = lastEquation.match(operatorAndNumRegex) || [];
+        const lastOperatorAndNum = results[results.length - 1];
+        const lastOperator = lastOperatorAndNum[0];
+        const lastNum = lastOperatorAndNum.substr(1);
+        const roundedResult = (expression) => {
+          const digitAfterComma = 13;
+          return round(evaluate(expression), digitAfterComma);
+        };
+
+        if ("+-/*".includes(lastOperator) && !isNaN(lastNum)) {
+          try {
+            nextEquation = cleanEquation + lastOperator + lastNum;
+            finalResult = roundedResult(nextEquation) + "";
+          } catch (error) {}
         }
+      } else {
+        const nonNestedParens = /\(([0123456789/*-+.]*)\)/g;
+        var parensEquation = nextEquation.match(nonNestedParens) || [];
+        while (parensEquation.length > 0) {
+          for (var i = 0; i < parensEquation.length; i++) {
+            let expression = parensEquation[i];
+            try {
+              let tempResult = round(evaluate(expression), 13);
+              nextEquation = nextEquation.replace(expression, tempResult);
+            } catch (error) {}
+          }
+          parensEquation = nextEquation.match(nonNestedParens) || [];
+        }
+        try {
+          finalResult = round(evaluate(nextEquation), 13);
+        } catch (error) {}
       }
-    } else {
-      if (numOrOperator) {
-        this.setState({
-          operate: button.key,
-          //result: this.state.result + button.key,
-          result: changeKeys(this.state.result, button.key),
-        });
-      }
-    }
-    if (pressedEqual) {
-      this.calculate();
+      this.setState({
+        result: finalResult + "",
+        lastFormula: nextEquation,
+      });
     } else if (pressedAC) {
       this.reset();
     } else if (pressedCE) {
@@ -69,30 +94,9 @@ class App extends React.Component {
     }
   };
 
-  calculate = () => {
-    const { result, operate, originalLastNum } = this.state;
-
-    var [tempResult, finalResult] = cleanupEquation(
-      result,
-      operate,
-      originalLastNum
-    );
-
-    handleNestedParens(tempResult);
-
-    this.setState({
-      done: true,
-      result: finalResult + "",
-      lastEquation: finalResult + "",
-    });
-  };
-
   reset = () => {
     this.setState({
       result: "",
-      operate: "",
-      done: false,
-      originalLastNum: "",
       lastEquation: "",
     });
   };

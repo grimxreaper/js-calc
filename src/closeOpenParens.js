@@ -1,4 +1,4 @@
-const closeParens = (result) => {
+const closeOpenParens = (result) => {
   var numberOfOpenP = (result.match(/\(/g) || []).length;
   var numberOfCloseP = (result.match(/\)/g) || []).length;
   //this solution works but only if there is one parenthesis missing,
@@ -10,4 +10,4 @@ const closeParens = (result) => {
   }
   return result;
 };
-export default closeParens;
+export default closeOpenParens;
