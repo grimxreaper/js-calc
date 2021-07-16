@@ -5,7 +5,7 @@ import KeyPadComponent from "./Components/KeyPadComponent";
 import changeKeys from "./changeKeys";
 import closeOpenParens from "./closeOpenParens";
 import addMultiplier from "./addMultiplier";
-import { evaluate, round } from "mathjs";
+import runEquation from "./runEquation";
 
 class App extends React.Component {
   state = {
@@ -46,42 +46,10 @@ class App extends React.Component {
       cleanEquation = closeOpenParens(cleanEquation);
       cleanEquation = addMultiplier(cleanEquation);
 
-      let finalResult = 0;
-      let nextEquation = cleanEquation;
-
-      if (lastEquation.length > 0) {
-        const operatorAndNumRegex = /[-+/*]{0,}[0-9]{1,}[.]{0,1}[0-9]*/g;
-        const results = lastEquation.match(operatorAndNumRegex) || [];
-        const lastOperatorAndNum = results[results.length - 1];
-        const lastOperator = lastOperatorAndNum[0];
-        const lastNum = lastOperatorAndNum.substr(1);
-        const roundedResult = (expression) => {
-          const digitAfterComma = 13;
-          return round(evaluate(expression), digitAfterComma);
-        };
-        if ("+-/*".includes(lastOperator) && !isNaN(lastNum)) {
-          try {
-            nextEquation = cleanEquation + lastOperator + lastNum;
-            finalResult = roundedResult(nextEquation) + "";
-          } catch (error) {}
-        }
-      } else {
-        const nonNestedParens = /\(([0123456789/*-+.]*)\)/g;
-        var parensEquation = nextEquation.match(nonNestedParens) || [];
-        while (parensEquation.length > 0) {
-          for (var i = 0; i < parensEquation.length; i++) {
-            let expression = parensEquation[i];
-            try {
-              let tempResult = round(evaluate(expression), 13);
-              nextEquation = nextEquation.replace(expression, tempResult);
-            } catch (error) {}
-          }
-          parensEquation = nextEquation.match(nonNestedParens) || [];
-        }
-        try {
-          finalResult = round(evaluate(nextEquation), 13);
-        } catch (error) {}
-      }
+      let [finalResult, nextEquation] = runEquation(
+        lastEquation,
+        cleanEquation
+      );
 
       this.setState({
         result: finalResult + "",
