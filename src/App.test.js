@@ -41,7 +41,7 @@ test("buttons pressed appear in display", () => {
 
 //Testing user interaction
 describe("when result is empty and an operator is pressed, then result defaults to zero and operator", () => {
-  xtest("for division", () => {
+  test("for division", () => {
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId("/"));
@@ -56,7 +56,7 @@ describe("when result is empty and an operator is pressed, then result defaults 
 
     expect(getByTestId("result")).toHaveTextContent("0");
   });
-  xtest("for multiplication", () => {
+  test("for multiplication", () => {
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId("*"));
