@@ -25,7 +25,7 @@ const changeKeys = (result, button) => {
 
     if (pressedAnotherOperator) {
       result = result.slice(0, -1);
-      return [result, button];
+      return [result + button];
     }
   }
 
