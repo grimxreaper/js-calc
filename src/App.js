@@ -47,30 +47,23 @@ class App extends React.Component {
       cleanEquation = addMultiplier(cleanEquation);
 
       let finalResult = 0;
-      var nextEquation = cleanEquation;
-      let tempResult = cleanEquation;
+      let nextEquation = cleanEquation;
 
-      const regex = /-{0,1}[0123456789]*(\.[0123456789]*){0,1}/g;
-      const matches = tempResult.match(regex) || [];
-
-      if (matches.length > 1 && matches[0] === tempResult) {
-        if (lastEquation.length > 0) {
-          const operatorAndNumRegex = /[-+/*]{0,}[0-9]{1,}[.]{0,1}[0-9]*/g;
-          const results = lastEquation.match(operatorAndNumRegex) || [];
-          const lastOperatorAndNum = results[results.length - 1];
-          const lastOperator = lastOperatorAndNum[0];
-          const lastNum = lastOperatorAndNum.substr(1);
-          const roundedResult = (expression) => {
-            const digitAfterComma = 13;
-            return round(evaluate(expression), digitAfterComma);
-          };
-
-          if ("+-/*".includes(lastOperator) && !isNaN(lastNum)) {
-            try {
-              nextEquation = cleanEquation + lastOperator + lastNum;
-              finalResult = roundedResult(nextEquation) + "";
-            } catch (error) {}
-          }
+      if (lastEquation.length > 0) {
+        const operatorAndNumRegex = /[-+/*]{0,}[0-9]{1,}[.]{0,1}[0-9]*/g;
+        const results = lastEquation.match(operatorAndNumRegex) || [];
+        const lastOperatorAndNum = results[results.length - 1];
+        const lastOperator = lastOperatorAndNum[0];
+        const lastNum = lastOperatorAndNum.substr(1);
+        const roundedResult = (expression) => {
+          const digitAfterComma = 13;
+          return round(evaluate(expression), digitAfterComma);
+        };
+        if ("+-/*".includes(lastOperator) && !isNaN(lastNum)) {
+          try {
+            nextEquation = cleanEquation + lastOperator + lastNum;
+            finalResult = roundedResult(nextEquation) + "";
+          } catch (error) {}
         }
       } else {
         const nonNestedParens = /\(([0123456789/*-+.]*)\)/g;
@@ -92,7 +85,7 @@ class App extends React.Component {
 
       this.setState({
         result: finalResult + "",
-        lastFormula: nextEquation,
+        lastEquation: nextEquation,
       });
     } else if (pressedAC) {
       this.reset();

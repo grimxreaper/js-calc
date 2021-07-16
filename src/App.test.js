@@ -99,7 +99,7 @@ describe("when equals is pressed", () => {
     expect(getByTestId("result")).toHaveTextContent("7+");
   });
 
-  xtest("multiple times, applies last calculation to each result", () => {
+  test("multiple times, applies last calculation to each result", () => {
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId(3));
@@ -111,7 +111,7 @@ describe("when equals is pressed", () => {
     expect(getByTestId("result")).toHaveTextContent("147");
   });
 
-  xtest("five times, it repeats the right hand side of previous operation every time", () => {
+  test("five times, it repeats the right hand side of previous operation every time", () => {
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId(3));
