@@ -2,10 +2,10 @@ import React from "react";
 import "./App.css";
 import ResultComponent from "./Components/ResultComponent";
 import KeyPadComponent from "./Components/KeyPadComponent";
-import changeKeys from "./changeKeys";
 import closeOpenParens from "./closeOpenParens";
 import addMultiplier from "./addMultiplier";
 import runEquation from "./runEquation";
+import updateDisplay from "./updateDisplay";
 
 class App extends React.Component {
   state = {
@@ -17,10 +17,6 @@ class App extends React.Component {
     const { result, lastEquation } = this.state;
 
     const pressedEqual = button.key === "=";
-    const openParens = button.key === "(";
-    const closeParens = button.key === ")";
-    const numOrOperator = "+-*/0123456789.".includes(button.key);
-    const numOrDecimal = "0123456789.".includes(button.key);
     const pressedAC = button.key === "AC";
     const pressedCE = button.key === "CE";
 
@@ -28,13 +24,10 @@ class App extends React.Component {
       return from.slice(-1);
     };
 
-    if (numOrDecimal || openParens || closeParens) {
+    if (button.isDisplayable) {
+      const nextResult = updateDisplay(result, button.key, lastEquation);
       this.setState({
-        result: result + button.key,
-      });
-    } else if (numOrOperator) {
-      this.setState({
-        result: changeKeys(result, button.key),
+        result: nextResult + button.key,
       });
     } else if (pressedEqual) {
       var cleanEquation = result;

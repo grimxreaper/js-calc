@@ -22,10 +22,10 @@ exports[`matches snapshot 1`] = `
       >
         <button
           class="keypad"
-          data-testid="("
-          name="("
+          data-testid="AC"
+          name="AC"
         >
-          (
+          AC
         </button>
         <button
           class="keypad"
@@ -36,17 +36,24 @@ exports[`matches snapshot 1`] = `
         </button>
         <button
           class="keypad"
+          data-testid="="
+          name="="
+        >
+          =
+        </button>
+        <button
+          class="keypad"
+          data-testid="("
+          name="("
+        >
+          (
+        </button>
+        <button
+          class="keypad"
           data-testid=")"
           name=")"
         >
           )
-        </button>
-        <button
-          class="keypad"
-          data-testid="AC"
-          name="AC"
-        >
-          AC
         </button>
         <button
           class="keypad"
@@ -75,6 +82,13 @@ exports[`matches snapshot 1`] = `
           name="+"
         >
           +
+        </button>
+        <button
+          class="keypad"
+          data-testid="."
+          name="."
+        >
+          .
         </button>
         <button
           class="keypad"
@@ -145,20 +159,6 @@ exports[`matches snapshot 1`] = `
           name="0"
         >
           0
-        </button>
-        <button
-          class="keypad"
-          data-testid="="
-          name="="
-        >
-          =
-        </button>
-        <button
-          class="keypad"
-          data-testid="."
-          name="."
-        >
-          .
         </button>
       </div>
     </div>
