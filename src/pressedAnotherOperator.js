@@ -1,14 +1,9 @@
-const pressedAnotherOperator = (result, button) => {
-  const divideLastMinus =
-    "/".includes(button) && result[result.length - 1] === "-";
-  const divideLastAdd =
-    "/".includes(button) && result[result.length - 1] === "+";
-  const multiplyLastMinus =
-    "*".includes(button) && result[result.length - 1] === "-";
-  const multiplyLastAdd =
-    "*".includes(button) && result[result.length - 1] === "+";
-  const addLastMinus =
-    "+".includes(button) && result[result.length - 1] === "-";
+const pressedAnotherOperator = (result, button, hasLastChar) => {
+  const divideLastMinus = button === "/" && hasLastChar("-");
+  const divideLastAdd = button === "/" && hasLastChar("+");
+  const multiplyLastMinus = button === "*" && hasLastChar("-");
+  const multiplyLastAdd = button === "*" && hasLastChar("+");
+  const addLastMinus = button === "+" && hasLastChar("-");
 
   if (
     divideLastAdd ||

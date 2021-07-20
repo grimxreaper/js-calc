@@ -4,8 +4,8 @@ const updateDisplay = (result, button, lastEquation) => {
   const lastCharIsOperator = "/*+-".includes(result[result.length - 1]);
   const pressedDecimal = ".".includes(button);
 
-  const hasLastChar = (char) => {
-    return result.substr(-1) === char;
+  const hasLastChar = (chars) => {
+    return (result + "").substr(-1) === chars;
   };
 
   if (button === "-" && hasLastChar("-")) {
@@ -27,7 +27,8 @@ const updateDisplay = (result, button, lastEquation) => {
     }
   }
 
-  if (pressedAnotherOperator(result, button)) {
+  if (pressedAnotherOperator(result, button, hasLastChar)) {
+    console.log(result);
     result = result.slice(0, -1);
   }
 
