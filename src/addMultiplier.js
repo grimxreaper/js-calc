@@ -8,7 +8,7 @@ const addMultiplier = (expression) => {
   const pAndp = /(\))(\()/g;
 
   //return the value
-  return expression
+  return (expression + "")
     .replace(digitAndP, "$1*$2")
     .replace(pAndDigit, "$1*$2")
     .replace(pAndp, "$1*$2");

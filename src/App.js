@@ -2,10 +2,7 @@ import React from "react";
 import "./App.css";
 import ResultComponent from "./Components/ResultComponent";
 import KeyPadComponent from "./Components/KeyPadComponent";
-import closeOpenParens from "./closeOpenParens";
-import addMultiplier from "./addMultiplier";
-import runEquation from "./runEquation";
-import updateDisplay from "./updateDisplay";
+import handleButtonPress from "./handleButtonPress";
 
 class App extends React.Component {
   state = {
@@ -16,55 +13,15 @@ class App extends React.Component {
   onClick = (button) => {
     const { result, lastEquation } = this.state;
 
-    const pressedEqual = button.key === "=";
-    const pressedAC = button.key === "AC";
-    const pressedCE = button.key === "CE";
+    const [nextResult, nextEquation] = handleButtonPress(
+      result,
+      button,
+      lastEquation
+    );
 
-    const getLastChar = (from) => {
-      return from.slice(-1);
-    };
-
-    if (button.isDisplayable) {
-      const nextResult = updateDisplay(result, button.key, lastEquation);
-      this.setState({
-        result: nextResult + button.key,
-      });
-    } else if (pressedEqual) {
-      var cleanEquation = result;
-
-      if ("-+*/".includes(getLastChar(result))) {
-        cleanEquation = result.slice(0, -1);
-      }
-
-      cleanEquation = closeOpenParens(cleanEquation);
-      cleanEquation = addMultiplier(cleanEquation);
-
-      let [finalResult, nextEquation] = runEquation(
-        lastEquation,
-        cleanEquation
-      );
-
-      this.setState({
-        result: finalResult + "",
-        lastEquation: nextEquation,
-      });
-    } else if (pressedAC) {
-      this.reset();
-    } else if (pressedCE) {
-      this.backspace();
-    }
-  };
-
-  reset = () => {
     this.setState({
-      result: "",
-      lastEquation: "",
-    });
-  };
-
-  backspace = () => {
-    this.setState({
-      result: this.state.result.slice(0, -1),
+      result: nextResult,
+      lastEquation: nextEquation,
     });
   };
 

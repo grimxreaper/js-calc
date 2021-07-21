@@ -1,7 +1,7 @@
 import { evaluate, round } from "mathjs";
 
 const handleDoubleEquals = (lastEquation, cleanEquation) => {
-  let finalResult = 0;
+  let finalResult;
   let nextEquation = cleanEquation;
 
   const operatorAndNumRegex = /[-+/*]{0,}[0-9]{1,}[.]{0,1}[0-9]*/g;

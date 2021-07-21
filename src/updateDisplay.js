@@ -28,11 +28,9 @@ const updateDisplay = (result, button, lastEquation) => {
   }
 
   if (pressedAnotherOperator(result, button, hasLastChar)) {
-    console.log(result);
-    result = result.slice(0, -1);
+    result = (result + "").slice(0, -1);
   }
 
-  return result;
+  return result + button;
 };
-
 export default updateDisplay;
