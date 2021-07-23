@@ -232,40 +232,40 @@ class App extends React.Component {
     tempResult = this.closeParens(tempResult) + "";
     tempResult = this.addMultiplier(tempResult) + "";
 
+    var tempResultString = tempResult;
+    const reg = /\(([0123456789/*-+.]*)\)/g;
+    var parenthesisToCalculate = tempResultString.match(reg) || [];
+    while (parenthesisToCalculate.length > 0) {
+      for (var i = 0; i < parenthesisToCalculate.length; i++) {
+        let expression = parenthesisToCalculate[i];
+        try {
+          let tempResult = round(evaluate(expression), 13);
+          tempResultString = tempResultString.replace(expression, tempResult);
+        } catch (error) {}
+      }
+      parenthesisToCalculate = tempResultString.match(reg) || [];
+    }
+    try {
+      finalResult = round(evaluate(tempResultString), 13);
+    } catch (error) {}
+
     const regex = /-{0,1}[0123456789]*(\.[0123456789]*){0,1}/g;
     const matches = tempResult.match(regex) || [];
     if (matches.length > 1 && matches[0] === tempResult) {
       if ("+-/*".includes(operate) && !isNaN(originalLastNum)) {
         try {
-          finalResult =
-            this.roundedResult(tempResult + operate + originalLastNum) + "";
+          finalResult = round(
+            evaluate(tempResult + operate + originalLastNum),
+            13 + ""
+          );
         } catch (error) {}
       }
-    } else {
-      var tempResultString = tempResult;
-      const reg = /\(([0123456789/*-+.]*)\)/g;
-      var parenthesisToCalculate = tempResultString.match(reg) || [];
-      while (parenthesisToCalculate.length > 0) {
-        for (var i = 0; i < parenthesisToCalculate.length; i++) {
-          let expression = parenthesisToCalculate[i];
-          try {
-            let tempResult = round(evaluate(expression), 13);
-            tempResultString = tempResultString.replace(expression, tempResult);
-          } catch (error) {}
-        }
-
-        parenthesisToCalculate = tempResultString.match(reg) || [];
-      }
-      try {
-        finalResult = round(evaluate(tempResultString), 13);
-      } catch (error) {
-        //throw error
-      }
-      this.setState({
-        done: true,
-        result: finalResult + "",
-      });
     }
+
+    this.setState({
+      done: true,
+      result: finalResult + "",
+    });
   };
 
   reset = () => {
