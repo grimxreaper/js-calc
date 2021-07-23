@@ -142,13 +142,18 @@ class App extends React.Component {
     }
 
     if ("0123456789)".includes(result[result.length - 2])) {
-      //checking "digit, ) -> operator"
       if ("/*+-".includes(result[result.length - 1])) {
-        if ("+-(0123456789".includes(button)) {
+        if ("(0123456789".includes(button)) {
           return result + button;
         }
         if (".".includes(button)) {
           return result + "0.";
+        }
+        if ("+".includes(button) && result[result.length - 1] === "-") {
+          return this.setCharAt(result, result.length - 1, "+");
+        }
+        if ("-".includes(button) && result[result.length - 1] === "+") {
+          return this.setCharAt(result, result.length - 1, "-");
         }
         if ("/".includes(button) && result[result.length - 1] === "-") {
           return this.setCharAt(result, result.length - 1, "/");

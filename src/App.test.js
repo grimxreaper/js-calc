@@ -337,7 +337,7 @@ describe("given special cases, it removes characters appropriately", () => {
     expect(getByTestId("result")).toHaveTextContent("0");
   });
 
-  xtest("for a subtraction followed by an addition, then it defaults to an addition", () => {
+  test("for a subtraction followed by an addition, then it defaults to an addition", () => {
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId(3));
