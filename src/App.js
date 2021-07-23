@@ -103,6 +103,9 @@ class App extends React.Component {
       if ("+-(0123456789".includes(button)) {
         return button;
       }
+      if ("/*".includes(button)) {
+        return "0" + button;
+      }
       if (".".includes(button)) {
         return "0.";
       }
