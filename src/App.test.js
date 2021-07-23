@@ -1,8 +1,6 @@
-import { render, userEvent, fireEvent, screen } from "@testing-library/react";
-import { all, create, evaluate } from "mathjs";
+import { render, fireEvent } from "@testing-library/react";
 import App from "./App";
 import ResultComponent from "./Components/ResultComponent";
-
 
 //snapshot
 it("matches snapshot", () => {
@@ -11,112 +9,189 @@ it("matches snapshot", () => {
 });
 
 //Testing DOM elements
-it("should equal an empty string", () => {
+it("when no key has been pressed, the display should be empty", () => {
   const { getByTestId } = render(<ResultComponent />);
   expect(getByTestId("result")).toHaveTextContent("");
 });
 
-//Testing user interaction
-test("division button displays when clicked", () => {
-  const { getByTestId } = render(<App />);
-
-  fireEvent.click(getByTestId("/"));
-
-  expect(getByTestId("result")).not.toHaveTextContent("/");
-});
-
-test("result displays correct number and operation when used together", () => {
+test("buttons pressed appear in display", () => {
   const { getByTestId } = render(<App />);
 
   fireEvent.click(getByTestId(9));
-  fireEvent.click(getByTestId("/"));
-
-  expect(getByTestId("result")).toHaveTextContent("9/");
-});
-
-
-//Testing events
-it("state is updated when a button is clicked", () => {
-  const { getByTestId } = render(<App />);
-
+  fireEvent.click(getByTestId(8));
+  fireEvent.click(getByTestId("-"));
+  fireEvent.click(getByTestId(7));
+  fireEvent.click(getByTestId("*"));
+  fireEvent.click(getByTestId(6));
+  fireEvent.click(getByTestId(5));
+  fireEvent.click(getByTestId("+"));
+  fireEvent.click(getByTestId(4));
   fireEvent.click(getByTestId("("));
+  fireEvent.click(getByTestId(3));
+  fireEvent.click(getByTestId(2));
+  fireEvent.click(getByTestId("."));
+  fireEvent.click(getByTestId(0));
+  fireEvent.click(getByTestId(1));
+  fireEvent.click(getByTestId("/"));
+  fireEvent.click(getByTestId(6));
+  fireEvent.click(getByTestId(")"));
 
-  expect(getByTestId("result")).toHaveTextContent("(");
+  expect(getByTestId("result")).toHaveTextContent("98-7*65+4(32.01/6)");
 });
 
-//Testing events: multiplication calculation with eval
-
-test("displays correct result of adding -7 to 7", () => {
-  expect(evaluate('7+-7')).toBe(0);
-});
-
-describe("check the operation of 2 numbers", () => {
-  test("division of 9 by 2 must result in 4.5", () => {
+//Testing user interaction
+describe("when result is empty and an operator is pressed, then result defaults to zero and operator", () => {
+  xtest("for division", () => {
     const { getByTestId } = render(<App />);
 
-    fireEvent.click(getByTestId(9));
     fireEvent.click(getByTestId("/"));
-    fireEvent.click(getByTestId(2));
-    fireEvent.click(getByTestId("="));
-    expect(getByTestId("result")).toHaveTextContent("4.5");
-  });
 
-  test("multiplication of 4 by 8 must result in 32", () => {
+    expect(getByTestId("result")).toHaveTextContent("0/");
+  });
+  test("for division and returns correct answer", () => {
     const { getByTestId } = render(<App />);
 
-    fireEvent.click(getByTestId(4));
-    fireEvent.click(getByTestId("*"));
-    fireEvent.click(getByTestId(8));
+    fireEvent.click(getByTestId("/"));
     fireEvent.click(getByTestId("="));
-    expect(getByTestId("result")).toHaveTextContent("32");
-  });
 
-  test("addition of 1 by 89 must result in 90", () => {
+    expect(getByTestId("result")).toHaveTextContent("0");
+  });
+  xtest("for multiplication", () => {
+    const { getByTestId } = render(<App />);
+
+    fireEvent.click(getByTestId("*"));
+
+    expect(getByTestId("result")).toHaveTextContent("0*");
+  });
+  test("for multiplication and returns correct answer", () => {
+    const { getByTestId } = render(<App />);
+
+    fireEvent.click(getByTestId("*"));
+    fireEvent.click(getByTestId("="));
+
+    expect(getByTestId("result")).toHaveTextContent("0");
+  });
+});
+
+describe("when equals is pressed", () => {
+  test("pressing another key starts a new calculation", () => {
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId(1));
     fireEvent.click(getByTestId("+"));
-    fireEvent.click(getByTestId(8));
-    fireEvent.click(getByTestId(9));
+    fireEvent.click(getByTestId(2));
     fireEvent.click(getByTestId("="));
-    expect(getByTestId("result")).toHaveTextContent("90");
+    fireEvent.click(getByTestId(7));
+
+    expect(getByTestId("result")).toHaveTextContent("7");
   });
 
-  test("subtraction of 1 by 8 must result in -7", () => {
+  test("pressing another key and an addition operator continues a new calculation", () => {
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId(1));
-    fireEvent.click(getByTestId("-"));
-    fireEvent.click(getByTestId(8));
+    fireEvent.click(getByTestId("+"));
+    fireEvent.click(getByTestId(2));
     fireEvent.click(getByTestId("="));
-    expect(getByTestId("result")).toHaveTextContent("-7");
-  });
-});
+    fireEvent.click(getByTestId(7));
+    fireEvent.click(getByTestId("+"));
 
-describe("check operations of AC and CE", () => {
-  test("clearing the display when hitting AC", () => {
+    expect(getByTestId("result")).toHaveTextContent("7+");
+  });
+
+  xtest("multiple times, applies last calculation to each result", () => {
     const { getByTestId } = render(<App />);
 
-    fireEvent.click(getByTestId(2));
-    fireEvent.click(getByTestId("-"));
     fireEvent.click(getByTestId(3));
-    fireEvent.click(getByTestId("AC"));
+    fireEvent.click(getByTestId("*"));
+    fireEvent.click(getByTestId(7));
+    fireEvent.click(getByTestId("="));
+    fireEvent.click(getByTestId("="));
 
-    expect(getByTestId("result")).toHaveTextContent("");
+    expect(getByTestId("result")).toHaveTextContent("147");
   });
 
-  test("clearing the last entered number when hitting CE", () => {
+  xtest("five times, it repeats the right hand side of previous operation every time", () => {
     const { getByTestId } = render(<App />);
 
-    fireEvent.click(getByTestId(2));
-    fireEvent.click(getByTestId("CE"));
+    fireEvent.click(getByTestId(3));
+    fireEvent.click(getByTestId("*"));
+    fireEvent.click(getByTestId(7));
+    fireEvent.click(getByTestId("="));
+    fireEvent.click(getByTestId("="));
+    fireEvent.click(getByTestId("="));
+    fireEvent.click(getByTestId("="));
+    fireEvent.click(getByTestId("="));
 
-    expect(getByTestId("result")).toHaveTextContent("");
+    expect(getByTestId("result")).toHaveTextContent("50421");
+  });
+
+  describe("returns the correct result", () => {
+    test("for division", () => {
+      const { getByTestId } = render(<App />);
+
+      fireEvent.click(getByTestId(9));
+      fireEvent.click(getByTestId("/"));
+      fireEvent.click(getByTestId(2));
+      fireEvent.click(getByTestId("="));
+      expect(getByTestId("result")).toHaveTextContent("4.5");
+    });
+
+    test("for multiplication", () => {
+      const { getByTestId } = render(<App />);
+
+      fireEvent.click(getByTestId(4));
+      fireEvent.click(getByTestId("*"));
+      fireEvent.click(getByTestId(8));
+      fireEvent.click(getByTestId("="));
+      expect(getByTestId("result")).toHaveTextContent("32");
+    });
+
+    test("for addition", () => {
+      const { getByTestId } = render(<App />);
+
+      fireEvent.click(getByTestId(1));
+      fireEvent.click(getByTestId("+"));
+      fireEvent.click(getByTestId(8));
+      fireEvent.click(getByTestId(9));
+      fireEvent.click(getByTestId("="));
+      expect(getByTestId("result")).toHaveTextContent("90");
+    });
+
+    test("for subtraction", () => {
+      const { getByTestId } = render(<App />);
+
+      fireEvent.click(getByTestId(1));
+      fireEvent.click(getByTestId("-"));
+      fireEvent.click(getByTestId(8));
+      fireEvent.click(getByTestId("="));
+      expect(getByTestId("result")).toHaveTextContent("-7");
+    });
   });
 });
 
-describe("check the operation of 3 or more numbers", () => {
-  test("multiplying 3 by 7 by 5 must result in 105", () => {
+test("when the key AC is pressed, the display is cleared", () => {
+  const { getByTestId } = render(<App />);
+
+  fireEvent.click(getByTestId(2));
+  fireEvent.click(getByTestId("-"));
+  fireEvent.click(getByTestId(3));
+  fireEvent.click(getByTestId("AC"));
+
+  expect(getByTestId("result")).toHaveTextContent("");
+});
+
+test("when the key CE is pressed, the last entered key in display is cleared", () => {
+  const { getByTestId } = render(<App />);
+
+  fireEvent.click(getByTestId(2));
+  fireEvent.click(getByTestId("CE"));
+
+  expect(getByTestId("result")).toHaveTextContent("");
+});
+
+describe("given the operation of 3 or more numbers", () => {
+  test("when there is a multiplication operator, it returns the correct result", () => {
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId(3));
@@ -126,10 +201,10 @@ describe("check the operation of 3 or more numbers", () => {
     fireEvent.click(getByTestId(5));
     fireEvent.click(getByTestId("="));
 
-    expect(getByTestId("result")).toHaveTextContent("105")
+    expect(getByTestId("result")).toHaveTextContent("105");
   });
 
-  test("dividing 99 by 3 and multiplying by 5 must result in 165", () => {
+  test("when there is a division and multiplication it returns the correct result", () => {
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId(9));
@@ -140,10 +215,10 @@ describe("check the operation of 3 or more numbers", () => {
     fireEvent.click(getByTestId(5));
     fireEvent.click(getByTestId("="));
 
-    expect(getByTestId("result")).toHaveTextContent("165")
+    expect(getByTestId("result")).toHaveTextContent("165");
   });
 
-  test("multiplication and addition with parens", () => {
+  test("when there is a multiplication and addition with parens it returns the correct result", () => {
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId("("));
@@ -155,10 +230,10 @@ describe("check the operation of 3 or more numbers", () => {
     fireEvent.click(getByTestId(2));
     fireEvent.click(getByTestId("="));
 
-    expect(getByTestId("result")).toHaveTextContent("18")
+    expect(getByTestId("result")).toHaveTextContent("18");
   });
 
-  test("multiplication and addition without parens", () => {
+  test("when there is a multiplication and addition without parens it returns the correct result", () => {
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId(7));
@@ -168,10 +243,10 @@ describe("check the operation of 3 or more numbers", () => {
     fireEvent.click(getByTestId(2));
     fireEvent.click(getByTestId("="));
 
-    expect(getByTestId("result")).toHaveTextContent("11")
+    expect(getByTestId("result")).toHaveTextContent("11");
   });
 
-  test("1.1 + 1.2 must equal 1.3", () => {
+  test("when there is an addition of decimal numbers it returns the correct result", () => {
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId(1));
@@ -183,10 +258,10 @@ describe("check the operation of 3 or more numbers", () => {
     fireEvent.click(getByTestId(2));
     fireEvent.click(getByTestId("="));
 
-    expect(getByTestId("result")).toHaveTextContent("2.3")
+    expect(getByTestId("result")).toHaveTextContent("2.3");
   });
 
-  test("Multiple operations including parens", () => {
+  test("when there are multiple operations including parens it returns the correct result", () => {
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId(8));
@@ -204,48 +279,53 @@ describe("check the operation of 3 or more numbers", () => {
     fireEvent.click(getByTestId(")"));
     fireEvent.click(getByTestId("="));
 
-    expect(getByTestId("result")).toHaveTextContent("18.4")
+    expect(getByTestId("result")).toHaveTextContent("18.4");
   });
 });
 
-
-describe('removes characters appropriately', () => {
-  test("multiplying 3 by 7 then adding 8 and hitting CE must remove 8", () => {
+describe("given special cases, it removes characters appropriately", () => {
+  test("for trailing operators", () => {
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId(3));
     fireEvent.click(getByTestId("*"));
     fireEvent.click(getByTestId(7));
     fireEvent.click(getByTestId("+"));
-    fireEvent.click(getByTestId(8));
-    fireEvent.click(getByTestId("CE"));
     fireEvent.click(getByTestId("="));
 
-    expect(getByTestId("result")).toHaveTextContent("21")
+    expect(getByTestId("result")).toHaveTextContent("21");
   });
 
-  test("double negative at the beginning of an expression defaults to one negative sign", () => {
+  test("for if a minus is already present, then you cannot add another one", () => {
+    const { getByTestId } = render(<App />);
+
+    fireEvent.click(getByTestId(3));
+    fireEvent.click(getByTestId("-"));
+    fireEvent.click(getByTestId("-"));
+
+    expect(getByTestId("result")).toHaveTextContent("3-");
+  });
+
+  test("for more than one negative sign at the beginning of an expression", () => {
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId("-"));
     fireEvent.click(getByTestId("-"));
 
-    expect(getByTestId("result")).toHaveTextContent("-")
-  })
+    expect(getByTestId("result")).toHaveTextContent("-");
+  });
 
-  test("using an addition followed by a multiplication operator defaults to a multiplication operator", () => {
-
+  test("for an addition followed by a multiplication operator, then it defaults to a multiplication operator", () => {
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId(7));
     fireEvent.click(getByTestId("+"));
     fireEvent.click(getByTestId("*"));
 
-    expect(getByTestId("result")).toHaveTextContent("7*")
-  })
+    expect(getByTestId("result")).toHaveTextContent("7*");
+  });
 
-
-  test("returns 0 instead of an empty string", () => {
+  test("for an addition followed by subtraction, then it defaults to a subtraction operator", () => {
     const { getByTestId } = render(<App />);
 
     fireEvent.click(getByTestId(7));
@@ -254,67 +334,83 @@ describe('removes characters appropriately', () => {
     fireEvent.click(getByTestId(7));
     fireEvent.click(getByTestId("="));
 
-    expect(getByTestId("result")).toHaveTextContent("0")
+    expect(getByTestId("result")).toHaveTextContent("0");
   });
-})
 
-test("2 multiplied by what is inside the parentheses (4 +4)", () => {
-  const { getByTestId } = render(<App />);
+  xtest("for a subtraction followed by an addition, then it defaults to an addition", () => {
+    const { getByTestId } = render(<App />);
 
-  fireEvent.click(getByTestId(2));
-  fireEvent.click(getByTestId("("));
-  fireEvent.click(getByTestId(4));
-  fireEvent.click(getByTestId("+"));
-  fireEvent.click(getByTestId(4));
-  fireEvent.click(getByTestId(")"));
-  fireEvent.click(getByTestId("="));
+    fireEvent.click(getByTestId(3));
+    fireEvent.click(getByTestId("-"));
+    fireEvent.click(getByTestId("+"));
+    fireEvent.click(getByTestId(2));
 
-  expect(getByTestId("result")).toHaveTextContent("16")
+    expect(getByTestId("result")).toHaveTextContent("3+2");
+  });
 });
 
+describe("when operations are in parentheses", () => {
+  test("and follow each other, then their results are multiplied together", () => {
+    const { getByTestId } = render(<App />);
 
-test("must add 6 parentheses to the end of the equation and return 874", () => {
-  const { getByTestId } = render(<App />);
+    fireEvent.click(getByTestId("("));
+    fireEvent.click(getByTestId(2));
+    fireEvent.click(getByTestId("+"));
+    fireEvent.click(getByTestId(2));
+    fireEvent.click(getByTestId(")"));
+    fireEvent.click(getByTestId("("));
+    fireEvent.click(getByTestId(8));
+    fireEvent.click(getByTestId("-"));
+    fireEvent.click(getByTestId(2));
+    fireEvent.click(getByTestId(")"));
+    fireEvent.click(getByTestId("="));
 
-  fireEvent.click(getByTestId("("));
-  fireEvent.click(getByTestId(1));
-  fireEvent.click(getByTestId("+"));
-  fireEvent.click(getByTestId(1));
-  fireEvent.click(getByTestId("("));
-  fireEvent.click(getByTestId(1));
-  fireEvent.click(getByTestId("+"));
-  fireEvent.click(getByTestId(2));
-  fireEvent.click(getByTestId("("));
-  fireEvent.click(getByTestId(1));
-  fireEvent.click(getByTestId("+"));
-  fireEvent.click(getByTestId(3));
-  fireEvent.click(getByTestId("("));
-  fireEvent.click(getByTestId(1));
-  fireEvent.click(getByTestId("+"));
-  fireEvent.click(getByTestId(4));
-  fireEvent.click(getByTestId("("));
-  fireEvent.click(getByTestId(1));
-  fireEvent.click(getByTestId("+"));
-  fireEvent.click(getByTestId(5));
-  fireEvent.click(getByTestId("("));
-  fireEvent.click(getByTestId(1));
-  fireEvent.click(getByTestId("+"));
-  fireEvent.click(getByTestId(6));
-  fireEvent.click(getByTestId("="));
+    expect(getByTestId("result")).toHaveTextContent("24");
+  });
 
-  expect(getByTestId("result")).toHaveTextContent("874")
+  test("and a number is added in front of a parenthesis, then it is multiplied by what is inside the parenthesis", () => {
+    const { getByTestId } = render(<App />);
+
+    fireEvent.click(getByTestId(2));
+    fireEvent.click(getByTestId("("));
+    fireEvent.click(getByTestId(4));
+    fireEvent.click(getByTestId("+"));
+    fireEvent.click(getByTestId(4));
+    fireEvent.click(getByTestId(")"));
+    fireEvent.click(getByTestId("="));
+
+    expect(getByTestId("result")).toHaveTextContent("16");
+  });
+
+  test("and their open parens aren't closed, then needed parentheses are added at the end of an operation", () => {
+    const { getByTestId } = render(<App />);
+
+    fireEvent.click(getByTestId("("));
+    fireEvent.click(getByTestId(1));
+    fireEvent.click(getByTestId("+"));
+    fireEvent.click(getByTestId(1));
+    fireEvent.click(getByTestId("("));
+    fireEvent.click(getByTestId(1));
+    fireEvent.click(getByTestId("+"));
+    fireEvent.click(getByTestId(2));
+    fireEvent.click(getByTestId("("));
+    fireEvent.click(getByTestId(1));
+    fireEvent.click(getByTestId("+"));
+    fireEvent.click(getByTestId(3));
+    fireEvent.click(getByTestId("("));
+    fireEvent.click(getByTestId(1));
+    fireEvent.click(getByTestId("+"));
+    fireEvent.click(getByTestId(4));
+    fireEvent.click(getByTestId("("));
+    fireEvent.click(getByTestId(1));
+    fireEvent.click(getByTestId("+"));
+    fireEvent.click(getByTestId(5));
+    fireEvent.click(getByTestId("("));
+    fireEvent.click(getByTestId(1));
+    fireEvent.click(getByTestId("+"));
+    fireEvent.click(getByTestId(6));
+    fireEvent.click(getByTestId("="));
+
+    expect(getByTestId("result")).toHaveTextContent("874");
+  });
 });
-
-// test("Manually add * operator", () => {
-//   const { getByTestId } = render(<App />);
-
-//   const expression1 = "" 
-//   const expression2 = "2*(2+2)" 
-//   const expression3 = "2(2+2)" 
-
-//   expect(this.addMultiplier(expression1)).toHaveTextContent("")
-//   expect(this.addMultiplier(expression2)).toHaveTextContent(expression2)
-//   expect(this.addMultiplier(expression3)).toHaveTextContent(expression2)
-// });
-
-
