@@ -27,24 +27,29 @@ class App extends React.Component {
             result: this.state.result + button.key,
           });
         } else {
-          if (
-            button.key === "." ||
-            (this.state.originalLastNum + "").includes(".")
-          ) {
-            this.setState({
-              originalLastNum: this.recordLastNum(
-                this.state.result + button.key
-              ),
-              result: this.state.result + button.key,
-            });
+          let originalLastNum;
+          let lastNumResult = this.state.result + button.key;
+          const operatorAndNumRegex = /[-+/*]{0,}[0-9]{1,}[.]{0,1}[0-9]*/g;
+          let lastNumMatches = lastNumResult.match(operatorAndNumRegex) || [];
+
+          if (lastNumMatches.length === 0) {
+            originalLastNum = "";
           } else {
-            this.setState({
-              originalLastNum: this.recordLastNum(
-                this.state.result + button.key
-              ),
-              result: this.state.result + button.key,
-            });
+            let lastNum = lastNumMatches[lastNumMatches.length - 1];
+            if (!"-+/*".includes(lastNum[0])) {
+              originalLastNum = lastNum;
+            } else {
+              this.setState({
+                operate: lastNum[0],
+              });
+              originalLastNum = lastNum.substr(1);
+            }
           }
+
+          this.setState({
+            originalLastNum: originalLastNum,
+            result: this.state.result + button.key,
+          });
         }
       }
     } else {
@@ -68,22 +73,6 @@ class App extends React.Component {
     } else if (button.key === "CE") {
       this.backspace();
     }
-  };
-
-  recordLastNum = (result) => {
-    const regex = /[-+/*]{0,}[0-9]{1,}[.]{0,1}[0-9]*/g;
-    let results = result.match(regex) || [];
-    if (results.length === 0) {
-      return "";
-    }
-    let lastNum = results[results.length - 1];
-    if (!"-+/*".includes(lastNum[0])) {
-      return lastNum;
-    }
-    this.setState({
-      operate: lastNum[0],
-    });
-    return lastNum.substr(1);
   };
 
   setCharAt = (str, index, chr) => {
