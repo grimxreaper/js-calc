@@ -75,11 +75,6 @@ class App extends React.Component {
     }
   };
 
-  setCharAt = (str, index, chr) => {
-    if (index > str.length - 1) return str;
-    return str.substring(0, index) + chr + str.substring(index + 1);
-  };
-
   changeKeys = (result, button) => {
     if ("(".includes(button)) {
       if (result.length > 1) {
@@ -139,22 +134,46 @@ class App extends React.Component {
           return result + "0.";
         }
         if ("+".includes(button) && result[result.length - 1] === "-") {
-          return this.setCharAt(result, result.length - 1, "+");
+          return (
+            result.substring(0, result.length - 1) +
+            "+" +
+            result.substring(result.length - 1 + 1)
+          );
         }
         if ("-".includes(button) && result[result.length - 1] === "+") {
-          return this.setCharAt(result, result.length - 1, "-");
+          return (
+            result.substring(0, result.length - 1) +
+            "-" +
+            result.substring(result.length - 1 + 1)
+          );
         }
         if ("/".includes(button) && result[result.length - 1] === "-") {
-          return this.setCharAt(result, result.length - 1, "/");
+          return (
+            result.substring(0, result.length - 1) +
+            "/" +
+            result.substring(result.length - 1 + 1)
+          );
         }
         if ("/".includes(button) && result[result.length - 1] === "+") {
-          return this.setCharAt(result, result.length - 1, "/");
+          return (
+            result.substring(0, result.length - 1) +
+            "/" +
+            result.substring(result.length - 1 + 1)
+          );
         }
         if ("*".includes(button) && result[result.length - 1] === "-") {
-          return this.setCharAt(result, result.length - 1, "*");
+          return (
+            result.substring(0, result.length - 1) +
+            "*" +
+            result.substring(result.length - 1 + 1)
+          );
         }
         if ("*".includes(button) && result[result.length - 1] === "+") {
-          return this.setCharAt(result, result.length - 1, "*");
+          return (
+            result.substring(0, result.length - 1) +
+            "*" +
+            result.substring(result.length - 1 + 1)
+          );
         }
       }
     }
