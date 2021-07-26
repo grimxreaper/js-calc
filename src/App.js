@@ -212,25 +212,9 @@ class App extends React.Component {
     return result;
   };
 
-  getLastChar = (from) => {
-    return from.slice(-1);
-  };
-
   roundedResult = (expression) => {
     const digitAfterComma = 13;
     round(evaluate(expression), digitAfterComma);
-  };
-
-  addMultiplier = (expression) => {
-    const digitAndP = /([0123456789])(\()/g;
-    const pAndDigit = /(\))([0123456789])/g;
-    // )( -> )*(
-    const pAndp = /(\))(\()/g;
-
-    return expression
-      .replace(digitAndP, "$1*$2")
-      .replace(pAndDigit, "$1*$2")
-      .replace(pAndp, "$1*$2");
   };
 
   calculate = () => {
@@ -238,12 +222,21 @@ class App extends React.Component {
     let finalResult = 0;
     var tempResult = result;
 
-    if ("-+*/".includes(this.getLastChar(result))) {
+    if ("-+*/".includes(result.slice(-1))) {
       tempResult = result.slice(0, -1);
     }
 
     tempResult = this.closeParens(tempResult) + "";
-    tempResult = this.addMultiplier(tempResult) + "";
+
+    const digitAndP = /([0123456789])(\()/g;
+    const pAndDigit = /(\))([0123456789])/g;
+    // )( -> )*(
+    const pAndp = /(\))(\()/g;
+
+    tempResult = tempResult
+      .replace(digitAndP, "$1*$2")
+      .replace(pAndDigit, "$1*$2")
+      .replace(pAndp, "$1*$2");
 
     const regex = /-{0,1}[0123456789]*(\.[0123456789]*){0,1}/g;
     const matches = tempResult.match(regex) || [];
