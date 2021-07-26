@@ -69,9 +69,16 @@ class App extends React.Component {
     if (button.key === "=") {
       this.calculate();
     } else if (button.key === "AC") {
-      this.reset();
+      this.setState({
+        result: "",
+        operate: "",
+        done: false,
+        originalLastNum: "",
+      });
     } else if (button.key === "CE") {
-      this.backspace();
+      this.setState({
+        result: this.state.result.slice(0, -1),
+      });
     }
   };
 
@@ -270,21 +277,6 @@ class App extends React.Component {
     this.setState({
       done: true,
       result: finalResult + "",
-    });
-  };
-
-  reset = () => {
-    this.setState({
-      result: "",
-      operate: "",
-      done: false,
-      originalLastNum: "",
-    });
-  };
-
-  backspace = () => {
-    this.setState({
-      result: this.state.result.slice(0, -1),
     });
   };
 
