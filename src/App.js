@@ -67,7 +67,62 @@ class App extends React.Component {
       }
     }
     if (button.key === "=") {
-      this.calculate();
+      const { result, operate, originalLastNum } = this.state;
+      let finalResult = 0;
+      var tempResult = result;
+
+      if ("-+*/".includes(result.slice(-1))) {
+        tempResult = result.slice(0, -1);
+      }
+
+      tempResult = this.closeParens(tempResult) + "";
+
+      const digitAndP = /([0123456789])(\()/g;
+      const pAndDigit = /(\))([0123456789])/g;
+      // )( -> )*(
+      const pAndp = /(\))(\()/g;
+
+      tempResult = tempResult
+        .replace(digitAndP, "$1*$2")
+        .replace(pAndDigit, "$1*$2")
+        .replace(pAndp, "$1*$2");
+
+      const regex = /-{0,1}[0123456789]*(\.[0123456789]*){0,1}/g;
+      const matches = tempResult.match(regex) || [];
+      if (matches.length > 1 && matches[0] === tempResult) {
+        if ("+-/*".includes(operate) && !isNaN(originalLastNum)) {
+          try {
+            finalResult = round(
+              evaluate(tempResult + operate + originalLastNum),
+              13 + ""
+            );
+          } catch (error) {}
+        }
+      } else {
+        var tempResultString = tempResult;
+        const reg = /\(([0123456789/*-+.]*)\)/g;
+        var parenthesisToCalculate = tempResultString.match(reg) || [];
+        while (parenthesisToCalculate.length > 0) {
+          for (var i = 0; i < parenthesisToCalculate.length; i++) {
+            let expression = parenthesisToCalculate[i];
+            try {
+              let tempResult = round(evaluate(expression), 13);
+              tempResultString = tempResultString.replace(
+                expression,
+                tempResult
+              );
+            } catch (error) {}
+          }
+          parenthesisToCalculate = tempResultString.match(reg) || [];
+        }
+        try {
+          finalResult = round(evaluate(tempResultString), 13);
+        } catch (error) {}
+      }
+      this.setState({
+        done: true,
+        result: finalResult + "",
+      });
     } else if (button.key === "AC") {
       this.setState({
         result: "",
@@ -222,62 +277,6 @@ class App extends React.Component {
   roundedResult = (expression) => {
     const digitAfterComma = 13;
     round(evaluate(expression), digitAfterComma);
-  };
-
-  calculate = () => {
-    const { result, operate, originalLastNum } = this.state;
-    let finalResult = 0;
-    var tempResult = result;
-
-    if ("-+*/".includes(result.slice(-1))) {
-      tempResult = result.slice(0, -1);
-    }
-
-    tempResult = this.closeParens(tempResult) + "";
-
-    const digitAndP = /([0123456789])(\()/g;
-    const pAndDigit = /(\))([0123456789])/g;
-    // )( -> )*(
-    const pAndp = /(\))(\()/g;
-
-    tempResult = tempResult
-      .replace(digitAndP, "$1*$2")
-      .replace(pAndDigit, "$1*$2")
-      .replace(pAndp, "$1*$2");
-
-    const regex = /-{0,1}[0123456789]*(\.[0123456789]*){0,1}/g;
-    const matches = tempResult.match(regex) || [];
-    if (matches.length > 1 && matches[0] === tempResult) {
-      if ("+-/*".includes(operate) && !isNaN(originalLastNum)) {
-        try {
-          finalResult = round(
-            evaluate(tempResult + operate + originalLastNum),
-            13 + ""
-          );
-        } catch (error) {}
-      }
-    } else {
-      var tempResultString = tempResult;
-      const reg = /\(([0123456789/*-+.]*)\)/g;
-      var parenthesisToCalculate = tempResultString.match(reg) || [];
-      while (parenthesisToCalculate.length > 0) {
-        for (var i = 0; i < parenthesisToCalculate.length; i++) {
-          let expression = parenthesisToCalculate[i];
-          try {
-            let tempResult = round(evaluate(expression), 13);
-            tempResultString = tempResultString.replace(expression, tempResult);
-          } catch (error) {}
-        }
-        parenthesisToCalculate = tempResultString.match(reg) || [];
-      }
-      try {
-        finalResult = round(evaluate(tempResultString), 13);
-      } catch (error) {}
-    }
-    this.setState({
-      done: true,
-      result: finalResult + "",
-    });
   };
 
   render() {
