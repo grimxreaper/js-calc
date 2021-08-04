@@ -60,9 +60,117 @@ class App extends React.Component {
         button.key !== "AC" &&
         button.key !== ")"
       ) {
+        let keyPressed = button.key;
+        let result = this.state.result;
+
+        if ("(".includes(keyPressed)) {
+          if (result.length > 1) {
+            if ("0123456789".includes(result[result.length - 1])) {
+              result = result + keyPressed.replace("(", "*(");
+            }
+          }
+        } else if (result === "") {
+          if ("+-(0123456789".includes(keyPressed)) {
+            result = keyPressed;
+          }
+          if ("/*".includes(keyPressed)) {
+            result = "0" + keyPressed;
+          }
+          if (".".includes(keyPressed)) {
+            result = "0.";
+          }
+        } else if ("0123456789".includes(result[result.length - 1])) {
+          const numberOfOpenP = (result.match(/\(/g) || []).length;
+          const numberOfCloseP = (result.match(/\)/g) || []).length;
+          if (
+            "*/-+0123456789.".includes(keyPressed) ||
+            (keyPressed.key === ")" && numberOfOpenP > numberOfCloseP)
+          ) {
+            result = result + keyPressed;
+          }
+        } else if (result[result.length - 1] === "(") {
+          if ("+-(0123456789".includes(keyPressed)) {
+            result = result + keyPressed;
+          }
+          if (".".includes(keyPressed)) {
+            result = result + "0.";
+          }
+        } else if (result[result.length - 1] === ")") {
+          const numberOfOpenP = (result.match(/\(/g) || []).length;
+          const numberOfCloseP = (result.match(/\)/g) || []).length;
+          if ("/*-+".includes(keyPressed)) {
+            result = result + keyPressed;
+          }
+          if (")".includes(keyPressed) && numberOfOpenP > numberOfCloseP) {
+            result = result + keyPressed;
+          }
+        } else if ("0123456789)".includes(result[result.length - 2])) {
+          if ("/*+-".includes(result[result.length - 1])) {
+            if ("(0123456789".includes(keyPressed)) {
+              result = result + keyPressed;
+            }
+            if (".".includes(keyPressed)) {
+              result = result + "0.";
+            }
+            if ("+".includes(keyPressed) && result[result.length - 1] === "-") {
+              result =
+                result.substring(0, result.length - 1) +
+                "+" +
+                result.substring(result.length - 1 + 1);
+            }
+            if ("-".includes(keyPressed) && result[result.length - 1] === "+") {
+              result =
+                result.substring(0, result.length - 1) +
+                "-" +
+                result.substring(result.length - 1 + 1);
+            }
+            if ("/".includes(keyPressed) && result[result.length - 1] === "-") {
+              result =
+                result.substring(0, result.length - 1) +
+                "/" +
+                result.substring(result.length - 1 + 1);
+            }
+            if ("/".includes(keyPressed) && result[result.length - 1] === "+") {
+              result =
+                result.substring(0, result.length - 1) +
+                "/" +
+                result.substring(result.length - 1 + 1);
+            }
+            if ("*".includes(keyPressed) && result[result.length - 1] === "-") {
+              result =
+                result.substring(0, result.length - 1) +
+                "*" +
+                result.substring(result.length - 1 + 1);
+            }
+            if ("*".includes(keyPressed) && result[result.length - 1] === "+") {
+              result =
+                result.substring(0, result.length - 1) +
+                "*" +
+                result.substring(result.length - 1 + 1);
+            }
+          }
+        } else if ("/*+-(".includes(result[result.length - 2])) {
+          if ("-+".includes(result[result.length - 1])) {
+            if ("0123456789(".includes(keyPressed)) {
+              result = result + keyPressed;
+            }
+            if (".".includes(keyPressed)) {
+              result = result + "0.";
+            }
+          }
+        } else if ((result[result.length - 1] || "").includes(".")) {
+          if ("0123456789".includes(keyPressed)) {
+            result = result + keyPressed;
+          }
+        } else if ((result || "").includes(".")) {
+          if ("+-*/0123456789".includes(keyPressed)) {
+            result = result + keyPressed;
+          }
+        }
+
         this.setState({
           operate: button.key,
-          result: this.changeKeys(this.state.result, button.key),
+          result: result,
         });
       }
     }
@@ -135,132 +243,6 @@ class App extends React.Component {
         result: this.state.result.slice(0, -1),
       });
     }
-  };
-
-  changeKeys = (result, button) => {
-    if ("(".includes(button)) {
-      if (result.length > 1) {
-        if ("0123456789".includes(result[result.length - 1])) {
-          return result + button.replace("(", "*(");
-        }
-      }
-    }
-    if (result === "") {
-      if ("+-(0123456789".includes(button)) {
-        return button;
-      }
-      if ("/*".includes(button)) {
-        return "0" + button;
-      }
-      if (".".includes(button)) {
-        return "0.";
-      }
-    }
-    if ("0123456789".includes(result[result.length - 1])) {
-      const numberOfOpenP = (result.match(/\(/g) || []).length;
-      const numberOfCloseP = (result.match(/\)/g) || []).length;
-      if (
-        "*/-+0123456789.".includes(button) ||
-        (button.key === ")" && numberOfOpenP > numberOfCloseP)
-      ) {
-        return result + button;
-      } else {
-        return result;
-      }
-    }
-    if (result[result.length - 1] === "(") {
-      if ("+-(0123456789".includes(button)) {
-        return result + button;
-      }
-      if (".".includes(button)) {
-        return result + "0.";
-      }
-    }
-    if (result[result.length - 1] === ")") {
-      const numberOfOpenP = (result.match(/\(/g) || []).length;
-      const numberOfCloseP = (result.match(/\)/g) || []).length;
-      if ("/*-+".includes(button)) {
-        return result + button;
-      }
-      if (")".includes(button) && numberOfOpenP > numberOfCloseP) {
-        return result + button;
-      }
-    }
-
-    if ("0123456789)".includes(result[result.length - 2])) {
-      if ("/*+-".includes(result[result.length - 1])) {
-        if ("(0123456789".includes(button)) {
-          return result + button;
-        }
-        if (".".includes(button)) {
-          return result + "0.";
-        }
-        if ("+".includes(button) && result[result.length - 1] === "-") {
-          return (
-            result.substring(0, result.length - 1) +
-            "+" +
-            result.substring(result.length - 1 + 1)
-          );
-        }
-        if ("-".includes(button) && result[result.length - 1] === "+") {
-          return (
-            result.substring(0, result.length - 1) +
-            "-" +
-            result.substring(result.length - 1 + 1)
-          );
-        }
-        if ("/".includes(button) && result[result.length - 1] === "-") {
-          return (
-            result.substring(0, result.length - 1) +
-            "/" +
-            result.substring(result.length - 1 + 1)
-          );
-        }
-        if ("/".includes(button) && result[result.length - 1] === "+") {
-          return (
-            result.substring(0, result.length - 1) +
-            "/" +
-            result.substring(result.length - 1 + 1)
-          );
-        }
-        if ("*".includes(button) && result[result.length - 1] === "-") {
-          return (
-            result.substring(0, result.length - 1) +
-            "*" +
-            result.substring(result.length - 1 + 1)
-          );
-        }
-        if ("*".includes(button) && result[result.length - 1] === "+") {
-          return (
-            result.substring(0, result.length - 1) +
-            "*" +
-            result.substring(result.length - 1 + 1)
-          );
-        }
-      }
-    }
-    if ("/*+-(".includes(result[result.length - 2])) {
-      if ("-+".includes(result[result.length - 1])) {
-        if ("0123456789(".includes(button)) {
-          return result + button;
-        }
-        if (".".includes(button)) {
-          return result + "0.";
-        }
-      }
-    }
-    if ((result[result.length - 1] || "").includes(".")) {
-      if ("0123456789".includes(button)) {
-        return result + button;
-      }
-    }
-
-    if ((result || "").includes(".")) {
-      if ("+-*/0123456789".includes(button)) {
-        return result + button;
-      }
-    }
-    return result;
   };
 
   closeParens = (result) => {
