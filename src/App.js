@@ -200,10 +200,8 @@ class App extends React.Component {
       if (matches.length > 1 && matches[0] === tempResult) {
         if ("+-/*".includes(operate) && !isNaN(originalLastNum)) {
           try {
-            finalResult = round(
-              evaluate(tempResult + operate + originalLastNum),
-              13 + ""
-            );
+            finalResult =
+              round(evaluate(tempResult + operate + originalLastNum), 13) + "";
           } catch (error) {}
         }
       } else {
